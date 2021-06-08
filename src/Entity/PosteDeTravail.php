@@ -35,7 +35,7 @@ class PosteDeTravail
     private $Realisations;
 
     /**
-     * @ORM\OneToMany(targetEntity=MAchine::class, mappedBy="PosteDeTravail")
+     * @ORM\OneToMany(targetEntity=Machine::class, mappedBy="PosteDeTravail")
      */
     private $Machines;
 
@@ -105,14 +105,14 @@ class PosteDeTravail
     }
 
     /**
-     * @return Collection|MAchine[]
+     * @return Collection|Machine[]
      */
     public function getMachines(): Collection
     {
         return $this->Machines;
     }
 
-    public function addMachine(MAchine $machine): self
+    public function addMachine(Machine $machine): self
     {
         if (!$this->Machines->contains($machine)) {
             $this->Machines[] = $machine;
@@ -122,7 +122,7 @@ class PosteDeTravail
         return $this;
     }
 
-    public function removeMachine(MAchine $machine): self
+    public function removeMachine(Machine $machine): self
     {
         if ($this->Machines->removeElement($machine)) {
             // set the owning side to null (unless already changed)
