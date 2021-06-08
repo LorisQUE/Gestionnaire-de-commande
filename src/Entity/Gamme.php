@@ -1,0 +1,113 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\GammeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity(repositoryClass=GammeRepository::class)
+ */
+class Gamme
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Libelle;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Piece::class, inversedBy="Gamme", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Piece;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Operation::class, inversedBy="Gammes")
+     */
+    private $Operations;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="Gammes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Superviseur;
+
+    public function __construct()
+    {
+        $this->Operations = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->Libelle;
+    }
+
+    public function setLibelle(string $Libelle): self
+    {
+        $this->Libelle = $Libelle;
+
+        return $this;
+    }
+
+    public function getPiece(): ?Piece
+    {
+        return $this->Piece;
+    }
+
+    public function setPiece(Piece $Piece): self
+    {
+        $this->Piece = $Piece;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Operation[]
+     */
+    public function getOperations(): Collection
+    {
+        return $this->Operations;
+    }
+
+    public function addOperation(Operation $operation): self
+    {
+        if (!$this->Operations->contains($operation)) {
+            $this->Operations[] = $operation;
+        }
+
+        return $this;
+    }
+
+    public function removeOperation(Operation $operation): self
+    {
+        $this->Operations->removeElement($operation);
+
+        return $this;
+    }
+
+    public function getSuperviseur(): ?Utilisateur
+    {
+        return $this->Superviseur;
+    }
+
+    public function setSuperviseur(?Utilisateur $Superviseur): self
+    {
+        $this->Superviseur = $Superviseur;
+
+        return $this;
+    }
+}
