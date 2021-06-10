@@ -4,17 +4,119 @@
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .page-container { display: flex; flex-direction: column; padding: 0 2em; }
+    .group-container { display: flex; flex-direction: column; justify-content: center; }
+    .group-body { display: flex; padding: 0 2em; flex-wrap: wrap; justify-content: center; }
+    .card { margin: 1em; width: 18rem; }
+    a.card { color: #212529; background-color: #dfdfdf38; border-radius: 3px; transition: .2s; }
+    a:hover.card { text-decoration: none; background-color: #fafad247; box-shadow: 0 0 0 1px rgba(0, 0, 0, .05), 0 2px 3px 0 rgba(0, 0, 0, 0.1); }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="page-container">
+    <h1>Tableau de bord</h1>
+    {% if is_granted('ROLE_OUVRIER') %}
+    <!-- Atelier -->
+    <div class="group-container">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'F:/Projet/GestionCommande/src/Controller/AccueilController.php'|file_link(0) }}">src/Controller/AccueilController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'F:/Projet/GestionCommande/templates/accueil/index.html.twig'|file_link(0) }}">templates/accueil/index.html.twig</a></code></li>
-    </ul>
+        <div class="group-header">
+            <h2>Atelier</h2>
+        </div>
+
+        <div class="group-body">
+
+            <a href="#" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Gammes</h5>
+                    <p class="card-text">Affiche la totalité des gammes disponible et leurs opérations.
+                        Les réalisations des gammes et des opérations seront également consultable.</p>
+                </div>
+            </a>
+
+            <a href="#" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Mes Réalisations</h5>
+                    <p class="card-text">Affiche toutes vos réalisations</p>
+                </div>
+            </a>
+
+            <a href="#" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Poste de Travail</h5>
+                    <p class="card-text">Affiche tous les postes de travail, vous pouvez en choisir un.</p>
+                </div>
+            </a>
+
+            <a href="#" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Stock</h5>
+                    <p class="card-text">Affiche toutes les pièces, leurs quantité, et leurs fournisseur si elles proviennent de l'extérieur.</p>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_COMMERCIAL') %}
+    <!-- Service Commercial -->
+    <div class="group-container">
+
+        <div class="group-header">
+            <h2>Service Commercial</h2>
+        </div>
+
+        <div class="group-body">
+
+            <a href="#" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Commande d'achat</h5>
+                    <p class="card-text">Permet de consulter les commandes déjà passées ou d'en réaliser d'autres.</p>
+                </div>
+            </a>
+
+            <a href="#" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Commande de vente</h5>
+                    <p class="card-text">Permet de consulter les commandes déjà passées ou d'en réaliser d'autres.
+                        Pour créer une commande il faut que le client est déjà un devis.</p>
+                </div>
+            </a>
+
+            <a href="#" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Devis</h5>
+                    <p class="card-text">Permet de consulter les devis ou d'en réaliser d'autres.</p>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_COMPTABLE') %}
+    <!-- Service Comptable -->
+    <div class="group-container">
+
+        <div class="group-header">
+            <h2>Service Comptable</h2>
+        </div>
+
+        <div class="group-body">
+
+            <a href="#" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </a>
+
+
+        </div>
+
+    </div>
+    {% endif %}
+
 </div>
 {% endblock %}
