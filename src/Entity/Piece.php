@@ -64,6 +64,11 @@ class Piece
      */
     private $Gamme;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Reference;
+
     public function __construct()
     {
         $this->PiecesParentes = new ArrayCollection();
@@ -211,6 +216,18 @@ class Piece
         }
 
         $this->Gamme = $Gamme;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->Reference;
+    }
+
+    public function setReference(string $Reference): self
+    {
+        $this->Reference = $Reference;
 
         return $this;
     }

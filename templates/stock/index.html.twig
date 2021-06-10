@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello StockController!{% endblock %}
+
+{% block body %}
+<style>
+</style>
+
+<div class="container">
+    <h1>Stock</h1>
+
+    <table class="table table-hover ">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Libelle</th>
+            <th scope="col">Type</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Prix</th>
+            <th scope="col">Prix Catalogue</th>
+            <th scope="col">Fournisseur</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+    {% for piece in pieces %}
+        <tr>
+            <th scope="row">{{ piece.Reference }}</th>
+            <td>{{ piece.Libelle }}</td>
+            <td>{{ enumType[piece.Type] }}</td>
+            <td>{{ piece.Quantite }}</td>
+            <td>{{ piece.Prix }}€</td>
+            <td>{{ piece.PrixCatalogue }}€</td>
+            <td> TODO </td>
+            <td> TODO </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td>Pas de pièce disponible</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+
+</div>
+{% endblock %}
