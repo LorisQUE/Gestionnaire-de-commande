@@ -54,15 +54,21 @@ class Utilisateur implements UserInterface
     private $PosteDeTravail;
 
     /**
-     * @ORM\OneToMany(targetEntity=Realisation::class, mappedBy="Operateur")
+     * @ORM\OneToMany(targetEntity=OperationRealisation::class, mappedBy="Operateur")
      */
     private $Realisations;
+
+    /**
+     * @ORM\OneToMany(targetEntity=GammeRealisation::class, mappedBy="Superviseur")
+     */
+    private $GammeRealisations;
 
     public function __construct()
     {
         $this->Gammes = new ArrayCollection();
         $this->PosteDeTravail = new ArrayCollection();
         $this->Realisations = new ArrayCollection();
+        $this->GammeRealisations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -219,14 +225,14 @@ class Utilisateur implements UserInterface
     }
 
     /**
-     * @return Collection|Realisation[]
+     * @return Collection|OperationRealisation[]
      */
     public function getRealisations(): Collection
     {
         return $this->Realisations;
     }
 
-    public function addRealisation(Realisation $realisation): self
+    public function addOperationRealisation(OperationRealisation $realisation): self
     {
         if (!$this->Realisations->contains($realisation)) {
             $this->Realisations[] = $realisation;
@@ -236,12 +242,42 @@ class Utilisateur implements UserInterface
         return $this;
     }
 
-    public function removeRealisation(Realisation $realisation): self
+    public function removeOperationRealisation(OperationRealisation $realisation): self
     {
         if ($this->Realisations->removeElement($realisation)) {
             // set the owning side to null (unless already changed)
             if ($realisation->getOperateur() === $this) {
                 $realisation->setOperateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GammeRealisation[]
+     */
+    public function getGammeRealisations(): Collection
+    {
+        return $this->GammeRealisations;
+    }
+
+    public function addGammeRealisation(GammeRealisation $GammeRealisation): self
+    {
+        if (!$this->GammeRealisations->contains($GammeRealisation)) {
+            $this->GammeRealisations[] = $GammeRealisation;
+            $GammeRealisation->setSuperviseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGammeRealisation(GammeRealisation $GammeRealisation): self
+    {
+        if ($this->GammeRealisations->removeElement($GammeRealisation)) {
+            // set the owning side to null (unless already changed)
+            if ($GammeRealisation->getSuperviseur() === $this) {
+                $GammeRealisation->setSuperviseur(null);
             }
         }
 

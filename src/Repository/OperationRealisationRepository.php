@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Realisation;
+use App\Entity\OperationRealisation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Realisation|null find($id, $lockMode = null, $lockVersion = null)
- * @method Realisation|null findOneBy(array $criteria, array $orderBy = null)
- * @method Realisation[]    findAll()
- * @method Realisation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OperationRealisation|null find($id, $lockMode = null, $lockVersion = null)
+ * @method OperationRealisation|null findOneBy(array $criteria, array $orderBy = null)
+ * @method OperationRealisation[]    findAll()
+ * @method OperationRealisation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RealisationRepository extends ServiceEntityRepository
+class OperationRealisationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Realisation::class);
+        parent::__construct($registry, OperationRealisation::class);
     }
 
     // /**
-    //  * @return Realisation[] Returns an array of Realisation objects
+    //  * @return OperationRealisation[] Returns an array of OperationRealisation objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class RealisationRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Realisation
+    public function findOneBySomeField($value): ?OperationRealisation
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.exampleField = :val')

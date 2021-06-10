@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\RealisationRepository;
+use App\Repository\OperationRealisationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=RealisationRepository::class)
+ * @ORM\Entity(repositoryClass=OperationRealisationRepository::class)
  */
-class Realisation
+class OperationRealisation
 {
     /**
      * @ORM\Id
@@ -50,6 +50,12 @@ class Realisation
      * @ORM\JoinColumn(nullable=false)
      */
     private $Machine;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=GammeRealisation::class, inversedBy="OperationRealisations")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $GammeRealisation;
 
     public function getId(): ?int
     {
@@ -124,6 +130,18 @@ class Realisation
     public function setMachine(?Machine $Machine): self
     {
         $this->Machine = $Machine;
+
+        return $this;
+    }
+
+    public function getGammeRealisation(): ?GammeRealisation
+    {
+        return $this->GammeRealisation;
+    }
+
+    public function setGammeRealisation(?GammeRealisation $GammeRealisation): self
+    {
+        $this->GammeRealisation = $GammeRealisation;
 
         return $this;
     }

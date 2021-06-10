@@ -30,7 +30,7 @@ class PosteDeTravail
     private $Ouvrier;
 
     /**
-     * @ORM\OneToMany(targetEntity=Realisation::class, mappedBy="PosteDeTravail")
+     * @ORM\OneToMany(targetEntity=OperationRealisation::class, mappedBy="PosteDeTravail")
      */
     private $Realisations;
 
@@ -75,14 +75,14 @@ class PosteDeTravail
     }
 
     /**
-     * @return Collection|Realisation[]
+     * @return Collection|OperationRealisation[]
      */
     public function getRealisations(): Collection
     {
         return $this->Realisations;
     }
 
-    public function addRealisation(Realisation $realisation): self
+    public function addRealisation(OperationRealisation $realisation): self
     {
         if (!$this->Realisations->contains($realisation)) {
             $this->Realisations[] = $realisation;
@@ -92,7 +92,7 @@ class PosteDeTravail
         return $this;
     }
 
-    public function removeRealisation(Realisation $realisation): self
+    public function removeRealisation(OperationRealisation $realisation): self
     {
         if ($this->Realisations->removeElement($realisation)) {
             // set the owning side to null (unless already changed)

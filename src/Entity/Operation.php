@@ -35,7 +35,7 @@ class Operation
     private $Gammes;
 
     /**
-     * @ORM\OneToMany(targetEntity=Realisation::class, mappedBy="Operation")
+     * @ORM\OneToMany(targetEntity=OperationRealisation::class, mappedBy="Operation")
      */
     private $Realisations;
 
@@ -108,14 +108,14 @@ class Operation
     }
 
     /**
-     * @return Collection|Realisation[]
+     * @return Collection|OperationRealisation[]
      */
     public function getRealisations(): Collection
     {
         return $this->Realisations;
     }
 
-    public function addRealisation(Realisation $realisation): self
+    public function addRealisation(OperationRealisation $realisation): self
     {
         if (!$this->Realisations->contains($realisation)) {
             $this->Realisations[] = $realisation;
@@ -125,7 +125,7 @@ class Operation
         return $this;
     }
 
-    public function removeRealisation(Realisation $realisation): self
+    public function removeRealisation(OperationRealisation $realisation): self
     {
         if ($this->Realisations->removeElement($realisation)) {
             // set the owning side to null (unless already changed)

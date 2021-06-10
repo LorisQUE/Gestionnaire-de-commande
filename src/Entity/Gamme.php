@@ -41,9 +41,15 @@ class Gamme
      */
     private $Superviseur;
 
+    /**
+     * @ORM\OneToMany(targetEntity=GammeRealisation::class, mappedBy="Gamme")
+     */
+    private $GammeRealisations;
+
     public function __construct()
     {
         $this->Operations = new ArrayCollection();
+        $this->GammeRealisations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,6 +113,36 @@ class Gamme
     public function setSuperviseur(?Utilisateur $Superviseur): self
     {
         $this->Superviseur = $Superviseur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GammeRealisation[]
+     */
+    public function getGammeRealisations(): Collection
+    {
+        return $this->GammeRealisations;
+    }
+
+    public function addGammeRealisation(GammeRealisation $gammeRealisation): self
+    {
+        if (!$this->GammeRealisations->contains($gammeRealisation)) {
+            $this->GammeRealisations[] = $gammeRealisation;
+            $gammeRealisation->setGamme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGammeRealisation(GammeRealisation $gammeRealisation): self
+    {
+        if ($this->GammeRealisations->removeElement($gammeRealisation)) {
+            // set the owning side to null (unless already changed)
+            if ($gammeRealisation->getGamme() === $this) {
+                $gammeRealisation->setGamme(null);
+            }
+        }
 
         return $this;
     }

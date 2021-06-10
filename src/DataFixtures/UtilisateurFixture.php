@@ -39,6 +39,13 @@ class UtilisateurFixture extends Fixture
         $comptable->setRoles(["ROLE_COMPTABLE"]);
         $manager->persist($comptable);
 
+        $multiOC = new Utilisateur();
+        $multiOC->setEmail("MultiRole@gmail.com");
+        $multiOC->setPseudonyme("MultiRole");
+        $multiOC->setPassword($this->passwordEncoder->encodePassword($multiOC, "123"));
+        $multiOC->setRoles(["ROLE_OUVRIER", "ROLE_COMMERCIAL"]);
+        $manager->persist($multiOC);
+
         $manager->flush();
     }
 }
