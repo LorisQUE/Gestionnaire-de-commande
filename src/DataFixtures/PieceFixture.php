@@ -19,67 +19,76 @@ class PieceFixture extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $MP1 = new Piece();
-        $MP1->setReference("A01");
-        $MP1->setLibelle("Bois");
-        $MP1->setFournisseur(null);
-        $MP1->setType("MP");
-        $MP1->setPrix(0.99);
-        $MP1->setPrixCatalogue(0.99);
-        $MP1->setQuantite(15);
+        $Bois = new Piece();
+        $Bois->setReference("MP0001");
+        $Bois->setLibelle("Bois");
+        $Bois->setFournisseur(null);
+        $Bois->setType("MP");
+        $Bois->setPrix(0.99);
+        $Bois->setPrixCatalogue(0.99);
+        $Bois->setQuantite(15);
 
-        $pieceUne = new Piece();
-        $pieceUne->setReference("A02");
-        $pieceUne->setLibelle("Manche de raquette");
-        $pieceUne->setFournisseur(null);
-        $pieceUne->setType("PI");
-        $pieceUne->setPrix(1.99);
-        $pieceUne->setPrixCatalogue(1.99);
-        $pieceUne->setQuantite(7);
+        $Vernis = new Piece();
+        $Vernis->setReference("PA0001");
+        $Vernis->setLibelle("Vernis");
+        $Vernis->setFournisseur(null);
+        $Vernis->setType("PA");
+        $Vernis->setPrix(0.99);
+        $Vernis->setPrixCatalogue(0.99);
+        $Vernis->setQuantite(2);
 
-        $pieceDeux = new Piece();
-        $pieceDeux->setReference("A03");
-        $pieceDeux->setLibelle("Vernis");
-        $pieceDeux->setFournisseur(null);
-        $pieceDeux->setType("PA");
-        $pieceDeux->setPrix(0.99);
-        $pieceDeux->setPrixCatalogue(0.99);
-        $pieceDeux->setQuantite(2);
+        $Colle = new Piece();
+        $Colle->setReference("PA0002");
+        $Colle->setLibelle("Colle");
+        $Colle->setFournisseur(null);
+        $Colle->setType("PA");
+        $Colle->setPrix(2.99);
+        $Colle->setPrixCatalogue(2.99);
+        $Colle->setQuantite(3);
 
-        $PA1 = new Piece();
-        $PA1->setReference("A04");
-        $PA1->setLibelle("Tête de raquette");
-        $PA1->setFournisseur(null);
-        $PA1->setType("PI");
-        $PA1->setPrix(2.99);
-        $PA1->setPrixCatalogue(2.99);
-        $PA1->setQuantite(7);
+        $Manche = new Piece();
+        $Manche->setReference("PI0001");
+        $Manche->setLibelle("Manche de raquette");
+        $Manche->setFournisseur(null);
+        $Manche->setType("PI");
+        $Manche->setPrix(1.99);
+        $Manche->setPrixCatalogue(1.99);
+        $Manche->setQuantite(7);
 
-        $PL = new Piece();
-        $PL->setReference("A05");
-        $PL->setLibelle("Raquette");
-        $PL->setFournisseur(null);
-        $PL->setType("PL");
-        $PL->setPrix(16);
-        $PL->setPrixCatalogue(16);
-        $PL->setQuantite(32);
 
-        $MP1->addPiecesParente($pieceUne);
-        $PA1->addPiecesParente($pieceUne);
-        $MP1->addPiecesParente($pieceDeux);
-        $pieceUne->addPiecesNecessaire($MP1);
-        $pieceUne->addPiecesNecessaire($PA1);
-        $pieceDeux->addPiecesNecessaire($MP1);
-        $pieceUne->addPiecesParente($PL);
-        $pieceDeux->addPiecesParente($PL);
-        $PL->addPiecesNecessaire($pieceUne);
-        $PL->addPiecesNecessaire($pieceDeux);
+        $Tete = new Piece();
+        $Tete->setReference("PI0002");
+        $Tete->setLibelle("Tête de raquette");
+        $Tete->setFournisseur(null);
+        $Tete->setType("PI");
+        $Tete->setPrix(2.99);
+        $Tete->setPrixCatalogue(2.99);
+        $Tete->setQuantite(7);
 
-        $manager->persist($MP1);
-        $manager->persist($pieceUne);
-        $manager->persist($pieceDeux);
-        $manager->persist($PA1);
-        $manager->persist($PL);
+        $Raquette = new Piece();
+        $Raquette->setReference("PL0001");
+        $Raquette->setLibelle("Raquette");
+        $Raquette->setFournisseur(null);
+        $Raquette->setType("PL");
+        $Raquette->setPrix(16);
+        $Raquette->setPrixCatalogue(16);
+        $Raquette->setQuantite(32);
+
+        $Manche->addPiecesNecessaire($Bois);
+        $Manche->addPiecesNecessaire($Vernis);
+
+        $Tete->addPiecesNecessaire($Bois);
+
+        $Raquette->addPiecesNecessaire($Colle);
+        $Raquette->addPiecesNecessaire($Manche);
+        $Raquette->addPiecesNecessaire($Tete);
+
+        $manager->persist($Bois);
+        $manager->persist($Vernis);
+        $manager->persist($Colle);
+        $manager->persist($Manche);
+        $manager->persist($Tete);
+        $manager->persist($Raquette);
         $manager->flush();
     }
 }

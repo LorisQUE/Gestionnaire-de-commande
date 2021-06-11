@@ -3,41 +3,35 @@
 namespace App\Controller;
 
 use App\Entity\Piece;
-use App\Form\StockType;
+use App\Form\Piece1Type;
 use App\Repository\PieceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class StockController extends AbstractController
+/**
+ * @Route("/piece")
+ */
+class PieceController extends AbstractController
 {
-
-    public $enumType = array (
-        "MP" => "Matière Première",
-        "PI" => "Pièce Intermédiaire",
-        "PA" => "Pièce Achetée",
-        "PL" => "Pièce Livrable"
-    );
-
     /**
-     * @Route("/stock", name="stock")
+     * @Route("/", name="piece_index", methods={"GET"})
      */
     public function index(PieceRepository $pieceRepository): Response
     {
-        return $this->render('stock/index.html.twig', [
+        return $this->render('piece/index.html.twig', [
             'pieces' => $pieceRepository->findAll(),
-            'enumType' => $this->enumType,
         ]);
     }
 
     /**
-     * @Route("/new", name="stock_new", methods={"GET","POST"})
+     * @Route("/new", name="piece_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
         $piece = new Piece();
-        $form = $this->createForm(StockType::class, $piece);
+        $form = $this->createForm(Piece1Type::class, $piece);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -45,52 +39,47 @@ class StockController extends AbstractController
             $entityManager->persist($piece);
             $entityManager->flush();
 
-            return $this->redirectToRoute('stock');
+            return $this->redirectToRoute('piece_index');
         }
 
-        return $this->render('stock/new.html.twig', [
+        return $this->render('piece/new.html.twig', [
             'piece' => $piece,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="stock_show", methods={"GET"})
+     * @Route("/{id}", name="piece_show", methods={"GET"})
      */
     public function show(Piece $piece): Response
     {
-        $pieceNecessaire = $piece->getPiecesNecessaire();
-        $pieceRealisable = $piece->getPiecesParentes();
-        return $this->render('stock/show.html.twig', [
-            'pieceNecessaire' => $pieceNecessaire,
-            'pieceRealisable' => $pieceRealisable,
+        return $this->render('piece/show.html.twig', [
             'piece' => $piece,
-            'enumType' => $this->enumType,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="stock_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="piece_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Piece $piece): Response
     {
-        $form = $this->createForm(StockType::class, $piece);
+        $form = $this->createForm(Piece1Type::class, $piece);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('stock');
+            return $this->redirectToRoute('piece_index');
         }
 
-        return $this->render('stock/edit.html.twig', [
+        return $this->render('piece/edit.html.twig', [
             'piece' => $piece,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="stock_delete", methods={"POST"})
+     * @Route("/{id}", name="piece_delete", methods={"POST"})
      */
     public function delete(Request $request, Piece $piece): Response
     {
@@ -100,6 +89,6 @@ class StockController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('stock');
+        return $this->redirectToRoute('piece_index');
     }
 }

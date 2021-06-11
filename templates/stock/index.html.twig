@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello StockController!{% endblock %}
+{% block title %}Stock{% endblock %}
 
 {% block body %}
 <style>
@@ -33,15 +33,21 @@
             <td>{{ piece.Prix }}€</td>
             <td>{{ piece.PrixCatalogue }}€</td>
             <td> TODO </td>
-            <td> TODO </td>
+            <td>
+                <a href="{{ path('stock_show', {'id': piece.id}) }}" title="Détails"><i class="fas fa-info-circle"></i></a>
+                <a href="{{ path('stock_edit', {'id': piece.id}) }}" title="Modification"><i class="fas fa-edit"></i></a>
+                <a href="#"  title="Suppression"><i class="fas fa-trash-alt"></i></a>
+            </td>
         </tr>
     {% else %}
         <tr>
-            <td>Pas de pièce disponible</td>
+            <td colspan="8">Pas de pièce disponible</td>
         </tr>
     {% endfor %}
     </tbody>
     </table>
+
+    <a class="btn btn-primary" href="{{ path('stock_new') }}">Ajouter une pièce</a>
 
 </div>
 {% endblock %}

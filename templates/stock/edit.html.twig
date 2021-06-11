@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification{% endblock %}
+
+{% block body %}
+    <h1>Modification de #{{ piece.Reference }} - {{ piece.Libelle }}</h1>
+
+    {{ include('stock/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <a class="btn btn-primary" href="{{ path('stock') }}">Retour à la liste</a>
+
+    {{ include('stock/_delete_form.html.twig') }}
+{% endblock %}
