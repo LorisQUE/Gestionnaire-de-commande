@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Atelier;
 
 use App\Entity\Piece;
 use App\Form\StockType;
@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/atelier/stock")
+ */
 class StockController extends AbstractController
 {
 
@@ -21,7 +24,7 @@ class StockController extends AbstractController
     );
 
     /**
-     * @Route("/stock", name="stock")
+     * @Route("/", name="stock")
      */
     public function index(PieceRepository $pieceRepository): Response
     {
