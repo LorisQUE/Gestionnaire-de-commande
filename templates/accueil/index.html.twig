@@ -9,7 +9,7 @@
     .group-body { display: flex; padding: 0 2em; flex-wrap: wrap; justify-content: center; }
     .card { margin: 1em; width: 18rem; }
     a.card { color: #212529; background-color: #dfdfdf38; border-radius: 3px; transition: .2s; }
-    a:hover.card { text-decoration: none; background-color: #fafad247; box-shadow: 0 0 0 1px rgba(0, 0, 0, .05), 0 2px 3px 0 rgba(0, 0, 0, 0.1); }
+    a:hover.card { text-decoration: none; background-color: #f0ffff57 /*#fafad247*/; box-shadow: 0 0 0 1px rgba(0, 0, 0, .05), 0 2px 3px 0 rgba(0, 0, 0, 0.1); }
 </style>
 
 <div class="page-container">
@@ -17,7 +17,6 @@
     {% if is_granted('ROLE_OUVRIER') %}
     <!-- Atelier -->
     <div class="group-container">
-
         <div class="group-header">
             <h2>Atelier</h2>
         </div>
@@ -32,21 +31,7 @@
                 </div>
             </a>
 
-            <a href="#" class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Mes Réalisations</h5>
-                    <p class="card-text">Affiche toutes vos réalisations</p>
-                </div>
-            </a>
-
-            <a href="#" class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Poste de Travail</h5>
-                    <p class="card-text">Affiche tous les postes de travail, vous pouvez en choisir un.</p>
-                </div>
-            </a>
-
-            <a href="#" class="card">
+            <a href="{{ path("stock") }}" class="card">
                 <div class="card-body">
                     <h5 class="card-title">Stock</h5>
                     <p class="card-text">Affiche toutes les pièces, leurs quantité, et leurs fournisseur si elles proviennent de l'extérieur.</p>
@@ -117,6 +102,5 @@
 
     </div>
     {% endif %}
-
 </div>
 {% endblock %}
