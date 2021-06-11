@@ -24,15 +24,28 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
+
+                        {% if is_granted('ROLE_OUVRIER') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Atelier</a>
+                            <a class="nav-link" href="#">Gamme</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Service Commercial</a>
+                            <a class="nav-link" href="{{ path("stock") }}">Stock</a>
+                        </li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_COMMERCIAL') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Devis</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Comptabilité</a>
+                            <a class="nav-link" href="#">Commande d'Achat</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Commande de Vente</a>
+                        </li>
+                        {% endif %}
+                        
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
                         </li>

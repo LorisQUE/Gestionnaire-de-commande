@@ -45,6 +45,12 @@ class Operation
      */
     private $Machine;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=PosteDeTravail::class, inversedBy="Operations")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $PosteDeTravail;
+
     public function __construct()
     {
         $this->Gammes = new ArrayCollection();
@@ -145,6 +151,18 @@ class Operation
     public function setMachine(?Machine $Machine): self
     {
         $this->Machine = $Machine;
+
+        return $this;
+    }
+
+    public function getPosteDeTravail(): ?PosteDeTravail
+    {
+        return $this->PosteDeTravail;
+    }
+
+    public function setPosteDeTravail(?PosteDeTravail $PosteDeTravail): self
+    {
+        $this->PosteDeTravail = $PosteDeTravail;
 
         return $this;
     }

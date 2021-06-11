@@ -39,10 +39,16 @@ class PosteDeTravail
      */
     private $Machines;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="PosteDeTravail")
+     */
+    private $Operations;
+
     public function __construct()
     {
         $this->Realisations = new ArrayCollection();
         $this->Machines = new ArrayCollection();
+        $this->Operations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +134,36 @@ class PosteDeTravail
             // set the owning side to null (unless already changed)
             if ($machine->getPosteDeTravail() === $this) {
                 $machine->setPosteDeTravail(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Operation[]
+     */
+    public function getOperations(): Collection
+    {
+        return $this->Operations;
+    }
+
+    public function addOperation(Operation $operation): self
+    {
+        if (!$this->Operations->contains($operation)) {
+            $this->Operations[] = $operation;
+            $operation->setPosteDeTravail($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOperation(Operation $operation): self
+    {
+        if ($this->Operations->removeElement($operation)) {
+            // set the owning side to null (unless already changed)
+            if ($operation->getPosteDeTravail() === $this) {
+                $operation->setPosteDeTravail(null);
             }
         }
 
