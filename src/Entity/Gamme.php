@@ -25,7 +25,7 @@ class Gamme
     private $Libelle;
 
     /**
-     * @ORM\OneToOne(targetEntity=Piece::class, inversedBy="Gamme", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Piece::class, inversedBy="Gamme")
      * @ORM\JoinColumn(nullable=false)
      */
     private $Piece;

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification de gamme{% endblock %}
+
+{% block body %}
+    <h1>Modifier la gamme</h1>
+
+    {{ include('gamme/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <a class="btn btn-primary" href="{{ path('gamme_index') }}">Retour aux gammes</a>
+
+    {{ include('gamme/_delete_form.html.twig') }}
+{% endblock %}

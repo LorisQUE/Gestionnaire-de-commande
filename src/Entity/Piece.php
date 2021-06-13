@@ -77,7 +77,7 @@ class Piece
 
     public function __toString()
     {
-        return $this->getLibelle();
+        return "#".$this->getReference()." ".$this->getLibelle();
     }
 
     public function getId(): ?int

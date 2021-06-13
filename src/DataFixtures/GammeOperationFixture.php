@@ -66,6 +66,7 @@ class GammeOperationFixture extends Fixture
         $operation1->setDuree(3);
         $operation1->setPosteDeTravail($PDT);
         $operation1->setMachine($machine1);
+        $operation1->addGamme($gamme);
         $manager->persist($operation1);
 
         $operation2 = new Operation();
@@ -73,6 +74,7 @@ class GammeOperationFixture extends Fixture
         $operation2->setDuree(1);
         $operation2->setPosteDeTravail($PDT);
         $operation2->setMachine($machine2);
+        $operation2->addGamme($gamme);
         $manager->persist($operation2);
 
         $manager->flush();

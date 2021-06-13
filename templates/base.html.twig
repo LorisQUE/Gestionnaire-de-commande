@@ -27,7 +27,7 @@
 
                         {% if is_granted('ROLE_OUVRIER') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Gamme</a>
+                            <a class="nav-link" href="{{ path("gamme_index") }}" >Gammes</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path("stock") }}">Stock</a>
