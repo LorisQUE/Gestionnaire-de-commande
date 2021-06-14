@@ -31,11 +31,6 @@ class Gamme
     private $Piece;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Operation::class, inversedBy="Gammes")
-     */
-    private $Operations;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="Gammes")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -46,10 +41,15 @@ class Gamme
      */
     private $GammeRealisations;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="Gamme")
+     */
+    private $Operations;
+
     public function __construct()
     {
-        $this->Operations = new ArrayCollection();
         $this->GammeRealisations = new ArrayCollection();
+        $this->Operations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,30 +77,6 @@ class Gamme
     public function setPiece(Piece $Piece): self
     {
         $this->Piece = $Piece;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Operation[]
-     */
-    public function getOperations(): Collection
-    {
-        return $this->Operations;
-    }
-
-    public function addOperation(Operation $operation): self
-    {
-        if (!$this->Operations->contains($operation)) {
-            $this->Operations[] = $operation;
-        }
-
-        return $this;
-    }
-
-    public function removeOperation(Operation $operation): self
-    {
-        $this->Operations->removeElement($operation);
 
         return $this;
     }
@@ -141,6 +117,36 @@ class Gamme
             // set the owning side to null (unless already changed)
             if ($gammeRealisation->getGamme() === $this) {
                 $gammeRealisation->setGamme(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Operation[]
+     */
+    public function getOperations(): Collection
+    {
+        return $this->Operations;
+    }
+
+    public function addOperation(Operation $operation): self
+    {
+        if (!$this->Operations->contains($operation)) {
+            $this->Operations[] = $operation;
+            $operation->setGamme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOperation(Operation $operation): self
+    {
+        if ($this->Operations->removeElement($operation)) {
+            // set the owning side to null (unless already changed)
+            if ($operation->getGamme() === $this) {
+                $operation->setGamme(null);
             }
         }
 

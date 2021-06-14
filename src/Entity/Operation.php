@@ -30,11 +30,6 @@ class Operation
     private $Duree;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Gamme::class, mappedBy="Operations")
-     */
-    private $Gammes;
-
-    /**
      * @ORM\OneToMany(targetEntity=OperationRealisation::class, mappedBy="Operation")
      */
     private $Realisations;
@@ -51,9 +46,13 @@ class Operation
      */
     private $PosteDeTravail;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Gamme::class, inversedBy="Operations")
+     */
+    private $Gamme;
+
     public function __construct()
     {
-        $this->Gammes = new ArrayCollection();
         $this->Realisations = new ArrayCollection();
     }
 
@@ -87,33 +86,6 @@ class Operation
     public function setDuree(int $Duree): self
     {
         $this->Duree = $Duree;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Gamme[]
-     */
-    public function getGammes(): Collection
-    {
-        return $this->Gammes;
-    }
-
-    public function addGamme(Gamme $gamme): self
-    {
-        if (!$this->Gammes->contains($gamme)) {
-            $this->Gammes[] = $gamme;
-            $gamme->addOperation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGamme(Gamme $gamme): self
-    {
-        if ($this->Gammes->removeElement($gamme)) {
-            $gamme->removeOperation($this);
-        }
 
         return $this;
     }
@@ -168,6 +140,18 @@ class Operation
     public function setPosteDeTravail(?PosteDeTravail $PosteDeTravail): self
     {
         $this->PosteDeTravail = $PosteDeTravail;
+
+        return $this;
+    }
+
+    public function getGamme(): ?Gamme
+    {
+        return $this->Gamme;
+    }
+
+    public function setGamme(?Gamme $Gamme): self
+    {
+        $this->Gamme = $Gamme;
 
         return $this;
     }
