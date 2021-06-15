@@ -7,5 +7,5 @@
 
     {{ include('operation/_form.html.twig') }}
 
-    <a class="btn btn-primary" href="{{ path('operation_index') }}">Retour</a>
+    <a class="btn btn-primary" href="{{ path('gamme_show', { 'id': operation.Gamme.Id }) }}">Retour</a>
 {% endblock %}
