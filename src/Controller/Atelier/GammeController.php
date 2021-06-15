@@ -4,6 +4,7 @@ namespace App\Controller\Atelier;
 
 use App\Entity\Gamme;
 use App\Entity\GammeRealisation;
+use App\Form\GammeRealisationType;
 use App\Form\GammeType;
 use App\Repository\GammeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class GammeController extends AbstractController
 {
+    //Gammes :
+
     /**
      * @Route("/", name="gamme_index", methods={"GET"})
      */
@@ -61,54 +64,6 @@ class GammeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/realisation", name="gamme_real", methods={"GET"})
-     */
-    public function showReal(Gamme $gamme): Response
-    {
-        return $this->render('gamme/realisations.html.twig', [
-            'gamme' => $gamme,
-            'realisations' => $gamme->getGammeRealisations(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/new/realisation", name="gamme_new_real", methods={"GET"})
-     */
-    public function newReal(Gamme $gamme): Response
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $realisation = new GammeRealisation();
-        $realisation->setGamme($gamme);
-        $realisation->setLibelle($gamme->getLibelle());
-        $realisation->setSuperviseur($gamme->getSuperviseur());
-
-        $entityManager->persist($realisation);
-        $entityManager->flush();
-
-        return $this->render('gamme/realisations.html.twig', [
-            'gamme' => $gamme,
-            'realisations' => $gamme->getGammeRealisations(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/delete/realisation", name="gamme_realisation_delete", methods={"POST"})
-     */
-    public function deleteReal(Request $request, GammeRealisation $gammeRealisation): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$gammeRealisation->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($gammeRealisation);
-            $entityManager->flush();
-        }
-
-        return $this->render('gamme/realisations.html.twig', [
-            'gamme' => $gammeRealisation->getGamme(),
-            'realisations' => $gammeRealisation->getGamme()->getGammeRealisations(),
-        ]);
-    }
 
     /**
      * @Route("/{id}/edit", name="gamme_edit", methods={"GET","POST"})
@@ -142,5 +97,71 @@ class GammeController extends AbstractController
         }
 
         return $this->redirectToRoute('gamme_index');
+    }
+
+    // Réalisations des Gammes :
+
+    /**
+     * @Route("/{id}/realisation", name="gamme_real", methods={"GET"})
+     */
+    public function showReal(Gamme $gamme): Response
+    {
+        return $this->render('gamme/realisations.html.twig', [
+            'gamme' => $gamme,
+            'realisations' => $gamme->getGammeRealisations(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit/realisation", name="gamme_realisation_edit", methods={"GET","POST"})
+     */
+    public function editReal(Request $request, GammeRealisation $gammeRealisation): Response
+    {
+        $form = $this->createForm(GammeRealisationType::class, $gammeRealisation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('gamme_real', ['id'=> $gammeRealisation->getGamme()->getId()]);
+        }
+
+        return $this->render('gamme/edit_realisation.html.twig', [
+            'gamme_realisation' => $gammeRealisation,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/new/realisation", name="gamme_new_real", methods={"GET"})
+     */
+    public function newReal(Gamme $gamme): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $realisation = new GammeRealisation();
+        $realisation->setGamme($gamme);
+        $realisation->setLibelle($gamme->getLibelle());
+        $realisation->setSuperviseur($gamme->getSuperviseur());
+
+        $entityManager->persist($realisation);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('gamme_real', ['id'=> $gamme->getId()]);
+    }
+
+    /**
+     * @Route("/{id}/delete/realisation", name="gamme_realisation_delete", methods={"POST"})
+     */
+    public function deleteReal(Request $request, GammeRealisation $gammeRealisation): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$gammeRealisation->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($gammeRealisation);
+            $entityManager->flush();
+        }
+
+
+        return $this->redirectToRoute('gamme_real', ['id'=> $gammeRealisation->getGamme()->getId()]);
     }
 }

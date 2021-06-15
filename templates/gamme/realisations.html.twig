@@ -3,7 +3,7 @@
 {% block title %}Réalisations de gamme{% endblock %}
 
 {% block body %}
-    <h1>Réalisations de {{ gamme.Libelle }}</h1>
+    <h1>Réalisations de la gamme {{ gamme.Libelle }}</h1>
 
     <table class="table">
         <thead>
@@ -18,7 +18,7 @@
                 <td>{{ realisation.Superviseur }}</td>
                 <td>
                     <a title="Voir les réalisations" class="btn btn-primary" href="#"><i class="fas fa-search"></i></a>
-                    <a title="Voir les opérations" class="btn btn-primary" href="#"><i class="fas fa-edit"></i></a>
+                    <a title="Modification" class="btn btn-primary" href="{{ path('gamme_realisation_edit', {'id': realisation.id}) }}"><i class="fas fa-edit"></i></a>
                     <form method="post" action="{{ path('gamme_realisation_delete', {'id': realisation.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cette réalisation de gamme ?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ realisation.id) }}">
                         <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
@@ -33,8 +33,6 @@
 
     <a class="btn btn-primary" href="{{ path('gamme_index') }}">Retour aux Gammes</a>
 
-    <a class="btn btn-primary" href="#">Modifier</a>
-
-    <a class="btn btn-primary" href="#">Ajouter une opération</a>
+    <a class="btn btn-success" href="{{ path('gamme_new_real', {'id': gamme.id}) }}">Ajouter une réalisation</a>
 
 {% endblock %}
