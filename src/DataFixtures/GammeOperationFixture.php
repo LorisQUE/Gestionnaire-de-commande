@@ -3,8 +3,10 @@
 namespace App\DataFixtures;
 
 use App\Entity\Gamme;
+use App\Entity\GammeRealisation;
 use App\Entity\Machine;
 use App\Entity\Operation;
+use App\Entity\OperationRealisation;
 use App\Entity\Piece;
 use App\Entity\PosteDeTravail;
 use App\Entity\Utilisateur;
@@ -23,6 +25,7 @@ class GammeOperationFixture extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        //USAGE POUR GAMME ET OPE
         $ouvrier = new Utilisateur();
         $ouvrier->setEmail("Supervisuer@gmail.com");
         $ouvrier->setPseudonyme("Superviseur");
@@ -55,6 +58,7 @@ class GammeOperationFixture extends Fixture
         $table->setQuantite(1);
         $manager->persist($table);
 
+        //GAMME ET OPE
         $gamme = new Gamme();
         $gamme->setLibelle("Création de Table de Ping Pong");
         $gamme->setSuperviseur($ouvrier);
@@ -76,6 +80,69 @@ class GammeOperationFixture extends Fixture
         $operation2->setMachine($machine2);
         $operation2->setGamme($gamme);
         $manager->persist($operation2);
+
+        //USAGE POUR REALISATIONS
+        $ouvrier1 = new Utilisateur();
+        $ouvrier1->setEmail("NewOuvr@gmail.com");
+        $ouvrier1->setPseudonyme("NewOuvr");
+        $ouvrier1->setPassword($this->passwordEncoder->encodePassword($ouvrier1, "root"));
+        $ouvrier1->setRoles(["ROLE_OUVRIER"]);
+        $manager->persist($ouvrier1);
+
+        $ouvrier2 = new Utilisateur();
+        $ouvrier2->setEmail("ouv2r@gmail.com");
+        $ouvrier2->setPseudonyme("ouv2r");
+        $ouvrier2->setPassword($this->passwordEncoder->encodePassword($ouvrier2, "root"));
+        $ouvrier2->setRoles(["ROLE_OUVRIER"]);
+        $manager->persist($ouvrier2);
+
+        $PDT1 = new PosteDeTravail();
+        $PDT1->setLibelle("Poste 01");
+        $PDT1->setOuvrier($ouvrier1);
+        $manager->persist($PDT1);
+
+        $machine3 = new Machine();
+        $machine3->setLibelle("Scie2");
+        $machine3->setPosteDeTravail($PDT1);
+        $manager->persist($machine3);
+
+        $machine4 = new Machine();
+        $machine4->setLibelle("Perceuse2");
+        $machine4->setPosteDeTravail($PDT1);
+        $manager->persist($machine4);
+
+        //REALISATIONS
+        $realGamme = new GammeRealisation();
+        $realGamme->setGamme($gamme);
+        $realGamme->setLibelle($gamme->getLibelle()." Réalisation");
+        $realGamme->setSuperviseur($ouvrier1);
+        $manager->persist($realGamme);
+
+        $realGamme1 = new GammeRealisation();
+        $realGamme1->setGamme($gamme);
+        $realGamme1->setLibelle($gamme->getLibelle()." Réalisation");
+        $realGamme1->setSuperviseur($ouvrier2);
+        $manager->persist($realGamme1);
+
+        $realOpe = new OperationRealisation();
+        $realOpe->setOperation($operation1);
+        $realOpe->setLibelle($operation1->getLibelle()." Réalisation");
+        $realOpe->setPosteDeTravail($PDT1);
+        $realOpe->setMachine($machine3);
+        $realOpe->setDuree(1);
+        $realOpe->setGammeRealisation($realGamme);
+        $realOpe->setOperateur($ouvrier1);
+        $manager->persist($realOpe);
+
+        $realOpe1 = new OperationRealisation();
+        $realOpe1->setOperation($operation2);
+        $realOpe1->setLibelle($operation2->getLibelle()." Réalisation");
+        $realOpe1->setPosteDeTravail($PDT1);
+        $realOpe1->setMachine($machine4);
+        $realOpe1->setDuree(1);
+        $realOpe1->setGammeRealisation($realGamme);
+        $realOpe1->setOperateur($ouvrier2);
+        $manager->persist($realOpe1);
 
         $manager->flush();
     }
