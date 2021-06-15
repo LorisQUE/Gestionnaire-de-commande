@@ -114,19 +114,19 @@ class GammeOperationFixture extends Fixture
         //REALISATIONS
         $realGamme = new GammeRealisation();
         $realGamme->setGamme($gamme);
-        $realGamme->setLibelle($gamme->getLibelle()." Réalisation");
+        $realGamme->setLibelle($gamme->getLibelle()." Réalisation1");
         $realGamme->setSuperviseur($ouvrier1);
         $manager->persist($realGamme);
 
         $realGamme1 = new GammeRealisation();
         $realGamme1->setGamme($gamme);
-        $realGamme1->setLibelle($gamme->getLibelle()." Réalisation");
+        $realGamme1->setLibelle($gamme->getLibelle()." Réalisation2");
         $realGamme1->setSuperviseur($ouvrier2);
         $manager->persist($realGamme1);
 
         $realOpe = new OperationRealisation();
         $realOpe->setOperation($operation1);
-        $realOpe->setLibelle($operation1->getLibelle()." Réalisation");
+        $realOpe->setLibelle($operation1->getLibelle()." Réalisation1");
         $realOpe->setPosteDeTravail($PDT1);
         $realOpe->setMachine($machine3);
         $realOpe->setDuree(1);
@@ -136,7 +136,7 @@ class GammeOperationFixture extends Fixture
 
         $realOpe1 = new OperationRealisation();
         $realOpe1->setOperation($operation2);
-        $realOpe1->setLibelle($operation2->getLibelle()." Réalisation");
+        $realOpe1->setLibelle($operation2->getLibelle()." Réalisation2");
         $realOpe1->setPosteDeTravail($PDT1);
         $realOpe1->setMachine($machine4);
         $realOpe1->setDuree(1);
@@ -146,7 +146,7 @@ class GammeOperationFixture extends Fixture
 
         $realOpe2 = new OperationRealisation();
         $realOpe2->setOperation($operation1);
-        $realOpe2->setLibelle($operation1->getLibelle()." Réalisation");
+        $realOpe2->setLibelle($operation1->getLibelle()." Réalisation3");
         $realOpe2->setPosteDeTravail($PDT);
         $realOpe2->setMachine($machine1);
         $realOpe2->setDuree(2);
@@ -156,7 +156,7 @@ class GammeOperationFixture extends Fixture
 
         $realOpe3 = new OperationRealisation();
         $realOpe3->setOperation($operation2);
-        $realOpe3->setLibelle($operation2->getLibelle()." Réalisation");
+        $realOpe3->setLibelle($operation2->getLibelle()." Réalisation4");
         $realOpe3->setPosteDeTravail($PDT);
         $realOpe3->setMachine($machine2);
         $realOpe3->setDuree(15);

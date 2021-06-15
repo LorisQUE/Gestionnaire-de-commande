@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réalisations de gamme{% endblock %}
+
+{% block body %}
+    <h1>Réalisations de {{ gamme.Libelle }}</h1>
+
+    <table class="table">
+        <thead>
+        <th>Libelle</th>
+        <th>Superviseur</th>
+        <th>Actions</th>
+        </thead>
+        <tbody>
+        {% for realisation in realisations %}
+            <tr>
+                <td>{{ realisation.Libelle }}</td>
+                <td>{{ realisation.Superviseur }}</td>
+                <td></td>
+            </tr>
+        {% else %}
+            <td>Aucune opération disponible.</td>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('gamme_index') }}">Retour aux Gammes</a>
+
+    <a class="btn btn-primary" href="#">Modifier</a>
+
+    <a class="btn btn-primary" href="#">Ajouter une opération</a>
+
+{% endblock %}

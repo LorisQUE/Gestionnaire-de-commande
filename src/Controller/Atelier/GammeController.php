@@ -61,12 +61,13 @@ class GammeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="gamme_real", methods={"GET"})
+     * @Route("/{id}/realisation", name="gamme_real", methods={"GET"})
      */
     public function showReal(Gamme $gamme): Response
     {
-        return $this->render('gamme/show.html.twig', [
+        return $this->render('gamme/realisations.html.twig', [
             'gamme' => $gamme,
+            'realisations' => $gamme->getGammeRealisations(),
         ]);
     }
 
