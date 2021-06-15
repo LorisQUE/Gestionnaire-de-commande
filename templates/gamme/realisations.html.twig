@@ -16,7 +16,14 @@
             <tr>
                 <td>{{ realisation.Libelle }}</td>
                 <td>{{ realisation.Superviseur }}</td>
-                <td></td>
+                <td>
+                    <a title="Voir les réalisations" class="btn btn-primary" href="#"><i class="fas fa-search"></i></a>
+                    <a title="Voir les opérations" class="btn btn-primary" href="#"><i class="fas fa-edit"></i></a>
+                    <form method="post" action="{{ path('gamme_realisation_delete', {'id': realisation.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cette réalisation de gamme ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ realisation.id) }}">
+                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
             </tr>
         {% else %}
             <td>Aucune opération disponible.</td>

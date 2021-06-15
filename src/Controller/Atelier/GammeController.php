@@ -77,7 +77,6 @@ class GammeController extends AbstractController
      */
     public function newReal(Gamme $gamme): Response
     {
-        var_dump("ON Y ESY LA ");
         $entityManager = $this->getDoctrine()->getManager();
 
         $realisation = new GammeRealisation();
@@ -91,6 +90,23 @@ class GammeController extends AbstractController
         return $this->render('gamme/realisations.html.twig', [
             'gamme' => $gamme,
             'realisations' => $gamme->getGammeRealisations(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/delete/realisation", name="gamme_realisation_delete", methods={"POST"})
+     */
+    public function deleteReal(Request $request, GammeRealisation $gammeRealisation): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$gammeRealisation->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($gammeRealisation);
+            $entityManager->flush();
+        }
+
+        return $this->render('gamme/realisations.html.twig', [
+            'gamme' => $gammeRealisation->getGamme(),
+            'realisations' => $gammeRealisation->getGamme()->getGammeRealisations(),
         ]);
     }
 
