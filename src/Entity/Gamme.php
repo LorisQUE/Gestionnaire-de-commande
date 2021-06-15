@@ -52,6 +52,11 @@ class Gamme
         $this->Operations = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
