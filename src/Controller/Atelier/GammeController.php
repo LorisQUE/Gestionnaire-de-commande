@@ -64,7 +64,6 @@ class GammeController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/{id}/edit", name="gamme_edit", methods={"GET","POST"})
      */

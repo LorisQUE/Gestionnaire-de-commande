@@ -3,11 +3,10 @@
 namespace App\Controller\Atelier;
 
 use App\Entity\Gamme;
+use App\Entity\GammeRealisation;
 use App\Entity\Operation;
 use App\Form\OperationType;
-use App\Repository\GammeRepository;
 use App\Repository\OperationRepository;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,5 +92,18 @@ class OperationController extends AbstractController
         }
 
         return $this->redirectToRoute('gamme_show', ['id' => $gamme->getId()]);
+    }
+
+    // Réalisation d'opération
+    /**
+     * @Route("/{id}/realisation", name="operation_real", methods={"GET"})
+     */
+    public function showReal(GammeRealisation $gammeRealisation): Response
+    {
+        $operationsRealisations = $gammeRealisation->getOperationRealisations();
+        return $this->render('operation/realisations.html.twig', [
+            'operationsRealisations' => $operationsRealisations,
+            'gammeRealisation' => $gammeRealisation,
+        ]);
     }
 }
