@@ -3,6 +3,7 @@
 namespace App\Controller\Atelier;
 
 use App\Entity\Gamme;
+use App\Entity\GammeRealisation;
 use App\Form\GammeType;
 use App\Repository\GammeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -65,6 +66,28 @@ class GammeController extends AbstractController
      */
     public function showReal(Gamme $gamme): Response
     {
+        return $this->render('gamme/realisations.html.twig', [
+            'gamme' => $gamme,
+            'realisations' => $gamme->getGammeRealisations(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/new/realisation", name="gamme_new_real", methods={"GET"})
+     */
+    public function newReal(Gamme $gamme): Response
+    {
+        var_dump("ON Y ESY LA ");
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $realisation = new GammeRealisation();
+        $realisation->setGamme($gamme);
+        $realisation->setLibelle($gamme->getLibelle());
+        $realisation->setSuperviseur($gamme->getSuperviseur());
+
+        $entityManager->persist($realisation);
+        $entityManager->flush();
+
         return $this->render('gamme/realisations.html.twig', [
             'gamme' => $gamme,
             'realisations' => $gamme->getGammeRealisations(),
