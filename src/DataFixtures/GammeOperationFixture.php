@@ -144,6 +144,26 @@ class GammeOperationFixture extends Fixture
         $realOpe1->setOperateur($ouvrier2);
         $manager->persist($realOpe1);
 
+        $realOpe2 = new OperationRealisation();
+        $realOpe2->setOperation($operation1);
+        $realOpe2->setLibelle($operation1->getLibelle()." Réalisation");
+        $realOpe2->setPosteDeTravail($PDT);
+        $realOpe2->setMachine($machine1);
+        $realOpe2->setDuree(2);
+        $realOpe2->setGammeRealisation($realGamme1);
+        $realOpe2->setOperateur($ouvrier2);
+        $manager->persist($realOpe2);
+
+        $realOpe3 = new OperationRealisation();
+        $realOpe3->setOperation($operation2);
+        $realOpe3->setLibelle($operation2->getLibelle()." Réalisation");
+        $realOpe3->setPosteDeTravail($PDT);
+        $realOpe3->setMachine($machine2);
+        $realOpe3->setDuree(15);
+        $realOpe3->setGammeRealisation($realGamme1);
+        $realOpe3->setOperateur($ouvrier1);
+        $manager->persist($realOpe3);
+
         $manager->flush();
     }
 }
