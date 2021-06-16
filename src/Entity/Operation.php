@@ -71,7 +71,7 @@ class Operation
         return $this->Libelle;
     }
 
-    public function setLibelle(string $Libelle): self
+    public function setLibelle(string $Libelle = null): self
     {
         $this->Libelle = $Libelle;
 
@@ -83,7 +83,7 @@ class Operation
         return $this->Duree;
     }
 
-    public function setDuree(int $Duree): self
+    public function setDuree(int $Duree = null): self
     {
         $this->Duree = $Duree;
 

@@ -1,4 +1,24 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
     <button class="btn">{{ button_label|default('Enregistrer') }}</button>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        var $pdt = $('#operation_realisation_PosteDeTravail');
+        $pdt.change(function() {
+            var $form = $(this).closest('form');
+            var data = {};
+            data[$pdt.attr('name')] = $pdt.val();
+            $.ajax({
+                url : $form.attr('action'),
+                type: $form.attr('method'),
+                data : data,
+                success: function(html) {
+                    $('#operation_realisation_Machine').replaceWith(
+                        $(html).find('#operation_realisation_Machine')
+                    );
+                }
+            });
+        });
+    </script>
 {{ form_end(form) }}
