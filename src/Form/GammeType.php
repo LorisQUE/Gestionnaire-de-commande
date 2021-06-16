@@ -27,7 +27,7 @@ class GammeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // UTILISATEUR
-        //$utilisateurs = $this->utilisateurRepository->findUsersByRole("ROLE_OUVRIER");
+        $ouvriers = $this->utilisateurRepository->findUsersByRole("ROLE_OUVRIER");
 
         // PIECE
         $pieces = $this->pieceRepository->findBy(["Type" => "PL"]);
@@ -47,7 +47,10 @@ class GammeType extends AbstractType
                     //if($key == null) return $choice;
                     /*else*/ return "#".$choice->getReference()." - ".$choice->getLibelle();
                 }, ])
-            ->add('Superviseur')
+            ->add('Superviseur', ChoiceType::class, [
+                'choices' => $ouvriers,
+                'choice_label' => function ($choice, $key, $value) { return $choice->getPseudonyme(); },
+                ])
         ;
     }
 
