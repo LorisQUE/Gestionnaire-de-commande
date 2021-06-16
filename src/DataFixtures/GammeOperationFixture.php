@@ -97,7 +97,7 @@ class GammeOperationFixture extends Fixture
         $manager->persist($ouvrier2);
 
         $PDT1 = new PosteDeTravail();
-        $PDT1->setLibelle("Poste 01");
+        $PDT1->setLibelle("Poste 02");
         $PDT1->setOuvrier($ouvrier1);
         $manager->persist($PDT1);
 

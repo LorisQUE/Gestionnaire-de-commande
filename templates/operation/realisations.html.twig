@@ -21,7 +21,7 @@
                 <td>{{ operation.Machine }}</td>
                 <td>{{ operation.Duree }}</td>
                 <td>
-                    <a title="Modifier" class="btn btn-primary" href="#"><i class="fas fa-edit"></i></a>
+                    <a title="Modifier" class="btn btn-primary" href="{{ path('operation_edit_real', {'id': operation.id}) }}"><i class="fas fa-edit"></i></a>
                 </td>
             </tr>
         {% else %}
@@ -30,5 +30,5 @@
         </tbody>
     </table>
 
-    <a href="#">Retour à la gamme</a>
+    <a class="btn btn-primary" href="{{ path('gamme_real', {'id': gammeRealisation.gamme.id}) }}">Retour à la gamme</a>
 {% endblock %}

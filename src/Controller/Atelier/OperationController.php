@@ -5,6 +5,8 @@ namespace App\Controller\Atelier;
 use App\Entity\Gamme;
 use App\Entity\GammeRealisation;
 use App\Entity\Operation;
+use App\Entity\OperationRealisation;
+use App\Form\OperationRealisationType;
 use App\Form\OperationType;
 use App\Repository\OperationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -95,6 +97,26 @@ class OperationController extends AbstractController
     }
 
     // Réalisation d'opération
+    /**
+     * @Route("/{id}/realisation/edit", name="operation_edit_real", methods={"GET","POST"})
+     */
+    public function editReal(Request $request, OperationRealisation $operationRealisation): Response
+    {
+        $form = $this->createForm(OperationRealisationType::class, $operationRealisation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('operation_real', ['id'=> $operationRealisation->getGammeRealisation()->getId()]);
+        }
+
+        return $this->render('operation/edit_realisation.html.twig', [
+            'operation_realisation' => $operationRealisation,
+            'form' => $form->createView(),
+        ]);
+    }
+
     /**
      * @Route("/{id}/realisation", name="operation_real", methods={"GET"})
      */
