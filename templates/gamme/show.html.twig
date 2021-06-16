@@ -21,7 +21,6 @@
                 <td>{{ operation.Machine }}</td>
                 <td>{{ operation.Duree }}</td>
                 <td>
-                    <a title="Voir les réalisations" class="btn btn-primary" href="{{ path('operation_show', {'id': gamme.id}) }}"><i class="fas fa-search"></i></a>
                     <a title="Modifier" class="btn btn-primary" href="{{ path('operation_edit', {'id': operation.id, 'gamme': gamme.id}) }}"><i class="fas fa-edit"></i></a>
                     <form method="post" action="{{ path('operation_delete', {'id': operation.id, 'gamme': gamme.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette opération ?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ operation.id) }}">

@@ -34,9 +34,13 @@
             <td>{{ piece.PrixCatalogue }}€</td>
             <td> TODO </td>
             <td>
-                <a href="{{ path('stock_show', {'id': piece.id}) }}" title="Détails"><i class="fas fa-info-circle"></i></a>
-                <a href="{{ path('stock_edit', {'id': piece.id}) }}" title="Modification"><i class="fas fa-edit"></i></a>
-                <a href="#"  title="Suppression"><i class="fas fa-trash-alt"></i></a>
+                <a class="btn btn-primary" href="{{ path('stock_show', {'id': piece.id}) }}" title="Détails"><i class="fas fa-info-circle"></i></a>
+                <a class="btn btn-primary" href="{{ path('stock_edit', {'id': piece.id}) }}" title="Modification"><i class="fas fa-edit"></i></a>
+                <form method="post" action="{{ path('stock_delete', {'id': piece.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette pièce ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ piece.id) }}">
+                    <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                </form>
+
             </td>
         </tr>
     {% else %}

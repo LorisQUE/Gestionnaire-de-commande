@@ -31,10 +31,10 @@ class GammeType extends AbstractType
 
         // PIECE
         $pieces = $this->pieceRepository->findBy(["Type" => "PL"]);
-        $piecesDisponible = [/*null => 'Aucune'*/];
+        $piecesDisponible = [];
 
         foreach ($pieces as $piece) {
-            if($piece->getGamme() == null) {
+            if($piece->getGamme() == null || $piece->getGamme() == $builder->getData()) {
                 array_push($piecesDisponible, $piece);
             }
         }
@@ -43,10 +43,8 @@ class GammeType extends AbstractType
             ->add('Libelle')
             ->add('Piece', ChoiceType::class, [
                 'choices' => $piecesDisponible,
-                'choice_label' => function ($choice, $key, $value) {
-                    //if($key == null) return $choice;
-                    /*else*/ return "#".$choice->getReference()." - ".$choice->getLibelle();
-                }, ])
+                'choice_label' => function ($choice, $key, $value) { return "#".$choice->getReference()." - ".$choice->getLibelle();}
+                ])
             ->add('Superviseur', ChoiceType::class, [
                 'choices' => $ouvriers,
                 'choice_label' => function ($choice, $key, $value) { return $choice->getPseudonyme()." - ".$choice->getEmail(); },
