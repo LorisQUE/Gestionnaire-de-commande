@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Fournisseur;
 use App\Entity\Piece;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -19,32 +20,50 @@ class PieceFixture extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        $Fournisseur1 = new Fournisseur();
+        $Fournisseur1->setLibelle("Scierie Local");
+        $Fournisseur1->setAdresse("22 Rue Gébond");
+        $Fournisseur1->setPays("France");
+        $Fournisseur1->setVille("Lille");
+
+        $Fournisseur2 = new Fournisseur();
+        $Fournisseur2->setLibelle("Usine Durand");
+        $Fournisseur2->setAdresse("22 Avenue Dubois");
+        $Fournisseur2->setPays("France");
+        $Fournisseur2->setVille("Bordeaux");
+
         $Bois = new Piece();
         $Bois->setReference("MP0001");
         $Bois->setLibelle("Bois");
+        $Bois->setFournisseur($Fournisseur1);
         $Bois->setFournisseur(null);
         $Bois->setType("MP");
         $Bois->setPrix(0.99);
         $Bois->setPrixCatalogue(0.99);
         $Bois->setQuantite(15);
+        $Fournisseur1->addPiecesFournie($Bois);
 
         $Vernis = new Piece();
         $Vernis->setReference("PA0001");
         $Vernis->setLibelle("Vernis");
+        $Vernis->setFournisseur($Fournisseur2);
         $Vernis->setFournisseur(null);
         $Vernis->setType("PA");
         $Vernis->setPrix(0.99);
         $Vernis->setPrixCatalogue(0.99);
         $Vernis->setQuantite(2);
+        $Fournisseur2->addPiecesFournie($Vernis);
 
         $Colle = new Piece();
         $Colle->setReference("PA0002");
         $Colle->setLibelle("Colle");
+        $Colle->setFournisseur($Fournisseur2);
         $Colle->setFournisseur(null);
         $Colle->setType("PA");
         $Colle->setPrix(2.99);
         $Colle->setPrixCatalogue(2.99);
         $Colle->setQuantite(3);
+        $Fournisseur2->addPiecesFournie($Colle);
 
         $Manche = new Piece();
         $Manche->setReference("PI0001");
@@ -83,6 +102,8 @@ class PieceFixture extends Fixture
         $Raquette->addPiecesNecessaire($Manche);
         $Raquette->addPiecesNecessaire($Tete);
 
+        $manager->persist($Fournisseur1);
+        $manager->persist($Fournisseur2);
         $manager->persist($Bois);
         $manager->persist($Vernis);
         $manager->persist($Colle);
