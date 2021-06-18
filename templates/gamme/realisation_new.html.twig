@@ -1,0 +1,18 @@
+{%  extends 'base.html.twig' %}
+
+{% block title %}Nouvelle réalisation de gamme{% endblock %}
+
+{%  block body %}
+
+    <h2>Nouvelle réalisation de gamme</h2>
+
+    {{ form_start(form) }}
+        {{ form_row(form.Libelle) }}
+        {{ form_row(form.Superviseur) }}
+    {% for operation in form.OperationRealisations %}
+        {{ form_row(operation) }}
+    {% endfor %}
+        <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+    {{ form_end(form) }}
+
+{% endblock %}

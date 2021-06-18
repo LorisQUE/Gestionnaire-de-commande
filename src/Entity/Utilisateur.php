@@ -71,6 +71,11 @@ class Utilisateur implements UserInterface
         $this->GammeRealisations = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getPseudonyme()." - ".$this->getEmail();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

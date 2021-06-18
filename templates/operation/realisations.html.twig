@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Operation{% endblock %}
+
+{% block body %}
+    <h1>Operation</h1>
+
+    <table class="table">
+        <thead>
+        <th>Libelle</th>
+        <th>Poste de Travail</th>
+        <th>Machine</th>
+        <th>Durée</th>
+        <th>Modification</th>
+        </thead>
+        <tbody>
+        {% for operation in operationsRealisations %}
+            <tr>
+                <td>{{ operation.Libelle }}</td>
+                <td>{{ operation.PosteDeTravail }}</td>
+                <td>{{ operation.Machine }}</td>
+                <td>{{ operation.Duree }}</td>
+                <td>
+                    <a title="Modifier" class="btn btn-primary" href="{{ path('operation_edit_real', {'id': operation.id}) }}"><i class="fas fa-edit"></i></a>
+                </td>
+            </tr>
+        {% else %}
+            <td>Aucune opération disponible.</td>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('gamme_real', {'id': gammeRealisation.gamme.id}) }}">Retour à la gamme</a>
+{% endblock %}

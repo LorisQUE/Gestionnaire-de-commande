@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification de la réalisation de gamme{% endblock %}
+
+{% block body %}
+    <h1>Modification de la réalisation de gamme</h1>
+
+    {{ include('gamme/_form_realisation.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <a href="{{ path('gamme_real', {'id': gamme_realisation.gamme.id}) }}">Retour aux réalisations</a>
+{% endblock %}

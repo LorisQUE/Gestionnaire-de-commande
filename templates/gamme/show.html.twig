@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gamme{% endblock %}
+
+{% block body %}
+    <h1>Opérations de {{ gamme.Libelle }}</h1>
+
+    <table class="table">
+        <thead>
+            <th>Libelle</th>
+            <th>Poste de Travail</th>
+            <th>Machine</th>
+            <th>Duree</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+        {% for operation in operations %}
+            <tr>
+                <td>{{ operation.Libelle }}</td>
+                <td>{{ operation.PosteDeTravail }}</td>
+                <td>{{ operation.Machine }}</td>
+                <td>{{ operation.Duree }}</td>
+                <td>
+                    <a title="Modifier" class="btn btn-primary" href="{{ path('operation_edit', {'id': operation.id, 'gamme': gamme.id}) }}"><i class="fas fa-edit"></i></a>
+                    <form method="post" action="{{ path('operation_delete', {'id': operation.id, 'gamme': gamme.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette opération ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ operation.id) }}">
+                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <p>Aucune opération disponible.</p>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('gamme_index') }}">Retour aux Gammes</a>
+
+    <a class="btn btn-primary" href="{{ path('gamme_edit', {'id': gamme.id}) }}">Modifier</a>
+
+    <a class="btn btn-primary" href="{{ path('operation_new', {'gamme': gamme.id}) }}">Ajouter une opération</a>
+
+    {{ include('gamme/_delete_form.html.twig') }}
+{% endblock %}

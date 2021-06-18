@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification de réalisation d'opération{% endblock %}
+
+{% block body %}
+    <h1>Modification de réalisation d'opération</h1>
+
+    {{ include('operation/_form_realisation.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <a class="btn btn-primary" href="{{ path('operation_real', {'id': operation_realisation.gammeRealisation.Id}) }}">Retour aux réalisations</a>
+{% endblock %}

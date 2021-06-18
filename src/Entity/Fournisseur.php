@@ -49,6 +49,11 @@ class Fournisseur
         $this->PiecesFournies = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getLibelle();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -110,7 +115,7 @@ class Fournisseur
         return $this->PiecesFournies;
     }
 
-    public function addPiecesFourny(Piece $piecesFourny): self
+    public function addPiecesFournie(Piece $piecesFourny): self
     {
         if (!$this->PiecesFournies->contains($piecesFourny)) {
             $this->PiecesFournies[] = $piecesFourny;
