@@ -4,6 +4,8 @@ namespace App\Controller\Atelier;
 
 use App\Entity\Gamme;
 use App\Entity\GammeRealisation;
+use App\Entity\OperationRealisation;
+use App\Form\GammeRealisationNewType;
 use App\Form\GammeRealisationType;
 use App\Form\GammeType;
 use App\Repository\GammeRepository;
@@ -132,21 +134,51 @@ class GammeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/new/realisation", name="gamme_new_real", methods={"GET"})
+     * @Route("/{id}/new/realisation", name="gamme_new_real",  methods={"GET","POST"})
+     * @param Request $request
+     * @param Gamme $gamme
+     * @return Response
      */
-    public function newReal(Gamme $gamme): Response
+    public function newReal(Request $request, Gamme $gamme): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        //On créer la nouvelle réalisation de gamme
+        $gammeReal = new GammeRealisation();
+        $gammeReal->setLibelle($gamme->getLibelle());
+        $gammeReal->setSuperviseur($gamme->getSuperviseur());
+        $gammeReal->setGamme($gamme);
 
-        $realisation = new GammeRealisation();
-        $realisation->setGamme($gamme);
-        $realisation->setLibelle($gamme->getLibelle());
-        $realisation->setSuperviseur($gamme->getSuperviseur());
+        //On créer les nouvelles réalisation d'opérations pour la réalisation de gamme
+        foreach ($gamme->getOperations() as $operation){
+            $opeReal = new OperationRealisation();
+            $opeReal->setOperation($operation);
+            $opeReal->setLibelle($operation->getLibelle());
+            $opeReal->setDuree($operation->getDuree());
+            $opeReal->setPosteDeTravail($operation->getPosteDeTravail());
+            $opeReal->setMachine($operation->getMachine());
 
-        $entityManager->persist($realisation);
-        $entityManager->flush();
+            $opeReal->setOperateur(null);
 
-        return $this->redirectToRoute('gamme_real', ['id'=> $gamme->getId()]);
+            $gammeReal->addOperationRealisation($opeReal);
+            $opeReal->setGammeRealisation($gammeReal);
+        }
+
+        $form = $this->createForm(GammeRealisationNewType::class, $gammeReal);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            foreach ($gammeReal->getOperationRealisations() as $operation){
+                $entityManager->persist($operation);
+            }
+            $entityManager->persist($gammeReal);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('gamme_real', ['id'=> $gamme->getId()]);
+        }
+
+        return $this->render('gamme/realisation_new.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**
