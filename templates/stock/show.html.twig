@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la pièce{% endblock %}
+
+{% block body %}
+    <h1>Détails de #{{ piece.Reference }} - {{ piece.Libelle }} </h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Reference</th>
+            <td>{{ piece.Reference }}</td>
+        </tr>
+        <tr>
+            <th>Libelle</th>
+            <td>{{ piece.Libelle }}</td>
+        </tr>
+        <tr>
+            <th>Type</th>
+            <td>{{ enumType[piece.Type] }}</td>
+        </tr>
+        <tr>
+            <th>Quantité</th>
+            <td>{{ piece.Quantite }}</td>
+        </tr>
+        <tr>
+            <th>Prix</th>
+            <td>{{ piece.Prix }}€</td>
+        </tr>
+        <tr>
+            <th>Prix Catalogue</th>
+            <td>{{ piece.PrixCatalogue }}€</td>
+        </tr>
+        <tr>
+            <th>Pièce Nécessaire</th>
+            <td>{{ piece.PrixCatalogue }}€</td>
+        </tr>
+        <tr>
+            <th>Pièce Parentes</th>
+            <td>{{ piece.PrixCatalogue }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead>Pièce Nécessaire</thead>
+        <tbody>
+        {% for piece in pieceNecessaire %}
+            <tr>
+                <td scope="row">{{ piece.Reference }}</td>
+                <td>{{ piece.Libelle }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">Aucune pièce</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead>Pièce Réalisable</thead>
+        <tbody>
+        {% for piece in pieceRealisable %}
+            <tr>
+                <td scope="row">{{ piece.Reference }}</td>
+                <td>{{ piece.Libelle }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">Aucune pièce</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('stock') }}">Retour à la liste</a>
+
+    <a class="btn btn-primary" href="{{ path('stock_edit', {'id': piece.id}) }}">Modification</a>
+
+    {{ include('stock/_delete_form.html.twig') }}
+{% endblock %}
