@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OperationRealisationType extends AbstractType
@@ -43,15 +44,17 @@ class OperationRealisationType extends AbstractType
                 'label' => 'Poste de travail',
                 'class'         => 'App\Entity\PosteDeTravail',
                 'multiple'      => false,
-            ]);
+                "attr" => array("class" => "select-pdt")
+            ])
         ;
 
-        $formModifier = function (\Symfony\Component\Form\FormInterface $form, PosteDeTravail $posteDeTravail = null) {
+        $formModifier = function (FormInterface $form, PosteDeTravail $posteDeTravail = null) {
             $machines = null === $posteDeTravail ? array() : $posteDeTravail->getMachines();
             $form->add('Machine', EntityType::class, array(
                 'class' => 'App\Entity\Machine',
                 'choices' => $machines,
                 'multiple'      => false,
+                "attr" => array("class" => "select-machine")
             ));
         };
 
@@ -84,6 +87,7 @@ class OperationRealisationType extends AbstractType
                         'class' => 'App\Entity\Machine',
                         'choices' => $machine->getPosteDeTravail()->getMachines(),
                         'multiple'      => false,
+                        "attr" => array("class" => "select-machine")
                     ));
                 }
             }

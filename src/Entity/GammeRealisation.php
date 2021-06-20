@@ -57,7 +57,7 @@ class GammeRealisation
         return $this->Libelle;
     }
 
-    public function setLibelle(string $Libelle): self
+    public function setLibelle(string $Libelle = null): self
     {
         $this->Libelle = $Libelle;
 

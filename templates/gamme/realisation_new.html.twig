@@ -3,6 +3,9 @@
 {% block title %}Nouvelle réalisation de gamme{% endblock %}
 
 {%  block body %}
+<style>
+    .card { margin: 2em 0; }
+</style>
 
     <h2>Nouvelle réalisation de gamme</h2>
 
@@ -10,9 +13,63 @@
         {{ form_row(form.Libelle) }}
         {{ form_row(form.Superviseur) }}
     {% for operation in form.OperationRealisations %}
-        {{ form_row(operation) }}
+        <div class="card">
+            <div class="card-header">
+                {{ operation.vars.value.Libelle }}
+            </div>
+            <div class="card-body">
+                {{ form_row(operation, { 'attr' : { 'class' : 'ope-real-form' }} ) }}
+            </div>
+        </div>
+        <div/>
     {% endfor %}
         <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+
+    <script>
+        var $pdt = $('.select-pdt');
+        $pdt.change(function(e) {
+            var that = this;
+            console.log(e.target.id, this)
+            var selectPdt = $("#" + e.target.id);
+            console.log(selectPdt, selectPdt.attr('name'), selectPdt.val());
+            var $form = selectPdt.closest('form');
+            console.log($form.attr('action'), $form.attr('method'));
+            var data = {};
+            data[selectPdt.attr('name')] = selectPdt.val();
+            $.ajax({
+                url : $form.attr('action'),
+                type: $form.attr('method'),
+                data : data,
+                success: function(html) {
+                    var selectMachineId = "#" + $(that).closest('.ope-real-form').find('.select-machine')[0].id;
+                    $(selectMachineId).replaceWith(
+                        $(html).find(selectMachineId)
+                    );
+                },
+                error: function(err) {
+                    console.log(err, this);
+                }
+            });
+        });
+
+
+        /*var $pdt = $('#operation_realisation_PosteDeTravail');
+        $pdt.change(function() {
+            var $form = $(this).closest('form');
+            var data = {};
+            data[$pdt.attr('name')] = $pdt.val();
+            $.ajax({
+                url : $form.attr('action'),
+                type: $form.attr('method'),
+                data : data,
+                success: function(html) {
+                    $('#operation_realisation_Machine').replaceWith(
+                        $(html).find('#operation_realisation_Machine')
+                    );
+                }
+            });
+        });*/
+    </script>
     {{ form_end(form) }}
 
 {% endblock %}
