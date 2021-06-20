@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau fournisseur{% endblock %}
+
+{% block body %}
+    <h1>Ajout d'un nouveau fournisseur</h1>
+
+    {{ include('fournisseur/_form.html.twig') }}
+
+    <a class="btn btn-primary" href="{{ path('fournisseur_index') }}">Retour aux fournisseurs</a>
+{% endblock %}

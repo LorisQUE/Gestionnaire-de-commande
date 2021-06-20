@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modif fournisseur {{ fournisseur.Libelle }}{% endblock %}
+
+{% block body %}
+    <h1>Modification de {{ fournisseur.Libelle }}</h1>
+
+    {{ include('fournisseur/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <a class="btn btn-primary" href="{{ path('fournisseur_index') }}">Retour aux fournisseurs</a>
+
+    {{ include('fournisseur/_delete_form.html.twig') }}
+{% endblock %}

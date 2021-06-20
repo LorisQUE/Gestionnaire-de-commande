@@ -37,6 +37,9 @@
 
                         {% if is_granted('ROLE_COMMERCIAL') %}
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ path("fournisseur_index") }}">Fournisseurs</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="#">Devis</a>
                         </li>
                         <li class="nav-item">
