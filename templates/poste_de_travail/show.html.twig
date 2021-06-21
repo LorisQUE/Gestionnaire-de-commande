@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PosteDeTravail{% endblock %}
+
+{% block body %}
+    <h1>PosteDeTravail</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ poste_de_travail.id }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ poste_de_travail.Libelle }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('poste_index') }}">Retour aux postes</a>
+
+    <a class="btn btn-primary" href="{{ path('poste_edit', {'id': poste_de_travail.id}) }}">Modification</a>
+
+    {{ include('poste_de_travail/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le poste{% endblock %}
+
+{% block body %}
+    <h1>Modifier le poste</h1>
+
+    {{ include('poste_de_travail/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <a href="{{ path('poste_index') }}">Retour aux Postes</a>
+
+    {{ include('poste_de_travail/_delete_form.html.twig') }}
+{% endblock %}

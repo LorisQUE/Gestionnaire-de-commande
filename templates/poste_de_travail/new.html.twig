@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout d'un poste{% endblock %}
+
+{% block body %}
+    <h1>Ajout d'un poste</h1>
+
+    {{ include('poste_de_travail/_form.html.twig') }}
+
+    <a class="btn btn-primary" href="{{ path('poste_index') }}">Retour aux postes</a>
+{% endblock %}
