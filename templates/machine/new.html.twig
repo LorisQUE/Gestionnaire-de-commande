@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout d'une machine{% endblock %}
+
+{% block body %}
+    <h1>Ajout d'une machine</h1>
+
+    {{ include('machine/_form.html.twig') }}
+
+    <a class="btn btn-primary" href="{{ path('poste_show', {'id': machine.postedetravail.id}) }}">Retour au poste</a>
+{% endblock %}

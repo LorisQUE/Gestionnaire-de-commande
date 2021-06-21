@@ -53,8 +53,10 @@ class PosteDeTravailController extends AbstractController
      */
     public function show(PosteDeTravail $posteDeTravail): Response
     {
+        $machines = $posteDeTravail->getMachines();
         return $this->render('poste_de_travail/show.html.twig', [
             'poste_de_travail' => $posteDeTravail,
+            'machines' => $machines,
         ]);
     }
 

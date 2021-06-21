@@ -3,13 +3,14 @@
 {% block title %}Operation{% endblock %}
 
 {% block body %}
-    <h1>Operation</h1>
+    <h1>Réalisation d'opération</h1>
 
     <table class="table">
         <thead>
         <th>Libelle</th>
         <th>Poste de Travail</th>
         <th>Machine</th>
+        <th>Opérateur</th>
         <th>Durée</th>
         <th>Modification</th>
         </thead>
@@ -19,6 +20,7 @@
                 <td>{{ operation.Libelle }}</td>
                 <td>{{ operation.PosteDeTravail }}</td>
                 <td>{{ operation.Machine }}</td>
+                <td>{{ operation.Operateur }}</td>
                 <td>{{ operation.Duree }}</td>
                 <td>
                     <a title="Modifier" class="btn btn-primary" href="{{ path('operation_edit_real', {'id': operation.id}) }}"><i class="fas fa-edit"></i></a>

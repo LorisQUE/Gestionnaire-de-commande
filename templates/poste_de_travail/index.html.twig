@@ -3,6 +3,11 @@
 {% block title %}Poste de travail{% endblock %}
 
 {% block body %}
+    <style>
+        .actions { display: flex; }
+        .actions a { margin-right: .5em; }
+    </style>
+
     <h1>Poste de travail</h1>
 
     <table class="table">
@@ -21,12 +26,14 @@
                 <td>{{ poste_de_travail.Libelle }}</td>
                 <td>{{ poste_de_travail.Ouvrier }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ path('poste_show', {'id': poste_de_travail.id}) }}"><i class="fas fa-search"></i></a>
-                    <a class="btn btn-primary" href="{{ path('poste_edit', {'id': poste_de_travail.id}) }}"><i class="fas fa-edit"></i></a>
-                    <form method="post" action="{{ path('poste_delete', {'id': poste_de_travail.id}) }}" onsubmit="return confirm('Voulez-vous supprimer ce poste ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ poste_de_travail.id) }}">
-                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-                    </form>
+                    <div class="actions">
+                        <a class="btn btn-primary" href="{{ path('poste_show', {'id': poste_de_travail.id}) }}"><i class="fas fa-search"></i></a>
+                        <a class="btn btn-primary" href="{{ path('poste_edit', {'id': poste_de_travail.id}) }}"><i class="fas fa-edit"></i></a>
+                        <form method="post" action="{{ path('poste_delete', {'id': poste_de_travail.id}) }}" onsubmit="return confirm('Voulez-vous supprimer ce poste ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ poste_de_travail.id) }}">
+                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </div>
                 </td>
             </tr>
         {% else %}

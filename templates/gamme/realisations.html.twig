@@ -3,6 +3,11 @@
 {% block title %}Réalisations de gamme{% endblock %}
 
 {% block body %}
+    <style>
+        .actions { display: flex; }
+        .actions a { margin-right: .5em; }
+    </style>
+
     <h1>Réalisations de la gamme {{ gamme.Libelle }}</h1>
 
     <table class="table">
@@ -17,12 +22,14 @@
                 <td>{{ realisation.Libelle }}</td>
                 <td>{{ realisation.Superviseur }}</td>
                 <td>
-                    <a title="Voir les réalisations" class="btn btn-primary" href="{{ path('operation_real', {'id': realisation.id}) }}"><i class="fas fa-search"></i></a>
-                    <a title="Modification" class="btn btn-primary" href="{{ path('gamme_realisation_edit', {'id': realisation.id}) }}"><i class="fas fa-edit"></i></a>
-                    <form method="post" action="{{ path('gamme_realisation_delete', {'id': realisation.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cette réalisation de gamme ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ realisation.id) }}">
-                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                    </form>
+                    <div class="actions">
+                        <a title="Voir les réalisations" class="btn btn-primary" href="{{ path('operation_real', {'id': realisation.id}) }}"><i class="fas fa-search"></i></a>
+                        <a title="Modification" class="btn btn-primary" href="{{ path('gamme_realisation_edit', {'id': realisation.id}) }}"><i class="fas fa-edit"></i></a>
+                        <form method="post" action="{{ path('gamme_realisation_delete', {'id': realisation.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cette réalisation de gamme ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ realisation.id) }}">
+                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </div>
                 </td>
             </tr>
         {% else %}
