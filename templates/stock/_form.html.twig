@@ -1,4 +1,46 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Enregistrer') }}</button>
+    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+
+    <script>
+        var $type = $('#stock_Type');
+        var prix = $("#stock_Prix");
+        var prixCatalogue = $("#stock_PrixCatalogue");
+        var fournisseur = $("#stock_Fournisseur");
+
+        $( document ).ready(function() {
+            getTypePiece($type.val())
+        });
+
+        $type.change(function(e) {
+            getTypePiece(this.value);
+        });
+
+        function getTypePiece(type){
+            switch (type) {
+                case "MP":
+                case "PA":
+                    prix.parents(".form-group").hide();
+                    prix.val(null);
+                    prixCatalogue.parents(".form-group").show();
+                    prixCatalogue.val(null);
+                    fournisseur.parents(".form-group").show();
+                break;
+
+                case "PL":
+                    prix.parents(".form-group").show();
+                    prixCatalogue.parents(".form-group").hide();
+                    fournisseur.parents(".form-group").hide();
+                    fournisseur.val(null);
+                break;
+
+                case "PI":
+                    prix.parents(".form-group").hide();
+                    prixCatalogue.parents(".form-group").hide();
+                    fournisseur.parents(".form-group").hide();
+                    fournisseur.val(null);
+                break;
+            }
+        }
+    </script>
 {{ form_end(form) }}

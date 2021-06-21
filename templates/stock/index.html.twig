@@ -4,6 +4,8 @@
 
 {% block body %}
 <style>
+    .actions { display: flex; }
+    .actions a { margin-right: .5em; }
 </style>
 
 <div class="container">
@@ -34,13 +36,14 @@
             <td>{% if (piece.Type == 'MP' or piece.Type == 'PA') %} {{ piece.PrixCatalogue }}€ {% else %} Aucun {% endif  %}</td>
             <td> {% if (piece.Fournisseur) %} {{ piece.Fournisseur }} {% else %} Aucun {% endif  %}</td>
             <td>
-                <a class="btn btn-primary" href="{{ path('stock_show', {'id': piece.id}) }}" title="Détails"><i class="fas fa-info-circle"></i></a>
-                <a class="btn btn-primary" href="{{ path('stock_edit', {'id': piece.id}) }}" title="Modification"><i class="fas fa-edit"></i></a>
-                <form method="post" action="{{ path('stock_delete', {'id': piece.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette pièce ?');">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ piece.id) }}">
-                    <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-                </form>
-
+                <div class="actions">
+                    <a class="btn btn-primary" href="{{ path('stock_show', {'id': piece.id}) }}" title="Détails"><i class="fas fa-info-circle"></i></a>
+                    <a class="btn btn-primary" href="{{ path('stock_edit', {'id': piece.id}) }}" title="Modification"><i class="fas fa-edit"></i></a>
+                    <form method="post" action="{{ path('stock_delete', {'id': piece.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette pièce ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ piece.id) }}">
+                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </div>
             </td>
         </tr>
     {% else %}
