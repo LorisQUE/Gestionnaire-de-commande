@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -32,6 +33,9 @@ class GammeRealisationNewType extends AbstractType
             ->add('Superviseur', ChoiceType::class, [
                 'choices' => $ouvriers,
                 'choice_label' => function ($choice, $key, $value) { return $choice->getPseudonyme()." - ".$choice->getEmail(); },
+            ])
+            ->add('Date', DateTimeType::class, [
+                'widget' => 'single_text',
             ])
             ->add('OperationRealisations', CollectionType::class, [
                 'entry_type' => OperationRealisationType::class,

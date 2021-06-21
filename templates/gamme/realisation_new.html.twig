@@ -12,6 +12,7 @@
     {{ form_start(form) }}
         {{ form_row(form.Libelle) }}
         {{ form_row(form.Superviseur) }}
+        {{ form_row(form.Date) }}
     {% for operation in form.OperationRealisations %}
         <div class="card">
             <div class="card-header">
