@@ -50,6 +50,7 @@ class GammeRealisation
     {
         $this->OperationRealisations = new ArrayCollection();
         $this->Date = new \DateTime();
+        $this->Date->setTimezone( new \DateTimeZone("Europe/Paris"));
     }
 
     public function getId(): ?int
@@ -128,7 +129,7 @@ class GammeRealisation
         return $this->Date;
     }
 
-    public function setDate(\DateTimeInterface $Date): self
+    public function setDate(\DateTimeInterface $Date = null): self
     {
         $this->date = $Date;
 

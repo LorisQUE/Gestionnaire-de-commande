@@ -35,7 +35,7 @@ class GammeOperationFixture extends Fixture
 
         $PDT = new PosteDeTravail();
         $PDT->setLibelle("Poste 01");
-        $PDT->setOuvrier($ouvrier);
+        $PDT->addOuvrier($ouvrier);
         $manager->persist($PDT);
 
         $machine1 = new Machine();
@@ -98,7 +98,8 @@ class GammeOperationFixture extends Fixture
 
         $PDT1 = new PosteDeTravail();
         $PDT1->setLibelle("Poste 02");
-        $PDT1->setOuvrier($ouvrier1);
+        $PDT1->addOuvrier($ouvrier1);
+        $PDT1->addOuvrier($ouvrier2);
         $manager->persist($PDT1);
 
         $machine3 = new Machine();

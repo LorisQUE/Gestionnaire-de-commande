@@ -1,6 +1,10 @@
+<style>
+    .col-form-label { display: none; }
+</style>
+
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Enregistrer') }}</button>
+    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 
     <script>
         var $pdt = $('#operation_realisation_PosteDeTravail');

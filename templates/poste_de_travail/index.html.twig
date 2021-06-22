@@ -13,18 +13,18 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Libelle</th>
-                <th>Ouvrier</th>
+                <th>Nb Ouvriers</th>
+                <th>Nb Machines</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for poste_de_travail in poste_de_travails %}
             <tr>
-                <td>{{ poste_de_travail.id }}</td>
                 <td>{{ poste_de_travail.Libelle }}</td>
-                <td>{{ poste_de_travail.Ouvrier }}</td>
+                <td>{{ poste_de_travail.Ouvriers | length }}</td>
+                <td>{{ poste_de_travail.Machines | length }}</td>
                 <td>
                     <div class="actions">
                         <a class="btn btn-primary" href="{{ path('poste_show', {'id': poste_de_travail.id}) }}"><i class="fas fa-search"></i></a>

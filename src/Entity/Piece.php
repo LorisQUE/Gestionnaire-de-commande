@@ -50,12 +50,12 @@ class Piece
     private $Fournisseur;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Piece::class, inversedBy="PiecesNecessaire")
+     * @ORM\ManyToMany(targetEntity=Piece::class, mappedBy="PiecesNecessaire")
      */
     private $PiecesParentes;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Piece::class, mappedBy="PiecesParentes")
+     * @ORM\ManyToMany(targetEntity=Piece::class, inversedBy="PiecesParentes")
      */
     private $PiecesNecessaire;
 

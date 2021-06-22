@@ -38,6 +38,7 @@ class GammeRealisationNewType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('OperationRealisations', CollectionType::class, [
+                'entry_options' => [ 'label' => false ],
                 'entry_type' => OperationRealisationType::class,
                 'by_reference' => true,
                 'allow_add' => false,

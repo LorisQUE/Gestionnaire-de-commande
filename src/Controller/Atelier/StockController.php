@@ -18,8 +18,8 @@ class StockController extends AbstractController
 
     public $enumType = array (
         "MP" => "Matière Première",
-        "PI" => "Pièce Intermédiaire",
         "PA" => "Pièce Achetée",
+        "PI" => "Pièce Intermédiaire",
         "PL" => "Pièce Livrable"
     );
 

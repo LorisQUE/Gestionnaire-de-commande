@@ -48,10 +48,6 @@ class Utilisateur implements UserInterface
      */
     private $Gammes;
 
-    /**
-     * @ORM\OneToMany(targetEntity=PosteDeTravail::class, mappedBy="Ouvrier")
-     */
-    private $PosteDeTravail;
 
     /**
      * @ORM\OneToMany(targetEntity=OperationRealisation::class, mappedBy="Operateur")
@@ -63,12 +59,17 @@ class Utilisateur implements UserInterface
      */
     private $GammeRealisations;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=PosteDeTravail::class, mappedBy="Ouvriers")
+     */
+    private $PostesDeTravail;
+
     public function __construct()
     {
         $this->Gammes = new ArrayCollection();
-        $this->PosteDeTravail = new ArrayCollection();
         $this->Realisations = new ArrayCollection();
         $this->GammeRealisations = new ArrayCollection();
+        $this->PostesDeTravail = new ArrayCollection();
     }
 
     public function __toString()
@@ -200,36 +201,6 @@ class Utilisateur implements UserInterface
     }
 
     /**
-     * @return Collection|PosteDeTravail[]
-     */
-    public function getPosteDeTravail(): Collection
-    {
-        return $this->PosteDeTravail;
-    }
-
-    public function addPosteDeTravail(PosteDeTravail $posteDeTravail): self
-    {
-        if (!$this->PosteDeTravail->contains($posteDeTravail)) {
-            $this->PosteDeTravail[] = $posteDeTravail;
-            $posteDeTravail->setOuvrier($this);
-        }
-
-        return $this;
-    }
-
-    public function removePosteDeTravail(PosteDeTravail $posteDeTravail): self
-    {
-        if ($this->PosteDeTravail->removeElement($posteDeTravail)) {
-            // set the owning side to null (unless already changed)
-            if ($posteDeTravail->getOuvrier() === $this) {
-                $posteDeTravail->setOuvrier(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|OperationRealisation[]
      */
     public function getRealisations(): Collection
@@ -284,6 +255,33 @@ class Utilisateur implements UserInterface
             if ($GammeRealisation->getSuperviseur() === $this) {
                 $GammeRealisation->setSuperviseur(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PosteDeTravail[]
+     */
+    public function getPostesDeTravail(): Collection
+    {
+        return $this->PostesDeTravail;
+    }
+
+    public function addPostesDeTravail(PosteDeTravail $postesDeTravail): self
+    {
+        if (!$this->PostesDeTravail->contains($postesDeTravail)) {
+            $this->PostesDeTravail[] = $postesDeTravail;
+            $postesDeTravail->addOuvrier($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostesDeTravail(PosteDeTravail $postesDeTravail): self
+    {
+        if ($this->PostesDeTravail->removeElement($postesDeTravail)) {
+            $postesDeTravail->removeOuvrier($this);
         }
 
         return $this;

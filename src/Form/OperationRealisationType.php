@@ -18,7 +18,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class OperationRealisationType extends AbstractType
 {
     private $entityManager;
-    private $pieceRepository;
     private $utilisateurRepository;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -38,23 +37,32 @@ class OperationRealisationType extends AbstractType
             ->add('Operateur', ChoiceType::class, [
                 'choices' => $ouvriers,
                 'choice_label' => function ($choice, $key, $value) { return $choice->getPseudonyme()." - ".$choice->getEmail(); },
+                "attr" => array("class" => "select-operateur"),
             ])
             ->add('PosteDeTravail', EntityType::class, [
                 'placeholder' => 'Sélectionnez un poste',
                 'label' => 'Poste de travail',
                 'class'         => 'App\Entity\PosteDeTravail',
                 'multiple'      => false,
-                "attr" => array("class" => "select-pdt")
+                "attr" => array("class" => "select-pdt"),
             ])
         ;
 
-        $formModifier = function (FormInterface $form, PosteDeTravail $posteDeTravail = null) {
+        $formModifier = function (FormInterface $form, PosteDeTravail $posteDeTravail = null, Utilisateur $operateur = null) {
+            $pdt = null === $operateur ? array() : $operateur->getPostesDeTravail();
+            $form->add('Machine', EntityType::class, array(
+                'class' => 'App\Entity\PosteDeTravail',
+                'choices' => $pdt,
+                'multiple'      => false,
+                "attr" => array("class" => "select-pdt"),
+            ));
+
             $machines = null === $posteDeTravail ? array() : $posteDeTravail->getMachines();
             $form->add('Machine', EntityType::class, array(
                 'class' => 'App\Entity\Machine',
                 'choices' => $machines,
                 'multiple'      => false,
-                "attr" => array("class" => "select-machine")
+                "attr" => array("class" => "select-machine"),
             ));
         };
 
@@ -62,7 +70,7 @@ class OperationRealisationType extends AbstractType
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($formModifier) {
                 $data = $event->getData();
-                $formModifier($event->getForm(), $data->getPosteDeTravail());
+                $formModifier($event->getForm(), $data->getPosteDeTravail(), $data->getOperateur());
             }
         );
 
@@ -74,19 +82,38 @@ class OperationRealisationType extends AbstractType
             }
         );
 
+        $builder->get('Operateur')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($formModifier) {
+                $operateur = $event->getForm()->getData();
+                $formModifier($event->getForm()->getParent(), $operateur);
+            }
+        );
+
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
             function(FormEvent $event){
                 $form = $event->getForm();
                 $data = $event->getData();
+                $pdt = $data->getPosteDeTravail();
                 $machine = $data->getMachine();
+
+                $form->get('Operateur')->setData($data->getOperateur());
+                if($machine !== null) {
+                    $form->add('operateur', EntityType::class, array(
+                        'class' => 'App\Entity\Machine',
+                        'choices' => $pdt,
+                        'multiple' => false,
+                        "attr" => array("class" => "select-machine")
+                    ));
+                }
 
                 $form->get('PosteDeTravail')->setData($data->getPosteDeTravail());
                 if($machine !== null) {
                     $form->add('Machine', EntityType::class, array(
                         'class' => 'App\Entity\Machine',
                         'choices' => $machine->getPosteDeTravail()->getMachines(),
-                        'multiple'      => false,
+                        'multiple' => false,
                         "attr" => array("class" => "select-machine")
                     ));
                 }

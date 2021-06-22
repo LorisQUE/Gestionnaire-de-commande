@@ -7,6 +7,7 @@
         var prix = $("#stock_Prix");
         var prixCatalogue = $("#stock_PrixCatalogue");
         var fournisseur = $("#stock_Fournisseur");
+        var piecesNecessaire = $("#stock_PiecesNecessaire");
 
         $( document ).ready(function() {
             getTypePiece($type.val())
@@ -22,23 +23,39 @@
                 case "PA":
                     prix.parents(".form-group").hide();
                     prix.val(null);
+                    prix.prop('required', false);
                     prixCatalogue.parents(".form-group").show();
-                    prixCatalogue.val(null);
+                    prixCatalogue.prop('required', true);
                     fournisseur.parents(".form-group").show();
+                    fournisseur.prop('required', true);
+                    piecesNecessaire.parents(".form-group").hide();
+                    piecesNecessaire.val(null);
+                    piecesNecessaire.prop('required', false);
                 break;
 
                 case "PL":
                     prix.parents(".form-group").show();
+                    prix.prop('required', true);
                     prixCatalogue.parents(".form-group").hide();
+                    prixCatalogue.val(null);
+                    prixCatalogue.prop('required', false);
                     fournisseur.parents(".form-group").hide();
                     fournisseur.val(null);
+                    fournisseur.prop('required', false);
+                    piecesNecessaire.parents(".form-group").show();
                 break;
 
                 case "PI":
                     prix.parents(".form-group").hide();
+                    prix.val(null);
+                    prix.prop('required', false);
                     prixCatalogue.parents(".form-group").hide();
+                    prixCatalogue.val(null);
+                    prixCatalogue.prop('required', false);
                     fournisseur.parents(".form-group").hide();
                     fournisseur.val(null);
+                    fournisseur.prop('required', false);
+                    piecesNecessaire.parents(".form-group").show();
                 break;
             }
         }
