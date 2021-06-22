@@ -62,8 +62,13 @@ class StockController extends AbstractController
      */
     public function show(Piece $piece): Response
     {
-        $pieceNecessaire = $piece->getPiecesNecessaire();
-        $pieceRealisable = $piece->getPiecesParentes();
+        $pieceNecessaire = $piece->getPiecesNecessaires();
+        $pieceRealisable = $piece->getPiecesProduites();
+
+        foreach ($pieceNecessaire as $p) {
+            dump($piece->getid(), $p->getQuantite());
+        }
+
         return $this->render('stock/show.html.twig', [
             'pieceNecessaire' => $pieceNecessaire,
             'pieceRealisable' => $pieceRealisable,

@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Piece;
+use App\Entity\PieceRelation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -74,14 +75,51 @@ class PieceFixture extends Fixture
         $Raquette->setPrixCatalogue(16);
         $Raquette->setQuantite(32);
 
-        $Manche->addPiecesNecessaire($Bois);
-        $Manche->addPiecesNecessaire($Vernis);
+        $RelationBoisManche = new PieceRelation();
+        $RelationBoisManche->setQuantite(2);
+        $RelationBoisManche->setPieceNecessaire($Bois);
+        $RelationBoisManche->setPieceProduite($Manche);
 
-        $Tete->addPiecesNecessaire($Bois);
+        $RelationVernisManche = new PieceRelation();
+        $RelationVernisManche->setQuantite(1);
+        $RelationVernisManche->setPieceNecessaire($Vernis);
+        $RelationVernisManche->setPieceProduite($Manche);
 
-        $Raquette->addPiecesNecessaire($Colle);
-        $Raquette->addPiecesNecessaire($Manche);
-        $Raquette->addPiecesNecessaire($Tete);
+        $RelationBoisTete = new PieceRelation();
+        $RelationBoisTete->setQuantite(1);
+        $RelationBoisTete->setPieceNecessaire($Bois);
+        $RelationBoisTete->setPieceProduite($Tete);
+
+        $RelationColleRaquette = new PieceRelation();
+        $RelationColleRaquette->setQuantite(2);
+        $RelationColleRaquette->setPieceNecessaire($Colle);
+        $RelationColleRaquette->setPieceProduite($Raquette);
+
+        $RelationMancheRaquette = new PieceRelation();
+        $RelationMancheRaquette->setQuantite(1);
+        $RelationMancheRaquette->setPieceNecessaire($Manche);
+        $RelationMancheRaquette->setPieceProduite($Raquette);
+
+        $RelationTeteRaquette = new PieceRelation();
+        $RelationTeteRaquette->setQuantite(1);
+        $RelationTeteRaquette->setPieceNecessaire($Tete);
+        $RelationTeteRaquette->setPieceProduite($Raquette);
+
+        //$Manche->addPiecesNecessaire($Bois);
+        //$Manche->addPiecesNecessaire($Vernis);
+
+        //$Tete->addPiecesNecessaire($Bois);
+
+        //$Raquette->addPiecesNecessaire($Colle);
+        //$Raquette->addPiecesNecessaire($Manche);
+        //$Raquette->addPiecesNecessaire($Tete);
+
+        $manager->persist($RelationBoisManche);
+        $manager->persist($RelationVernisManche);
+        $manager->persist($RelationBoisTete);
+        $manager->persist($RelationColleRaquette);
+        $manager->persist($RelationMancheRaquette);
+        $manager->persist($RelationTeteRaquette);
 
         $manager->persist($Bois);
         $manager->persist($Vernis);

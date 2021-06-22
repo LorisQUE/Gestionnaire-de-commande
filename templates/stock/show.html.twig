@@ -45,16 +45,16 @@
     <table class="table">
         <thead>Pièce Nécessaire</thead>
         <tbody>
-            {% for piece in pieceNecessaire %}
-                <tr>
-                    <td scope="row">{{ piece.Reference }}</td>
-                    <td>{{ piece.Libelle }}</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="2">Aucune pièce</td>
-                </tr>
-            {% endfor %}
+        {% for piece in pieceNecessaire %}
+            <tr>
+                <td scope="row">{{ piece.PieceNecessaire.Reference }}</td>
+                <td>{{ piece.Quantite }} x {{ piece.PieceNecessaire.Libelle }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">Aucune pièce</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 
@@ -63,8 +63,8 @@
         <tbody>
         {% for piece in pieceRealisable %}
             <tr>
-                <td scope="row">{{ piece.Reference }}</td>
-                <td>{{ piece.Libelle }}</td>
+                <td scope="row">{{ piece.PieceProduite.Reference }}</td>
+                <td>{{ piece.PieceProduite.Libelle }}</td>
             </tr>
         {% else %}
             <tr>
