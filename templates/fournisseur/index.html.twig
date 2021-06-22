@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fournisseur index{% endblock %}
+
+{% block body %}
+    <style>
+        .page-container { display: flex; flex-direction: column; padding: 0 2em; }
+        .group-container { display: flex; flex-direction: column; justify-content: center; }
+        .group-body { display: flex; padding: 0 2em; flex-wrap: wrap; justify-content: center; }
+        .card { margin: 1em; width: 18rem; color: #212529; background-color: #dfdfdf38; border-radius: 3px; }
+        .card-body { display: flex; flex-direction: column; }
+        .card div.card-text { display: flex; margin-top: auto; }
+        .card div.card-text a:not(:last-child) { margin-right: .5em; }
+        .adress { font-size: .9em; font-style: italic; }
+    </style>
+
+    <div class="page-container">
+        <h1>Fournisseurs</h1>
+        <!-- Atelier -->
+        <div class="group-container">
+
+            <div class="group-body">
+
+                {% for fournisseur in fournisseurs %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ fournisseur.Libelle }}</h5>
+                            <p class="card-text adress">{{ fournisseur.Adresse }}, {{ fournisseur.Ville }}, {{ fournisseur.Pays }}</p>
+                            <div class="card-text">
+                                <a class="btn btn-primary" href="{{ path('fournisseur_edit', {'id': fournisseur.id}) }}"><i class="fas fa-edit"></i></a>
+                                <form method="post" action="{{ path('fournisseur_delete', {'id': fournisseur.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ fournisseur.id) }}">
+                                    <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p> Aucune gamme disponible, vous pouvez en <a href="{{ path('gamme_new') }}">ajouter une</a>. </p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+    <a class="btn btn-primary" href="{{ path('fournisseur_new') }}">Ajouter un fournisseur</a>
+{% endblock %}

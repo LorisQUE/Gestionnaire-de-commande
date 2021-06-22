@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gamme index{% endblock %}
+
+{% block body %}
+    <style>
+        .page-container { display: flex; flex-direction: column; padding: 0 2em; }
+        .group-container { display: flex; flex-direction: column; justify-content: center; }
+        .group-body { display: flex; padding: 0 2em; flex-wrap: wrap; justify-content: center; }
+        .card { margin: 1em; width: 18rem; color: #212529; background-color: #dfdfdf38; border-radius: 3px; }
+        .card-body { display: flex; flex-direction: column; }
+        .card div.card-text { display: flex; margin-top: auto; }
+        .card div.card-text a:not(:last-child) { margin-right: .5em; }
+    </style>
+
+    <div class="page-container">
+        <h1>Gammes</h1>
+        <!-- Atelier -->
+        <div class="group-container">
+
+            <div class="group-body">
+
+                {% for gamme in gammes %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ gamme.Libelle }}</h5>
+                            <p class="card-text">Produit final : {{ gamme.getPiece().Libelle }}</p>
+                            <p class="card-text">Superviseur : {{ gamme.getSuperviseur().Pseudonyme }}</p>
+                            <div class="card-text">
+                                <a title="Voir les opérations" class="btn btn-primary" href="{{ path('gamme_show', {'id': gamme.id}) }}"><i class="fas fa-eye"></i></a>
+                                <a title="Voir les réalisations" class="btn btn-primary" href="{{ path('gamme_real', {'id': gamme.id}) }}"><i class="fas fa-search"></i></a>
+                                <a title="Ajouter une Réalisation" class="btn btn-success" href="{{ path('gamme_new_real', {'id': gamme.id}) }}"><i class="fas fa-plus"></i></a>
+                                <a title="Modifier" class="btn btn-primary" href="{{ path('gamme_edit', {'id': gamme.id}) }}"><i class="fas fa-edit"></i></a>
+                                <form method="post" action="{{ path('gamme_delete', {'id': gamme.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette gamme ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ gamme.id) }}">
+                                    <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p> Aucune gamme disponible, vous pouvez en <a href="{{ path('gamme_new') }}">ajouter une</a>. </p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    <a class="btn btn-primary" href="{{ path('gamme_new') }}">Ajouter une gamme</a>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Poste de travail{% endblock %}
+
+{% block body %}
+    <style>
+        .actions { display: flex; }
+        .actions a { margin-right: .5em; }
+    </style>
+
+    <h1>Poste de travail</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Libelle</th>
+                <th>Nb Ouvriers</th>
+                <th>Nb Machines</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for poste_de_travail in poste_de_travails %}
+            <tr>
+                <td>{{ poste_de_travail.Libelle }}</td>
+                <td>{{ poste_de_travail.Ouvriers | length }}</td>
+                <td>{{ poste_de_travail.Machines | length }}</td>
+                <td>
+                    <div class="actions">
+                        <a class="btn btn-primary" href="{{ path('poste_show', {'id': poste_de_travail.id}) }}"><i class="fas fa-search"></i></a>
+                        <a class="btn btn-primary" href="{{ path('poste_edit', {'id': poste_de_travail.id}) }}"><i class="fas fa-edit"></i></a>
+                        <form method="post" action="{{ path('poste_delete', {'id': poste_de_travail.id}) }}" onsubmit="return confirm('Voulez-vous supprimer ce poste ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ poste_de_travail.id) }}">
+                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucun poste</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('poste_new') }}">Ajouter un poste</a>
+{% endblock %}

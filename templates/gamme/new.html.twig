@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle gamme{% endblock %}
+
+{% block body %}
+
+    <h1>Créer une nouvelle gamme</h1>
+
+    {{ include('gamme/_form.html.twig') }}
+
+    <a href="{{ path('gamme_index') }}">Retour à la liste</a>
+{% endblock %}

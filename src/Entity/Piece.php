@@ -30,7 +30,7 @@ class Piece
     private $Quantite;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $Prix;
 
@@ -40,7 +40,7 @@ class Piece
     private $Type;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $PrixCatalogue;
 
@@ -77,7 +77,7 @@ class Piece
 
     public function __toString()
     {
-        return $this->getLibelle();
+        return "#".$this->getReference()." - ".$this->getLibelle();
     }
 
     public function getId(): ?int

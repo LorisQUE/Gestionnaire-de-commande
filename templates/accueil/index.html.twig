@@ -23,11 +23,18 @@
 
         <div class="group-body">
 
-            <a href="#" class="card">
+            <a href="{{ path("gamme_index") }}" class="card">
                 <div class="card-body">
                     <h5 class="card-title">Gammes</h5>
                     <p class="card-text">Affiche la totalité des gammes disponible et leurs opérations.
                         Les réalisations des gammes et des opérations seront également consultable.</p>
+                </div>
+            </a>
+
+            <a href="{{ path("poste_index") }}" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Postes de travail</h5>
+                    <p class="card-text">Affiche les postes de travail et leur machines.</p>
                 </div>
             </a>
 
@@ -52,6 +59,13 @@
         </div>
 
         <div class="group-body">
+
+            <a href="{{ path("fournisseur_index") }}" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Fournisseurs</h5>
+                    <p class="card-text">Permet de consulter les fournisseurs ou d'en ajoutés.</p>
+                </div>
+            </a>
 
             <a href="#" class="card">
                 <div class="card-body">

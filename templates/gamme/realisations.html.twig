@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réalisations de gamme{% endblock %}
+
+{% block body %}
+    <style>
+        .actions { display: flex; }
+        .actions a { margin-right: .5em; }
+    </style>
+
+    <h1>Réalisations de la gamme {{ gamme.Libelle }}</h1>
+
+    <table class="table">
+        <thead>
+        <th>Libelle</th>
+        <th>Superviseur</th>
+        <th>Date</th>
+        <th>Actions</th>
+        </thead>
+        <tbody>
+        {% for realisation in realisations %}
+            <tr>
+                <td>{{ realisation.Libelle }}</td>
+                <td>{{ realisation.Superviseur }}</td>
+                <td>{{ realisation.Date | date('d/m/y à h:m') }}</td>
+                <td>
+                    <div class="actions">
+                        <a title="Voir les réalisations" class="btn btn-primary" href="{{ path('operation_real', {'id': realisation.id}) }}"><i class="fas fa-search"></i></a>
+                        <a title="Modification" class="btn btn-primary" href="{{ path('gamme_realisation_edit', {'id': realisation.id}) }}"><i class="fas fa-edit"></i></a>
+                        <form method="post" action="{{ path('gamme_realisation_delete', {'id': realisation.id}) }}" onsubmit="return confirm('Êtes vous sûr de vouloir supprimer cette réalisation de gamme ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ realisation.id) }}">
+                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <td>Aucune réalisation disponible.</td>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('gamme_index') }}">Retour aux Gammes</a>
+
+    <a class="btn btn-success" href="{{ path('gamme_new_real', {'id': gamme.id}) }}">Ajouter une réalisation</a>
+
+{% endblock %}

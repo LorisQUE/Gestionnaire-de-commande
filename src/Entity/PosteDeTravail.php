@@ -25,11 +25,6 @@ class PosteDeTravail
     private $Libelle;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="PosteDeTravail")
-     */
-    private $Ouvrier;
-
-    /**
      * @ORM\OneToMany(targetEntity=OperationRealisation::class, mappedBy="PosteDeTravail")
      */
     private $Realisations;
@@ -44,11 +39,21 @@ class PosteDeTravail
      */
     private $Operations;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Utilisateur::class, inversedBy="PostesDeTravail")
+     */
+    private $Ouvriers;
+
     public function __construct()
     {
         $this->Realisations = new ArrayCollection();
         $this->Machines = new ArrayCollection();
         $this->Operations = new ArrayCollection();
+        $this->Ouvriers = new ArrayCollection();
+    }
+
+    public function  __toString(){
+        return $this->getLibelle();
     }
 
     public function getId(): ?int
@@ -64,18 +69,6 @@ class PosteDeTravail
     public function setLibelle(string $Libelle): self
     {
         $this->Libelle = $Libelle;
-
-        return $this;
-    }
-
-    public function getOuvrier(): ?Utilisateur
-    {
-        return $this->Ouvrier;
-    }
-
-    public function setOuvrier(?Utilisateur $Ouvrier): self
-    {
-        $this->Ouvrier = $Ouvrier;
 
         return $this;
     }
@@ -166,6 +159,30 @@ class PosteDeTravail
                 $operation->setPosteDeTravail(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Utilisateur[]
+     */
+    public function getOuvriers(): Collection
+    {
+        return $this->Ouvriers;
+    }
+
+    public function addOuvrier(Utilisateur $ouvrier): self
+    {
+        if (!$this->Ouvriers->contains($ouvrier)) {
+            $this->Ouvriers[] = $ouvrier;
+        }
+
+        return $this;
+    }
+
+    public function removeOuvrier(Utilisateur $ouvrier): self
+    {
+        $this->Ouvriers->removeElement($ouvrier);
 
         return $this;
     }

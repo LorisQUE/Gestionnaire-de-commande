@@ -37,14 +37,20 @@ class GammeRealisation
     private $Superviseur;
 
     /**
-     * @ORM\OneToMany(targetEntity=OperationRealisation::class, mappedBy="GammeRealisation")
+     * @ORM\OneToMany(targetEntity=OperationRealisation::class, mappedBy="GammeRealisation", cascade={"remove"})
      */
     private $OperationRealisations;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $Date;
+
     public function __construct()
     {
-        $this->Superviseur = new ArrayCollection();
         $this->OperationRealisations = new ArrayCollection();
+        $this->Date = new \DateTime();
+        $this->Date->setTimezone( new \DateTimeZone("Europe/Paris"));
     }
 
     public function getId(): ?int
@@ -57,7 +63,7 @@ class GammeRealisation
         return $this->Libelle;
     }
 
-    public function setLibelle(string $Libelle): self
+    public function setLibelle(string $Libelle = null): self
     {
         $this->Libelle = $Libelle;
 
@@ -114,6 +120,18 @@ class GammeRealisation
                 $operationRealisation->setGammeRealisation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->Date;
+    }
+
+    public function setDate(\DateTimeInterface $Date = null): self
+    {
+        $this->date = $Date;
 
         return $this;
     }
