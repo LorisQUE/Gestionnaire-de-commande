@@ -34,6 +34,10 @@ class PieceRelation
      */
     private $PieceProduite;
 
+    public function __toString(){
+        return "#".$this->getId()." - ".$this->getQuantite();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

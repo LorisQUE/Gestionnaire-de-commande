@@ -44,6 +44,7 @@ class StockController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            dd($piece);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($piece);
             $entityManager->flush();
@@ -86,6 +87,7 @@ class StockController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            dd($piece);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('stock');

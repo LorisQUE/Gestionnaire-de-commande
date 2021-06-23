@@ -12,70 +12,70 @@
 
     <table class="table">
         <tbody>
-        <tr>
-            <th>Reference</th>
-            <td>{{ piece.Reference }}</td>
-        </tr>
-        <tr>
-            <th>Libelle</th>
-            <td>{{ piece.Libelle }}</td>
-        </tr>
-        <tr>
-            <th>Type</th>
-            <td>{{ enumType[piece.Type] }}</td>
-        </tr>
-        <tr>
-            <th>Quantité</th>
-            <td>{{ piece.Quantite }}</td>
-        </tr>
-        {% if(piece.Type == 'PL') %}
-        <tr>
-            <th>Prix</th>
-            <td>{{ piece.Prix }}€</td>
-        </tr>
-        {% endif %}
-        {% if(piece.Type == 'PA' or piece.Type == 'MP') %}
-        <tr>
-            <th>Prix Catalogue</th>
-            <td>{{ piece.PrixCatalogue }}€</td>
-        </tr>
-        <tr>
-            <th>Fournisseur</th>
-            <td>{{ piece.Fournisseur }}€</td>
-        </tr>
-        {% endif %}
+            <tr>
+                <th>Reference</th>
+                <td>{{ piece.Reference }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ piece.Libelle }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ enumType[piece.Type] }}</td>
+            </tr>
+            <tr>
+                <th>Quantité</th>
+                <td>{{ piece.Quantite }}</td>
+            </tr>
+            {% if(piece.Type == 'PL') %}
+                <tr>
+                    <th>Prix</th>
+                    <td>{{ piece.Prix }} €</td>
+                </tr>
+            {% endif %}
+            {% if(piece.Type == 'PA' or piece.Type == 'MP') %}
+                <tr>
+                    <th>Prix Catalogue</th>
+                    <td>{{ piece.PrixCatalogue }} €</td>
+                </tr>
+                <tr>
+                    <th>Fournisseur</th>
+                    <td>{{ piece.Fournisseur }}</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 
     <table class="table">
         <thead>Pièce Nécessaire</thead>
         <tbody>
-        {% for piece in pieceNecessaire %}
-            <tr>
-                <td scope="row">{{ piece.PieceNecessaire.Reference }}</td>
-                <td>{{ piece.Quantite }} x {{ piece.PieceNecessaire.Libelle }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="2">Aucune pièce</td>
-            </tr>
-        {% endfor %}
+            {% for piece in pieceNecessaire %}
+                <tr>
+                    <th>{{ piece.PieceNecessaire.Reference }}</th>
+                    <td>{{ piece.Quantite }} x {{ piece.PieceNecessaire.Libelle }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">Aucune pièce</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
     <table class="table">
         <thead>Pièce Réalisable</thead>
         <tbody>
-        {% for piece in pieceRealisable %}
-            <tr>
-                <td scope="row">{{ piece.PieceProduite.Reference }}</td>
-                <td>{{ piece.PieceProduite.Libelle }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="2">Aucune pièce</td>
-            </tr>
-        {% endfor %}
+            {% for piece in pieceRealisable %}
+                <tr>
+                    <th>{{ piece.PieceProduite.Reference }}</th>
+                    <td>{{ piece.PieceProduite.Libelle }} - x{{ piece.Quantite }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">Aucune pièce</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
     <div class="actions">

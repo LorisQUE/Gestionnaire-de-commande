@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Piece;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -43,11 +43,19 @@ class StockType extends AbstractType
                 'label' => "Référence"
             ])
             ->add('Fournisseur')
-            ->add('PiecesNecessaire', EntityType::class, [
-                'label' => "Pièce Nécessaire",
-                'multiple' => true,
-                'class' => Piece::class,
-                'required' => false,
+            ->add('PiecesNecessaires', CollectionType::class, [
+                'entry_options' => [ 'label' => false ],
+                'entry_type' => PieceRelationNecessaireType::class,
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+            ])
+            ->add('PiecesProduites', CollectionType::class, [
+                'entry_options' => [ 'label' => false ],
+                'entry_type' => PieceRelationProduiteType::class,
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
             ])
         ;
     }

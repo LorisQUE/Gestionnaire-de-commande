@@ -71,6 +71,8 @@ class Piece
 
     public function __construct()
     {
+        $this->Prix = null;
+        $this->PrixCatalogue = null;
         $this->PiecesNecessaires = new ArrayCollection();
         $this->PiecesProduites = new ArrayCollection();
     }
@@ -114,7 +116,7 @@ class Piece
         return $this->Prix;
     }
 
-    public function setPrix(float $Prix): self
+    public function setPrix(?float $Prix): self
     {
         $this->Prix = $Prix;
 
@@ -138,7 +140,7 @@ class Piece
         return $this->PrixCatalogue;
     }
 
-    public function setPrixCatalogue(float $PrixCatalogue): self
+    public function setPrixCatalogue(?float $PrixCatalogue): self
     {
         $this->PrixCatalogue = $PrixCatalogue;
 

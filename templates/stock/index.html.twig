@@ -37,7 +37,7 @@
             <td>{% if (piece.Fournisseur) %} {{ piece.Fournisseur }} {% else %} Aucun {% endif  %}</td>
             <td>
                 <div class="actions">
-                    <a class="btn btn-primary" href="{{ path('stock_show', {'id': piece.id}) }}" title="Détails"><i class="fas fa-info-circle"></i></a>
+                    <a class="btn btn-primary" href="{{ path('stock_show', {'id': piece.id}) }}" title="Détails"><i class="fas fa-search"></i></a>
                     <a class="btn btn-primary" href="{{ path('stock_edit', {'id': piece.id}) }}" title="Modification"><i class="fas fa-edit"></i></a>
                     <form method="post" action="{{ path('stock_delete', {'id': piece.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette pièce ?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ piece.id) }}">
