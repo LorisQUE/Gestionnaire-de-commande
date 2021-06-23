@@ -37,12 +37,12 @@ class Gamme
     private $Superviseur;
 
     /**
-     * @ORM\OneToMany(targetEntity=GammeRealisation::class, mappedBy="Gamme")
+     * @ORM\OneToMany(targetEntity=GammeRealisation::class, mappedBy="Gamme", cascade={"remove"})
      */
     private $GammeRealisations;
 
     /**
-     * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="Gamme")
+     * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="Gamme", cascade={"remove"})
      */
     private $Operations;
 
