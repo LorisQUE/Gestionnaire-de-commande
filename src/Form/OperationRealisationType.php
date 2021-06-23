@@ -8,12 +8,12 @@ use App\Entity\Utilisateur;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class OperationRealisationType extends AbstractType
 {
@@ -34,92 +34,92 @@ class OperationRealisationType extends AbstractType
         $builder
             ->add('Libelle')
             ->add('Duree')
-            ->add('Operateur', ChoiceType::class, [
+            ->add('Operateur', EntityType::class, [
+                'placeholder' => "Sélectionnez un opérateur",
                 'choices' => $ouvriers,
-                'choice_label' => function ($choice, $key, $value) { return $choice->getPseudonyme()." - ".$choice->getEmail(); },
+                'label' => 'Opérateur',
+                'class' => Utilisateur::class,
                 "attr" => array("class" => "select-operateur"),
-            ])
-            ->add('PosteDeTravail', EntityType::class, [
-                'placeholder' => 'Sélectionnez un poste',
-                'label' => 'Poste de travail',
-                'class'         => 'App\Entity\PosteDeTravail',
-                'multiple'      => false,
-                "attr" => array("class" => "select-pdt"),
+                'constraints' => [
+                    new NotBlank([
+                        "message" => "Choisissez un opérateur"
+                    ]),
+                ],
             ])
         ;
 
-        $formModifier = function (FormInterface $form, PosteDeTravail $posteDeTravail = null, Utilisateur $operateur = null) {
-            $pdt = null === $operateur ? array() : $operateur->getPostesDeTravail();
-            $form->add('Machine', EntityType::class, array(
-                'class' => 'App\Entity\PosteDeTravail',
-                'choices' => $pdt,
-                'multiple'      => false,
-                "attr" => array("class" => "select-pdt"),
-            ));
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $formEvent){
+            /** @var OperationRealisation $operationRealisation */
+            $operationRealisation = $formEvent->getData();
+            $form = $formEvent->getForm();
+            $this->addPosteField($form, $operationRealisation->getOperateur());
+            $this->addMachineField($form, $operationRealisation->getPosteDeTravail());
+        });
 
-            $machines = null === $posteDeTravail ? array() : $posteDeTravail->getMachines();
-            $form->add('Machine', EntityType::class, array(
-                'class' => 'App\Entity\Machine',
-                'choices' => $machines,
-                'multiple'      => false,
-                "attr" => array("class" => "select-machine"),
-            ));
-        };
+        $builder->get("Operateur")->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $formEvent){
+            $form = $formEvent->getForm();
+            $id = $formEvent->getData();
+            $operateur = null;
 
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($formModifier) {
-                $data = $event->getData();
-                $formModifier($event->getForm(), $data->getPosteDeTravail(), $data->getOperateur());
+            if ($id) {
+                /** @var Utilisateur $operateur */
+                $operateur = $this->entityManager->find(Utilisateur::class, $id);
             }
-        );
 
-        $builder->get('PosteDeTravail')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($formModifier) {
-                $pdt = $event->getForm()->getData();
-                $formModifier($event->getForm()->getParent(), $pdt);
-            }
-        );
+            $this->addPosteField($form->getParent(), $operateur, function (FormEvent $formEvent) use ($operateur) {
+                $id = $formEvent->getData();
+                if(!$id) return;
 
-        $builder->get('Operateur')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($formModifier) {
-                $operateur = $event->getForm()->getData();
-                $formModifier($event->getForm()->getParent(), $operateur);
-            }
-        );
+                /** @var PosteDeTravail $poste */
+                $poste = $this->entityManager->find(PosteDeTravail::class, $id);
+                if(!$poste) return;
 
-        $builder->addEventListener(
-            FormEvents::POST_SET_DATA,
-            function(FormEvent $event){
-                $form = $event->getForm();
-                $data = $event->getData();
-                $pdt = $data->getPosteDeTravail();
-                $machine = $data->getMachine();
-
-                $form->get('Operateur')->setData($data->getOperateur());
-                if($machine !== null) {
-                    $form->add('operateur', EntityType::class, array(
-                        'class' => 'App\Entity\Machine',
-                        'choices' => $pdt,
-                        'multiple' => false,
-                        "attr" => array("class" => "select-machine")
-                    ));
-                }
-
-                $form->get('PosteDeTravail')->setData($data->getPosteDeTravail());
-                if($machine !== null) {
-                    $form->add('Machine', EntityType::class, array(
-                        'class' => 'App\Entity\Machine',
-                        'choices' => $machine->getPosteDeTravail()->getMachines(),
-                        'multiple' => false,
-                        "attr" => array("class" => "select-machine")
-                    ));
-                }
-            }
-        );
+                $this->addMachineField($formEvent->getForm()->getParent(), $poste, $operateur);
+            });
+        });
     }
+
+    private function addPosteField(FormInterface $form, ?Utilisateur $user, \Closure $listener = null) {
+        $builder = $form->getConfig()->getFormFactory()->createNamedBuilder('PosteDeTravail', EntityType::class, null, [
+            'choices' => $user && $user->getPostesDeTravail() ? $user->getPostesDeTravail() : [],
+            'placeholder' => 'Sélectionnez un poste',
+            'label' => 'Poste de travail',
+            'class'         => 'App\Entity\PosteDeTravail',
+            'multiple'      => false,
+            "attr" => array("class" => "select-pdt"),
+            'auto_initialize' => false,
+            'constraints' => [
+                new NotBlank([
+                    "message" => "Choisissez un poste de travail"
+                ]),
+            ],
+        ]);
+
+        if ($listener) {
+            $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) use ($listener) {
+                $listener($event);
+            });
+        }
+
+        $form->add($builder->getForm());
+    }
+
+    private function addMachineField(FormInterface $form, ?PosteDeTravail $pdt, ?Utilisateur $user = null){
+        $form->add('Machine', EntityType::class, array(
+            'placeholder' => 'Sélectionnez une machine',
+            'class' => 'App\Entity\Machine',
+            'choices' => $pdt && $user ? $pdt->getMachines() : [],
+            'multiple' => false,
+            "attr" => array("class" => "select-machine"),
+            'constraints' => [
+                new NotBlank([
+                    "message" => "Choisissez une machine"
+                ]),
+            ],
+        ));
+    }
+
+
 
     public function configureOptions(OptionsResolver $resolver)
     {

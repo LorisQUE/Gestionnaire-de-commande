@@ -10,6 +10,7 @@ use App\Form\GammeRealisationType;
 use App\Form\GammeType;
 use App\Repository\GammeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -165,7 +166,13 @@ class GammeController extends AbstractController
         $form = $this->createForm(GammeRealisationNewType::class, $gammeReal);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if($request->isXmlHttpRequest()) {
+            return $this->render('gamme/_form_realisation_new.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }
+
+        if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
             $entityManager = $this->getDoctrine()->getManager();
             foreach ($gammeReal->getOperationRealisations() as $operation){
                 $entityManager->persist($operation);

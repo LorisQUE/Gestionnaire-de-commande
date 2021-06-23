@@ -8,4 +8,32 @@
     {{ include('operation/_form_realisation.html.twig', {'button_label': 'Enregistrer'}) }}
 
     <a class="btn btn-primary" href="{{ path('operation_real', {'id': operation_realisation.gammeRealisation.Id}) }}">Retour aux réalisations</a>
+
+    <script>
+        const $select = $('select');
+
+        $select.change(callback);
+
+        function callback(e) {
+            const $form = $(this).closest('form');
+            const form = this.closest('form');
+            const data = new FormData(form);
+            var newData = {};
+
+            for (var p of data) {
+                let name = p[0];
+                let value = p[1];
+
+                newData[name] = value;
+            }
+
+            $.post($form.attr('action'), newData, function (res) {
+                const $html = $(res);
+
+                $html.find('select').change(callback);
+                $form.replaceWith($html);
+            });
+        }
+
+    </script>
 {% endblock %}

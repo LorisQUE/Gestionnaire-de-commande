@@ -105,6 +105,12 @@ class OperationController extends AbstractController
         $form = $this->createForm(OperationRealisationType::class, $operationRealisation);
         $form->handleRequest($request);
 
+        if($request->isXmlHttpRequest()) {
+            return $this->render('operation/_form_realisation.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
