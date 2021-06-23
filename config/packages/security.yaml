@@ -38,3 +38,4 @@ security:
          - { path: ^/atelier, roles: ROLE_OUVRIER }
          - { path: ^/commerical, roles: ROLE_COMMERCIAL }
          - { path: ^/comptabilite, roles: ROLE_COMPTABLE }
+         - { path: ^/admin, roles: ROLE_ADMIN }
