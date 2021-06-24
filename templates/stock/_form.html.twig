@@ -35,14 +35,14 @@
     </div>
 </div>
 
-<div class="card">
+<div class="card card-parent-produite">
     <div class="card-header">
         Pièces Produites
     </div>
 
-    <div id="piece-produite-list" class="cards-container" data-prototype="">
+    <div id="piece-produite-list" class="card-body cards-container" data-prototype="{{  form_widget(form.PiecesProduites.vars.prototype) | e('html_attr') }}">
         {% for PiecesProduites in form.PiecesProduites %}
-            <div class="card">
+            <div class="card card-piece-produite">
                 <div class="card-body">
                     {{ form_row(PiecesProduites, { 'attr' : { 'class' : 'piece piece-produite' }} ) }}
                 </div>
@@ -58,10 +58,11 @@
     var prix = $("#stock_Prix");
     var prixCatalogue = $("#stock_PrixCatalogue");
     var fournisseur = $("#stock_Fournisseur");
-    var piecesNecessaire = $("#stock_PiecesNecessaire");
+    var containerPieceNecessaire = $(".card-parent-necessaire");
+    var containerPieceProduite = $(".card-parent-produite");
 
     $( document ).ready(function() {
-        getTypePiece(type.val())
+        getTypePiece(type.val());
     });
 
     type.change(function(e) {
@@ -79,9 +80,8 @@
                 prixCatalogue.prop('required', true);
                 fournisseur.parents(".form-group").show();
                 fournisseur.prop('required', true);
-                piecesNecessaire.parents(".form-group").hide();
-                piecesNecessaire.val(null);
-                piecesNecessaire.prop('required', false);
+                containerPieceNecessaire.hide();
+                containerPieceProduite.show();
                 break;
 
             case "PL":
@@ -93,7 +93,8 @@
                 fournisseur.parents(".form-group").hide();
                 fournisseur.val(null);
                 fournisseur.prop('required', false);
-                piecesNecessaire.parents(".form-group").show();
+                containerPieceNecessaire.show();
+                containerPieceProduite.hide();
                 break;
 
             case "PI":
@@ -106,37 +107,47 @@
                 fournisseur.parents(".form-group").hide();
                 fournisseur.val(null);
                 fournisseur.prop('required', false);
-                piecesNecessaire.parents(".form-group").show();
+                containerPieceNecessaire.show();
+                containerPieceProduite.show();
                 break;
         }
     }
 
-
-
     var collectionHolderNecessaire;
-    var addNewItemNecessaire = $('<a class="btn btn-success"><i title="Ajouter" class="fas fa-plus"></i></a>')
+    var addNewPieceNecessaire = $('<a class="btn btn-success"><i title="Ajouter" class="fas fa-plus"></i></a>')
+    var collectionHolderProduite;
+    var addNewPieceProduite = $('<a class="btn btn-success"><i title="Ajouter" class="fas fa-plus"></i></a>')
 
 
     $(document).ready( function(){
-        //get the collectionHolderNecessaire
+        //get the collectionHolders
         collectionHolderNecessaire = $("#piece-necessaire-list");
+        collectionHolderProduite = $("#piece-produite-list");
 
-        //append btn new
-        $(".card-parent-necessaire > .card-body").append(addNewItemNecessaire)
-
-        //collectionHolderNecessaire.data('index', collectionHolderNecessaire.find('.card').length);
-        //console.log("'index'", collectionHolderNecessaire.data('index'));
+        //append btns new
+        $(".card-parent-necessaire > .card-body").append(addNewPieceNecessaire)
+        $(".card-parent-produite > .card-body").append(addNewPieceProduite)
 
         //add remove button to existing items
         collectionHolderNecessaire.find('.card').each(function(item) {
             addRemoveButtonNecessaire($(this));
         });
 
+        //add remove button to existing items
+        collectionHolderProduite.find('.card').each(function(item) {
+            addRemoveButtonProduite($(this));
+        });
+
         // handle click event du btn d'ajout
-        addNewItemNecessaire.click(function (e) {
+        addNewPieceNecessaire.click(function (e) {
             // création d'un nouveau form et l'append
             addNewFormNecessaire();
+        });
 
+        // handle click event du btn d'ajout
+        addNewPieceProduite.click(function (e) {
+            // création d'un nouveau form et l'append
+            addNewFormProduite();
         });
     });
 
@@ -152,13 +163,21 @@
         });
     }
 
+    //remove item
+    function addRemoveButtonProduite(item){
+        var removeButton = $('<a class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>');
+        var panelBtnContainer = $(item).find(".card-body").append(removeButton);
+
+        removeButton.click(function (e) {
+            $(e.target).parents('.card-piece-produite').slideUp(250, function() {
+                $(this).remove();
+            });
+        });
+    }
+
     function addNewFormNecessaire(){
         var prototype = collectionHolderNecessaire.data('prototype');
-        console.log(prototype)
         var newForm = prototype;
-        //var index = collectionHolderNecessaire.data('index');
-
-        //collectionHolderNecessaire.data('index', index++);
 
         newForm = newForm.replace(/__name__/g, $(".card-piece-necessaire").length + 1);
 
@@ -167,8 +186,21 @@
 
         card.append(cardbody);
         addRemoveButtonNecessaire(card);
+        addNewPieceNecessaire.before(card);
+    }
 
-        addNewItemNecessaire.before(card);
+    function addNewFormProduite(){
+        var prototype = collectionHolderProduite.data('prototype');
+        var newForm = prototype;
+
+        newForm = newForm.replace(/__name__/g, $(".card-piece-produite").length + 1);
+
+        var card = $('<div class="card card-piece-produite"></div>');
+        var cardbody = $('<div class="card-body new"></div>').append(newForm);
+
+        card.append(cardbody);
+        addRemoveButtonProduite(card);
+        addNewPieceProduite.before(card);
     }
 
 </script>

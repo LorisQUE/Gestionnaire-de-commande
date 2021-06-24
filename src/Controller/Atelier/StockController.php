@@ -24,6 +24,31 @@ class StockController extends AbstractController
     );
 
     /**
+     * @param Piece $piece
+     */
+    public function conformPropertiesToType ($piece) {
+        switch ($piece->getType()) {
+            case "MP":
+            case "PA":
+                $piece->setPrix(null);
+                $piece->getPiecesNecessaires()->clear();
+                break;
+
+            case "PL":
+                $piece->setFournisseur(null);
+                $piece->setPrixCatalogue(null);
+                $piece->getPiecesProduites()->clear();
+                break;
+
+            case "PI":
+                $piece->setFournisseur(null);
+                $piece->setPrixCatalogue(null);
+                $piece->setPrix(null);
+                break;
+        }
+    }
+
+    /**
      * @Route("/", name="stock")
      */
     public function index(PieceRepository $pieceRepository): Response
@@ -44,9 +69,16 @@ class StockController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($piece);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($piece);
+
+            foreach ($piece->getPiecesNecessaires() as $pn){
+                $entityManager->persist($pn);
+            }
+            foreach ($piece->getPiecesProduites() as $pp){
+                $entityManager->persist($pp);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('stock');
@@ -66,10 +98,6 @@ class StockController extends AbstractController
         $pieceNecessaire = $piece->getPiecesNecessaires();
         $pieceRealisable = $piece->getPiecesProduites();
 
-        foreach ($pieceNecessaire as $p) {
-            dump($piece->getid(), $p->getQuantite());
-        }
-
         return $this->render('stock/show.html.twig', [
             'pieceNecessaire' => $pieceNecessaire,
             'pieceRealisable' => $pieceRealisable,
@@ -85,11 +113,18 @@ class StockController extends AbstractController
     {
         $form = $this->createForm(StockType::class, $piece);
         $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($piece);
-            $this->getDoctrine()->getManager()->flush();
+            $this->conformPropertiesToType($piece);
+            foreach ($piece->getPiecesNecessaires() as $pn){
+                if($pn->getId() === null) $entityManager->persist($pn);
+            }
+            foreach ($piece->getPiecesProduites() as $pp){
+                if($pp->getId() === null) $entityManager->persist($pp);
+            }
 
+            $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('stock');
         }
 

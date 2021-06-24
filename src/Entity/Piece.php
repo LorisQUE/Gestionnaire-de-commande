@@ -60,12 +60,12 @@ class Piece
     private $Reference;
 
     /**
-     * @ORM\OneToMany(targetEntity=PieceRelation::class, mappedBy="PieceNecessaire", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=PieceRelation::class, mappedBy="PieceNecessaire", cascade={"merge"}, orphanRemoval=true)
      */
     private $PiecesNecessaires;
 
     /**
-     * @ORM\OneToMany(targetEntity=PieceRelation::class, mappedBy="PieceProduite", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=PieceRelation::class, mappedBy="PieceProduite", cascade={"merge"}, orphanRemoval=true)
      */
     private $PiecesProduites;
 

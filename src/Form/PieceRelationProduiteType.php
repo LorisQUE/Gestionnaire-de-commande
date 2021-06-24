@@ -23,7 +23,7 @@ class PieceRelationProduiteType extends AbstractType
 
             ])
             ->add('Quantite', IntegerType::class, [
-                'label' => "Quantité"
+                'label' => "Quantité Nécessaire"
             ])
         ;
     }
