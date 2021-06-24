@@ -29,11 +29,16 @@ class PieceRelationNecessaireType extends AbstractType
     {
         $pieces = $this->pieceRepository->findBy(["Type" => ["PM", "PA", "PI"]]);
         $piecesDisponible = [];
-        foreach ($pieces as $p) {
-            if($p->getId() === $this->piece->getId()){
-                continue;
+
+        if($this->piece) {
+            foreach ($pieces as $p) {
+                if($p->getId() === $this->piece->getId()){
+                    continue;
+                }
+                $piecesDisponible[] = $p;
             }
-            $piecesDisponible[] = $p;
+        } else {
+            $piecesDisponible = $pieces;
         }
 
         $builder

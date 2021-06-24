@@ -30,11 +30,16 @@ class PieceRelationProduiteType extends AbstractType
     {
         $pieces = $this->pieceRepository->findBy(["Type" => ["PL", "PI"]]);
         $piecesDisponible = [];
-        foreach ($pieces as $p) {
-            if($p->getId() === $this->piece->getId()){
-                continue;
+
+        if($this->piece) {
+            foreach ($pieces as $p) {
+                if ($p->getId() === $this->piece->getId()) {
+                    continue;
+                }
+                $piecesDisponible[] = $p;
             }
-            $piecesDisponible[] = $p;
+        } else {
+            $piecesDisponible = $pieces;
         }
 
         $builder
