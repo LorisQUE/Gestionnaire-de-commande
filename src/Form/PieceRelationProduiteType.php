@@ -10,23 +10,32 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PieceRelationProduiteType extends AbstractType
 {
     private $entityManager;
     private $pieceRepository;
+    private $piece;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, RequestStack $requestStack)
     {
+        $this->piece = $requestStack->getCurrentRequest()->attributes->get("piece");
         $this->entityManager = $entityManager;
         $this->pieceRepository = $this->entityManager->getRepository(Piece::class);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // PIECE
-        $piecesDisponible = $this->pieceRepository->findBy(["Type" => ["PL", "PI"]]);
+        $pieces = $this->pieceRepository->findBy(["Type" => ["PL", "PI"]]);
+        $piecesDisponible = [];
+        foreach ($pieces as $p) {
+            if($p->getId() === $this->piece->getId()){
+                continue;
+            }
+            $piecesDisponible[] = $p;
+        }
 
         $builder
             ->add('PieceProduite', EntityType::class, [
