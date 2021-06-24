@@ -82,8 +82,14 @@
             </tbody>
         </table>
     {% endif %}
+
+
     <div class="actions">
         <a class="btn btn-primary" href="{{ path('stock') }}">Retour à la liste</a>
+            {% dump(piece.Gamme) %}
+        {% if(piece.Type == 'PL' and piece.Gamme) %}
+            <a class="btn btn-primary" href="{{ path('gamme_show', {'id': piece.Gamme.id}) }}">Voir la gamme</a>
+        {% endif %}
 
         <a class="btn btn-primary" href="{{ path('stock_edit', {'id': piece.id}) }}">Modification</a>
 

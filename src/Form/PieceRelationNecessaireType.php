@@ -27,7 +27,7 @@ class PieceRelationNecessaireType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $pieces = $this->pieceRepository->findBy(["Type" => ["PM", "PA", "PI"]]);
+        $pieces = $this->pieceRepository->findBy(["Type" => ["MP", "PA", "PI"]]);
         $piecesDisponible = [];
 
         if($this->piece) {

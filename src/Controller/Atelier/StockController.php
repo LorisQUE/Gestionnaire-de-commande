@@ -85,15 +85,44 @@ class StockController extends AbstractController
                 }
             }
 
-            $entityManager->persist($piece);
+            //Pièces Nécessaire
+            $resNecessaires = [];
 
             foreach ($piece->getPiecesNecessaires() as $pn){
-                $entityManager->persist($pn);
-            }
-            foreach ($piece->getPiecesProduites() as $pp){
-                $entityManager->persist($pp);
+                if(isset($resNecessaires[$pn->getPieceNecessaire()->getId()])) {
+                    $var = $resNecessaires[$pn->getPieceNecessaire()->getId()];
+                    $var->setQuantite($var->getQuantite() + $pn->getQuantite());
+                } else {
+                    $resNecessaires[$pn->getPieceNecessaire()->getId()] = $pn;
+                }
             }
 
+            $piece->getPiecesNecessaires()->clear();
+
+            foreach($resNecessaires as $r){
+                $piece->addPiecesNecessaire($r);
+            }
+
+            //Pièces produites
+            $resProduites = [];
+
+            foreach ($piece->getPiecesProduites() as $pp){
+                if(isset($resProduites[$pp->getPieceProduite()->getId()])) {
+                    $var = $resProduites[$pp->getPieceProduite()->getId()];
+                    $var->setQuantite($var->getQuantite() + $pp->getQuantite());
+                } else {
+                    $resProduites[$pp->getPieceProduite()->getId()] = $pp;
+                }
+            }
+
+            $piece->getPiecesProduites()->clear();
+
+            foreach($resProduites as $r){
+                $piece->addPiecesProduite($r);
+            }
+
+
+            $entityManager->persist($piece);
             $entityManager->flush();
 
             return $this->redirectToRoute('stock');
