@@ -64,6 +64,17 @@
             </nav>
         {% endif %}
         <div class="container">
+            <br/>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    {% dump(message) %}
+                    {% dump(label) %}
+                    <div class="alert alert-{{ label }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
             {% block body %}{% endblock %}
         </div>
     </body>

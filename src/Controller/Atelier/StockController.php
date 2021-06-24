@@ -70,6 +70,21 @@ class StockController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            foreach ($entityManager->getRepository(Piece::class)->findAll() as $pPiece) {
+                if($pPiece->getReference() === $piece->getReference()){
+                    $this->addFlash(
+                        'warning',
+                        'Cette référence est déjà utilisée'
+                    );
+
+                    return $this->render('stock/new.html.twig', [
+                        'piece' => $piece,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+
             $entityManager->persist($piece);
 
             foreach ($piece->getPiecesNecessaires() as $pn){
@@ -116,6 +131,20 @@ class StockController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($entityManager->getRepository(Piece::class)->findAll() as $pPiece) {
+                if($pPiece->getReference() === $piece->getReference()){
+                    $this->addFlash(
+                        'warning',
+                        'Cette référence est déjà utilisée'
+                    );
+
+                    return $this->render('stock/new.html.twig', [
+                        'piece' => $piece,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+
             $this->conformPropertiesToType($piece);
             foreach ($piece->getPiecesNecessaires() as $pn){
                 if($pn->getId() === null) $entityManager->persist($pn);
