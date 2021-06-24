@@ -33,16 +33,41 @@ class PieceFixture extends Fixture
         $Fournisseur2->setPays("France");
         $Fournisseur2->setVille("Bordeaux");
 
+        $Fournisseur3 = new Fournisseur();
+        $Fournisseur3->setLibelle("Aciérie 'Mare Nostrum'");
+        $Fournisseur3->setAdresse("33 Avenue de l'Arène");
+        $Fournisseur3->setPays("France");
+        $Fournisseur3->setVille("Nîmes");
+
         $Bois = new Piece();
         $Bois->setReference("MP0001");
         $Bois->setLibelle("Bois");
         $Bois->setFournisseur($Fournisseur1);
         $Bois->setFournisseur(null);
         $Bois->setType("MP");
-        $Bois->setPrix(0.99);
         $Bois->setPrixCatalogue(0.99);
         $Bois->setQuantite(15);
         $Fournisseur1->addPiecesFournie($Bois);
+
+        $Acier = new Piece();
+        $Acier->setReference("MP0002");
+        $Acier->setLibelle("Acier");
+        $Acier->setFournisseur($Fournisseur1);
+        $Acier->setFournisseur(null);
+        $Acier->setType("MP");
+        $Acier->setPrixCatalogue(0.99);
+        $Acier->setQuantite(15);
+        $Fournisseur3->addPiecesFournie($Acier);
+
+        $Caoutchouc = new Piece();
+        $Caoutchouc->setReference("MP0003");
+        $Caoutchouc->setLibelle("Caoutchouc Synthétique");
+        $Caoutchouc->setFournisseur($Fournisseur2);
+        $Caoutchouc->setFournisseur(null);
+        $Caoutchouc->setType("MP");
+        $Caoutchouc->setPrixCatalogue(0.99);
+        $Caoutchouc->setQuantite(15);
+        $Fournisseur3->addPiecesFournie($Caoutchouc);
 
         $Vernis = new Piece();
         $Vernis->setReference("PA0001");
@@ -50,7 +75,6 @@ class PieceFixture extends Fixture
         $Vernis->setFournisseur($Fournisseur2);
         $Vernis->setFournisseur(null);
         $Vernis->setType("PA");
-        $Vernis->setPrix(0.99);
         $Vernis->setPrixCatalogue(0.99);
         $Vernis->setQuantite(2);
         $Fournisseur2->addPiecesFournie($Vernis);
@@ -59,9 +83,7 @@ class PieceFixture extends Fixture
         $Colle->setReference("PA0002");
         $Colle->setLibelle("Colle");
         $Colle->setFournisseur($Fournisseur2);
-        $Colle->setFournisseur(null);
         $Colle->setType("PA");
-        $Colle->setPrix(2.99);
         $Colle->setPrixCatalogue(2.99);
         $Colle->setQuantite(3);
         $Fournisseur2->addPiecesFournie($Colle);
@@ -69,29 +91,21 @@ class PieceFixture extends Fixture
         $Manche = new Piece();
         $Manche->setReference("PI0001");
         $Manche->setLibelle("Manche de raquette");
-        $Manche->setFournisseur(null);
         $Manche->setType("PI");
-        $Manche->setPrix(1.99);
-        $Manche->setPrixCatalogue(1.99);
         $Manche->setQuantite(7);
 
 
         $Tete = new Piece();
         $Tete->setReference("PI0002");
         $Tete->setLibelle("Tête de raquette");
-        $Tete->setFournisseur(null);
         $Tete->setType("PI");
-        $Tete->setPrix(2.99);
-        $Tete->setPrixCatalogue(2.99);
         $Tete->setQuantite(7);
 
         $Raquette = new Piece();
         $Raquette->setReference("PL0001");
         $Raquette->setLibelle("Raquette");
-        $Raquette->setFournisseur(null);
         $Raquette->setType("PL");
         $Raquette->setPrix(16);
-        $Raquette->setPrixCatalogue(16);
         $Raquette->setQuantite(32);
 
         $RelationBoisManche = new PieceRelation();
@@ -124,15 +138,6 @@ class PieceFixture extends Fixture
         $RelationTeteRaquette->setPieceNecessaire($Tete);
         $RelationTeteRaquette->setPieceProduite($Raquette);
 
-        //$Manche->addPiecesNecessaire($Bois);
-        //$Manche->addPiecesNecessaire($Vernis);
-
-        //$Tete->addPiecesNecessaire($Bois);
-
-        //$Raquette->addPiecesNecessaire($Colle);
-        //$Raquette->addPiecesNecessaire($Manche);
-        //$Raquette->addPiecesNecessaire($Tete);
-
         $manager->persist($RelationBoisManche);
         $manager->persist($RelationVernisManche);
         $manager->persist($RelationBoisTete);
@@ -142,7 +147,10 @@ class PieceFixture extends Fixture
 
         $manager->persist($Fournisseur1);
         $manager->persist($Fournisseur2);
+        $manager->persist($Fournisseur3);
         $manager->persist($Bois);
+        $manager->persist($Acier);
+        $manager->persist($Caoutchouc);
         $manager->persist($Vernis);
         $manager->persist($Colle);
         $manager->persist($Manche);
