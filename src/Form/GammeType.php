@@ -30,7 +30,7 @@ class GammeType extends AbstractType
         $ouvriers = $this->utilisateurRepository->findUsersByRole("ROLE_OUVRIER");
 
         // PIECE
-        $pieces = $this->pieceRepository->findBy(["Type" => "PL"]);
+        $pieces = $this->pieceRepository->findBy(["Type" => ["PL", "PI"]]);
         $piecesDisponible = [];
 
         foreach ($pieces as $piece) {

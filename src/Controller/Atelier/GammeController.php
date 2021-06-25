@@ -5,6 +5,8 @@ namespace App\Controller\Atelier;
 use App\Entity\Gamme;
 use App\Entity\GammeRealisation;
 use App\Entity\OperationRealisation;
+use App\Entity\Piece;
+use App\Entity\PieceRelation;
 use App\Form\GammeRealisationNewType;
 use App\Form\GammeRealisationType;
 use App\Form\GammeType;
@@ -20,6 +22,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class GammeController extends AbstractController
 {
+    /**
+     * @param Piece $pieceLivrable
+     */
+    public function updateStock($pieceFinal){
+        foreach ($pieceFinal->getPiecesNecessaires() as $pieceRelation){
+            $pieceNecessaire =  $pieceRelation->getPieceNecessaire();
+            $pieceNecessaireQuantite =  $pieceNecessaire->getQuantite();
+            $pieceNecessaire->setQuantite($pieceNecessaireQuantite - $pieceRelation->getQuantite());
+        }
+        $pieceFinal->setQuantite($pieceFinal->getQuantite() + 1);
+    }
+
     //Gammes :
 
     /**
@@ -178,6 +192,7 @@ class GammeController extends AbstractController
                 $entityManager->persist($operation);
             }
             $entityManager->persist($gammeReal);
+            $this->updateStock($gammeReal->getGamme()->getPiece());
             $entityManager->flush();
 
             return $this->redirectToRoute('gamme_real', ['id'=> $gamme->getId()]);

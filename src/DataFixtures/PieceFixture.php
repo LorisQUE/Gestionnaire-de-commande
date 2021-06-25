@@ -46,7 +46,7 @@ class PieceFixture extends Fixture
         $Bois->setFournisseur(null);
         $Bois->setType("MP");
         $Bois->setPrixCatalogue(0.99);
-        $Bois->setQuantite(15);
+        $Bois->setQuantite(5);
         $Fournisseur1->addPiecesFournie($Bois);
 
         $Acier = new Piece();
@@ -56,7 +56,7 @@ class PieceFixture extends Fixture
         $Acier->setFournisseur(null);
         $Acier->setType("MP");
         $Acier->setPrixCatalogue(0.99);
-        $Acier->setQuantite(15);
+        $Acier->setQuantite(0);
         $Fournisseur3->addPiecesFournie($Acier);
 
         $Caoutchouc = new Piece();
@@ -66,7 +66,7 @@ class PieceFixture extends Fixture
         $Caoutchouc->setFournisseur(null);
         $Caoutchouc->setType("MP");
         $Caoutchouc->setPrixCatalogue(0.99);
-        $Caoutchouc->setQuantite(15);
+        $Caoutchouc->setQuantite(0);
         $Fournisseur3->addPiecesFournie($Caoutchouc);
 
         $Vernis = new Piece();
@@ -76,7 +76,7 @@ class PieceFixture extends Fixture
         $Vernis->setFournisseur(null);
         $Vernis->setType("PA");
         $Vernis->setPrixCatalogue(0.99);
-        $Vernis->setQuantite(2);
+        $Vernis->setQuantite(5);
         $Fournisseur2->addPiecesFournie($Vernis);
 
         $Colle = new Piece();
@@ -85,28 +85,28 @@ class PieceFixture extends Fixture
         $Colle->setFournisseur($Fournisseur2);
         $Colle->setType("PA");
         $Colle->setPrixCatalogue(2.99);
-        $Colle->setQuantite(3);
+        $Colle->setQuantite(5);
         $Fournisseur2->addPiecesFournie($Colle);
 
         $Manche = new Piece();
         $Manche->setReference("PI0001");
         $Manche->setLibelle("Manche de raquette");
         $Manche->setType("PI");
-        $Manche->setQuantite(7);
+        $Manche->setQuantite(0);
 
 
         $Tete = new Piece();
         $Tete->setReference("PI0002");
         $Tete->setLibelle("Tête de raquette");
         $Tete->setType("PI");
-        $Tete->setQuantite(7);
+        $Tete->setQuantite(0);
 
         $Raquette = new Piece();
         $Raquette->setReference("PL0001");
         $Raquette->setLibelle("Raquette");
         $Raquette->setType("PL");
         $Raquette->setPrix(16);
-        $Raquette->setQuantite(32);
+        $Raquette->setQuantite(0);
 
         $RelationBoisManche = new PieceRelation();
         $RelationBoisManche->setQuantite(2);
