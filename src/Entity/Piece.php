@@ -69,12 +69,18 @@ class Piece
      */
     private $PiecesProduites;
 
+    /**
+     * @ORM\OneToMany(targetEntity=LigneCommandeAchat::class, mappedBy="Piece")
+     */
+    private $LignesCommandeAchat;
+
     public function __construct()
     {
         $this->Prix = null;
         $this->PrixCatalogue = null;
         $this->PiecesNecessaires = new ArrayCollection();
         $this->PiecesProduites = new ArrayCollection();
+        $this->LignesCommandeAchat = new ArrayCollection();
     }
 
     public function __toString()
@@ -244,6 +250,36 @@ class Piece
             // set the owning side to null (unless already changed)
             if ($piecesProduite->getPieceProduite() === $this) {
                 $piecesProduite->setPieceProduite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LigneCommandeAchat[]
+     */
+    public function getLignesCommandeAchat(): Collection
+    {
+        return $this->LignesCommandeAchat;
+    }
+
+    public function addLignesCommandeAchat(LigneCommandeAchat $lignesCommandeAchat): self
+    {
+        if (!$this->LignesCommandeAchat->contains($lignesCommandeAchat)) {
+            $this->LignesCommandeAchat[] = $lignesCommandeAchat;
+            $lignesCommandeAchat->setPiece($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLignesCommandeAchat(LigneCommandeAchat $lignesCommandeAchat): self
+    {
+        if ($this->LignesCommandeAchat->removeElement($lignesCommandeAchat)) {
+            // set the owning side to null (unless already changed)
+            if ($lignesCommandeAchat->getPiece() === $this) {
+                $lignesCommandeAchat->setPiece(null);
             }
         }
 

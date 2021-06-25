@@ -79,7 +79,6 @@ class GammeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //dd($gamme);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->render('gamme/show.html.twig', [

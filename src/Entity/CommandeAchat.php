@@ -35,18 +35,19 @@ class CommandeAchat
     private $DatePrevue;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\OneToMany(targetEntity=LigneCommandeAchat::class, mappedBy="CommandeAchat", orphanRemoval=true)
      */
-    private $Prix;
+    private $Lignes;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Piece::class)
+     * @ORM\ManyToOne(targetEntity=Fournisseur::class, inversedBy="Commandes")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $Pieces;
+    private $Fournisseur;
 
     public function __construct()
     {
-        $this->Pieces = new ArrayCollection();
+        $this->Lignes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,38 +91,44 @@ class CommandeAchat
         return $this;
     }
 
-    public function getPrix(): ?float
-    {
-        return $this->Prix;
-    }
-
-    public function setPrix(float $Prix): self
-    {
-        $this->Prix = $Prix;
-
-        return $this;
-    }
-
     /**
-     * @return Collection|Piece[]
+     * @return Collection|LigneCommandeAchat[]
      */
-    public function getPieces(): Collection
+    public function getLignes(): Collection
     {
-        return $this->Pieces;
+        return $this->Lignes;
     }
 
-    public function addPiece(Piece $piece): self
+    public function addLigne(LigneCommandeAchat $ligne): self
     {
-        if (!$this->Pieces->contains($piece)) {
-            $this->Pieces[] = $piece;
+        if (!$this->Lignes->contains($ligne)) {
+            $this->Lignes[] = $ligne;
+            $ligne->setCommandeAchat($this);
         }
 
         return $this;
     }
 
-    public function removePiece(Piece $piece): self
+    public function removeLigne(LigneCommandeAchat $ligne): self
     {
-        $this->Pieces->removeElement($piece);
+        if ($this->Lignes->removeElement($ligne)) {
+            // set the owning side to null (unless already changed)
+            if ($ligne->getCommandeAchat() === $this) {
+                $ligne->setCommandeAchat(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getFournisseur(): ?Fournisseur
+    {
+        return $this->Fournisseur;
+    }
+
+    public function setFournisseur(?Fournisseur $Fournisseur): self
+    {
+        $this->Fournisseur = $Fournisseur;
 
         return $this;
     }

@@ -44,9 +44,15 @@ class Fournisseur
      */
     private $PiecesFournies;
 
+    /**
+     * @ORM\OneToMany(targetEntity=CommandeAchat::class, mappedBy="Fournisseur", orphanRemoval=true)
+     */
+    private $Commandes;
+
     public function __construct()
     {
         $this->PiecesFournies = new ArrayCollection();
+        $this->Commandes = new ArrayCollection();
     }
 
     public function __toString()
@@ -131,6 +137,36 @@ class Fournisseur
             // set the owning side to null (unless already changed)
             if ($piecesFourny->getFournisseur() === $this) {
                 $piecesFourny->setFournisseur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CommandeAchat[]
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->Commandes;
+    }
+
+    public function addCommande(CommandeAchat $commande): self
+    {
+        if (!$this->Commandes->contains($commande)) {
+            $this->Commandes[] = $commande;
+            $commande->setFournisseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(CommandeAchat $commande): self
+    {
+        if ($this->Commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getFournisseur() === $this) {
+                $commande->setFournisseur(null);
             }
         }
 
