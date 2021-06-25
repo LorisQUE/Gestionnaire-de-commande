@@ -42,7 +42,7 @@ class Gamme
     private $GammeRealisations;
 
     /**
-     * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="Gamme", cascade={"remove"})
+     * @ORM\ManyToMany(targetEntity=Operation::class, inversedBy="Gammes")
      */
     private $Operations;
 
@@ -140,7 +140,6 @@ class Gamme
     {
         if (!$this->Operations->contains($operation)) {
             $this->Operations[] = $operation;
-            $operation->setGamme($this);
         }
 
         return $this;
@@ -148,12 +147,7 @@ class Gamme
 
     public function removeOperation(Operation $operation): self
     {
-        if ($this->Operations->removeElement($operation)) {
-            // set the owning side to null (unless already changed)
-            if ($operation->getGamme() === $this) {
-                $operation->setGamme(null);
-            }
-        }
+        $this->Operations->removeElement($operation);
 
         return $this;
     }

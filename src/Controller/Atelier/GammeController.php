@@ -7,6 +7,7 @@ use App\Entity\GammeRealisation;
 use App\Entity\OperationRealisation;
 use App\Entity\Piece;
 use App\Entity\PieceRelation;
+use App\Form\GammeOperationAjoutType;
 use App\Form\GammeRealisationNewType;
 use App\Form\GammeRealisationType;
 use App\Form\GammeType;
@@ -61,6 +62,30 @@ class GammeController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('gamme_index');
+        }
+
+        return $this->render('gamme/new.html.twig', [
+            'gamme' => $gamme,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/ajout/operation", name="gamme_ajout_operation", methods={"GET","POST"})
+     */
+    public function ajoutOperation(Request $request, Gamme $gamme): Response
+    {
+        $form = $this->createForm(GammeOperationAjoutType::class, $gamme);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //dd($gamme);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->render('gamme/show.html.twig', [
+                'operations' => $gamme->getOperations(),
+                'gamme' => $gamme,
+            ]);
         }
 
         return $this->render('gamme/new.html.twig', [

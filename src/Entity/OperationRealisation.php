@@ -35,7 +35,7 @@ class OperationRealisation
 
     /**
      * @ORM\ManyToOne(targetEntity=Operation::class, inversedBy="Realisations")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $Operation;
 

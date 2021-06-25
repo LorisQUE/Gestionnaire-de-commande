@@ -32,10 +32,10 @@ class OperationController extends AbstractController
     /**
      * @Route("/{gamme}/new", name="operation_new", methods={"GET","POST"})
      */
-    public function new(Request $request, Gamme $gamme): Response
+    public function new(Request $request, ?Gamme $gamme): Response
     {
         $operation = new Operation();
-        $operation->setGamme($gamme);
+        if($gamme) $operation->addGamme($gamme);
         $form = $this->createForm(OperationType::class, $operation);
         $form->handleRequest($request);
 
@@ -43,7 +43,10 @@ class OperationController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($operation);
             $entityManager->flush();
-            return $this->redirectToRoute('gamme_show', ['id' => $gamme->getId()]);
+            if($gamme)
+                return $this->redirectToRoute('gamme_show', ['id' => $gamme->getId()]);
+            else
+                return $this->redirectToRoute('operation_index');
         }
 
         return $this->render('operation/new.html.twig', [
@@ -65,7 +68,7 @@ class OperationController extends AbstractController
     /**
      * @Route("/{id}/edit/{gamme}", name="operation_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Operation $operation, Gamme $gamme): Response
+    public function edit(Request $request, Operation $operation, ?Gamme $gamme): Response
     {
         $form = $this->createForm(OperationType::class, $operation);
         $form->handleRequest($request);
@@ -73,7 +76,10 @@ class OperationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('gamme_show', ['id' => $gamme->getId()]);
+            if($gamme)
+                return $this->redirectToRoute('gamme_show', ['id' => $gamme->getId()]);
+            else
+                return $this->redirectToRoute('operation_index');
         }
 
         return $this->render('operation/edit.html.twig', [
@@ -85,7 +91,7 @@ class OperationController extends AbstractController
     /**
      * @Route("/{id}/{gamme}", name="operation_delete", methods={"POST"})
      */
-    public function delete(Request $request, Operation $operation, Gamme $gamme): Response
+    public function delete(Request $request, Operation $operation, ?Gamme $gamme): Response
     {
         if ($this->isCsrfTokenValid('delete'.$operation->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -93,7 +99,10 @@ class OperationController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('gamme_show', ['id' => $gamme->getId()]);
+        if($gamme)
+            return $this->redirectToRoute('gamme_show', ['id' => $gamme->getId()]);
+        else
+            return $this->redirectToRoute('operation_index');
     }
 
     // Réalisation d'opération
