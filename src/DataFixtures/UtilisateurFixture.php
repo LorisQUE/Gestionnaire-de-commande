@@ -26,7 +26,7 @@ class UtilisateurFixture extends Fixture
         $manager->persist($ouvrier);
 
         $commercial = new Utilisateur();
-        $commercial->setEmail("Jean.Hédouardo@gmail.com");
+        $commercial->setEmail("Jean.Hedouardo@gmail.com");
         $commercial->setPseudonyme("Jean Héd");
         $commercial->setPassword($this->passwordEncoder->encodePassword($commercial, "Popeye"));
         $commercial->setRoles(["ROLE_COMMERCIAL"]);

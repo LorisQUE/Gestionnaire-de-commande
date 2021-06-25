@@ -49,26 +49,6 @@ class PieceFixture extends Fixture
         $Bois->setQuantite(5);
         $Fournisseur1->addPiecesFournie($Bois);
 
-        $Acier = new Piece();
-        $Acier->setReference("MP0002");
-        $Acier->setLibelle("Acier");
-        $Acier->setFournisseur($Fournisseur1);
-        $Acier->setFournisseur(null);
-        $Acier->setType("MP");
-        $Acier->setPrixCatalogue(0.99);
-        $Acier->setQuantite(0);
-        $Fournisseur3->addPiecesFournie($Acier);
-
-        $Caoutchouc = new Piece();
-        $Caoutchouc->setReference("MP0003");
-        $Caoutchouc->setLibelle("Caoutchouc Synthétique");
-        $Caoutchouc->setFournisseur($Fournisseur2);
-        $Caoutchouc->setFournisseur(null);
-        $Caoutchouc->setType("MP");
-        $Caoutchouc->setPrixCatalogue(0.99);
-        $Caoutchouc->setQuantite(0);
-        $Fournisseur3->addPiecesFournie($Caoutchouc);
-
         $Vernis = new Piece();
         $Vernis->setReference("PA0001");
         $Vernis->setLibelle("Vernis");
@@ -149,8 +129,6 @@ class PieceFixture extends Fixture
         $manager->persist($Fournisseur2);
         $manager->persist($Fournisseur3);
         $manager->persist($Bois);
-        $manager->persist($Acier);
-        $manager->persist($Caoutchouc);
         $manager->persist($Vernis);
         $manager->persist($Colle);
         $manager->persist($Manche);

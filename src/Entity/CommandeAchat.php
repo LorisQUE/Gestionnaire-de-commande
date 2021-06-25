@@ -25,16 +25,6 @@ class CommandeAchat
     private $Libelle;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $DatePrevu;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $DatePrevue;
-
-    /**
      * @ORM\OneToMany(targetEntity=LigneCommandeAchat::class, mappedBy="CommandeAchat", orphanRemoval=true)
      */
     private $Lignes;
@@ -44,6 +34,16 @@ class CommandeAchat
      * @ORM\JoinColumn(nullable=false)
      */
     private $Fournisseur;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $DatePrevue;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $DateEffective;
 
     public function __construct()
     {
@@ -63,30 +63,6 @@ class CommandeAchat
     public function setLibelle(string $Libelle): self
     {
         $this->Libelle = $Libelle;
-
-        return $this;
-    }
-
-    public function getDatePrevu(): ?\DateTimeInterface
-    {
-        return $this->DatePrevu;
-    }
-
-    public function setDatePrevu(\DateTimeInterface $DatePrevu): self
-    {
-        $this->DatePrevu = $DatePrevu;
-
-        return $this;
-    }
-
-    public function getDatePrevue(): ?\DateTimeInterface
-    {
-        return $this->DatePrevue;
-    }
-
-    public function setDatePrevue(\DateTimeInterface $DatePrevue): self
-    {
-        $this->DatePrevue = $DatePrevue;
 
         return $this;
     }
@@ -129,6 +105,30 @@ class CommandeAchat
     public function setFournisseur(?Fournisseur $Fournisseur): self
     {
         $this->Fournisseur = $Fournisseur;
+
+        return $this;
+    }
+
+    public function getDatePrevue(): ?\DateTimeInterface
+    {
+        return $this->DatePrevue;
+    }
+
+    public function setDatePrevue(\DateTimeInterface $DatePrevue): self
+    {
+        $this->DatePrevue = $DatePrevue;
+
+        return $this;
+    }
+
+    public function getDateEffective(): ?\DateTimeInterface
+    {
+        return $this->DateEffective;
+    }
+
+    public function setDateEffective(?\DateTimeInterface $DateEffective): self
+    {
+        $this->DateEffective = $DateEffective;
 
         return $this;
     }
