@@ -36,7 +36,7 @@
                 </td>
             </tr>
         {% else %}
-            <p>Aucune opération disponible.</p>
+            <td>Aucune opération disponible.</td>
         {% endfor %}
         </tbody>
     </table>
@@ -44,7 +44,8 @@
     <div class="actions">
         <a class="btn btn-primary" href="{{ path('gamme_index') }}">Retour aux Gammes</a>
         <a class="btn btn-primary" href="{{ path('gamme_edit', {'id': gamme.id}) }}">Modifier</a>
-        <a class="btn btn-primary" href="{{ path('operation_new', {'gamme': gamme.id}) }}">Ajouter une opération</a>
+        <a class="btn btn-primary" href="{{ path('gamme_ajout_operation', {'id': gamme.id}) }}">Ajouter une opération</a>
+        <a class="btn btn-primary" href="{{ path('operation_new', {'gamme': gamme.id}) }}">Créer une opération</a>
         {{ include('gamme/_delete_form.html.twig') }}
     </div>
 {% endblock %}

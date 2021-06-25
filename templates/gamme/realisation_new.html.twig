@@ -9,77 +9,34 @@
 
     <h2>Nouvelle réalisation de gamme</h2>
 
-    {{ form_start(form) }}
-        {{ form_row(form.Libelle) }}
-        {{ form_row(form.Superviseur) }}
-        {{ form_row(form.Date) }}
-    {% for operation in form.OperationRealisations %}
-        <div class="card">
-            <div class="card-header">
-                {{ operation.vars.value.Libelle }}
-            </div>
-            <div class="card-body">
-                {{ form_row(operation, { 'attr' : { 'class' : 'ope-real-form' }} ) }}
-            </div>
-        </div>
-        <div/>
-    {% endfor %}
-        <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+    {% include 'gamme/_form_realisation_new.html.twig' with {form: form} %}
 
     <script>
+        const $select = $('select');
 
-        var $operateur = $('.select-operateur');
-        $operateur.change(function (e) {
-            var that = this;
-            var selectOpe = $("#" + e.target.id);
-            var $form = selectOpe.closest('form');
-            var data = {};
-            data[selectOpe.attr('name')] = selectOpe.val();
-            $.ajax({
-                url : $form.attr('action'),
-                type: $form.attr('method'),
-                data : data,
-                success: function(html) {
-                    console.log("")
-                    var selectPdtId = "#" + $(that).closest('.ope-real-form').find('.select-pdt')[0].id;
-                    $(selectPdtId).replaceWith(
-                        $(html).find(selectPdtId)
-                    );
+        $select.change(callback);
 
-                    var selectMachineId = "#" + $(that).closest('.ope-real-form').find('.select-machine')[0].id;
-                    $(selectMachineId).replaceWith(
-                        $(html).find(selectMachineId)
-                    );
-                },
-                error: function(err) {
-                    console.log(err, this);
-                }
+        function callback(e) {
+            const $form = $(this).closest('form');
+            const form = this.closest('form');
+            const data = new FormData(form);
+            var newData = {};
+
+            for (var p of data) {
+                let name = p[0];
+                let value = p[1];
+
+                newData[name] = value;
+            }
+
+            $.post($form.attr('action'), newData, function (res) {
+                const $html = $(res);
+
+                $html.find('select').change(callback);
+                $form.replaceWith($html);
             });
-        });
+        }
 
-        var $pdt = $('.select-pdt');
-        $pdt.change(function(e) {
-            var that = this;
-            var selectPdt = $("#" + e.target.id);
-            var $form = selectPdt.closest('form');
-            var data = {};
-            data[selectPdt.attr('name')] = selectPdt.val();
-            $.ajax({
-                url : $form.attr('action'),
-                type: $form.attr('method'),
-                data : data,
-                success: function(html) {
-                    var selectMachineId = "#" + $(that).closest('.ope-real-form').find('.select-machine')[0].id;
-                    $(selectMachineId).replaceWith(
-                        $(html).find(selectMachineId)
-                    );
-                },
-                error: function(err) {
-                    console.log(err, this);
-                }
-            });
-        });
     </script>
-    {{ form_end(form) }}
 
 {% endblock %}

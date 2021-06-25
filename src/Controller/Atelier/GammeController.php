@@ -5,11 +5,15 @@ namespace App\Controller\Atelier;
 use App\Entity\Gamme;
 use App\Entity\GammeRealisation;
 use App\Entity\OperationRealisation;
+use App\Entity\Piece;
+use App\Entity\PieceRelation;
+use App\Form\GammeOperationAjoutType;
 use App\Form\GammeRealisationNewType;
 use App\Form\GammeRealisationType;
 use App\Form\GammeType;
 use App\Repository\GammeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,6 +23,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class GammeController extends AbstractController
 {
+    /**
+     * @param Piece $pieceLivrable
+     */
+    public function updateStock($pieceFinal){
+        foreach ($pieceFinal->getPiecesNecessaires() as $pieceRelation){
+            $pieceNecessaire =  $pieceRelation->getPieceNecessaire();
+            $pieceNecessaireQuantite =  $pieceNecessaire->getQuantite();
+            $pieceNecessaire->setQuantite($pieceNecessaireQuantite - $pieceRelation->getQuantite());
+        }
+        $pieceFinal->setQuantite($pieceFinal->getQuantite() + 1);
+    }
+
     //Gammes :
 
     /**
@@ -46,6 +62,30 @@ class GammeController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('gamme_index');
+        }
+
+        return $this->render('gamme/new.html.twig', [
+            'gamme' => $gamme,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/ajout/operation", name="gamme_ajout_operation", methods={"GET","POST"})
+     */
+    public function ajoutOperation(Request $request, Gamme $gamme): Response
+    {
+        $form = $this->createForm(GammeOperationAjoutType::class, $gamme);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //dd($gamme);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->render('gamme/show.html.twig', [
+                'operations' => $gamme->getOperations(),
+                'gamme' => $gamme,
+            ]);
         }
 
         return $this->render('gamme/new.html.twig', [
@@ -165,12 +205,19 @@ class GammeController extends AbstractController
         $form = $this->createForm(GammeRealisationNewType::class, $gammeReal);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if($request->isXmlHttpRequest()) {
+            return $this->render('gamme/_form_realisation_new.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }
+
+        if ($form->isSubmitted() && $form->isValid() && !$request->isXmlHttpRequest()) {
             $entityManager = $this->getDoctrine()->getManager();
             foreach ($gammeReal->getOperationRealisations() as $operation){
                 $entityManager->persist($operation);
             }
             $entityManager->persist($gammeReal);
+            $this->updateStock($gammeReal->getGamme()->getPiece());
             $entityManager->flush();
 
             return $this->redirectToRoute('gamme_real', ['id'=> $gamme->getId()]);

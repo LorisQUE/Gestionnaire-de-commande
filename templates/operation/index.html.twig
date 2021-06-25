@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Opérations{% endblock %}
+
+{% block body %}
+
+    <style>
+        .actions { display: flex; }
+        .actions a { margin-right: .5em; }
+    </style>
+
+    <h1>Opérations</h1>
+
+    <table class="table">
+        <thead>
+        <th>Libelle</th>
+        <th>Poste de Travail</th>
+        <th>Machine</th>
+        <th>Duree</th>
+        <th>Actions</th>
+        </thead>
+        <tbody>
+        {% for operation in operations %}
+            <tr>
+                <td>{{ operation.Libelle }}</td>
+                <td>{{ operation.PosteDeTravail }}</td>
+                <td>{{ operation.Machine }}</td>
+                <td>{{ operation.Duree }}</td>
+                <td>
+                    <div class="actions">
+                        <a title="Modifier" class="btn btn-primary" href="{{ path('operation_edit', {'id': operation.id, 'gamme': 0}) }}"><i class="fas fa-edit"></i></a>
+                        <form method="post" action="{{ path('operation_delete', {'id': operation.id, 'gamme': 0}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette opération ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ operation.id) }}">
+                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <td>Aucune opération disponible.</td>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="actions">
+        <a class="btn btn-primary" href="{{ path('accueil') }}">Retour</a>
+        <a class="btn btn-primary" href="{{ path('operation_new', {'gamme': 0}) }}">Ajouter une opération</a>
+    </div>
+{% endblock %}

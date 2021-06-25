@@ -24,6 +24,31 @@ class StockController extends AbstractController
     );
 
     /**
+     * @param Piece $piece
+     */
+    public function conformPropertiesToType ($piece) {
+        switch ($piece->getType()) {
+            case "MP":
+            case "PA":
+                $piece->setPrix(null);
+                $piece->getPiecesNecessaires()->clear();
+                break;
+
+            case "PL":
+                $piece->setFournisseur(null);
+                $piece->setPrixCatalogue(null);
+                $piece->getPiecesProduites()->clear();
+                break;
+
+            case "PI":
+                $piece->setFournisseur(null);
+                $piece->setPrixCatalogue(null);
+                $piece->setPrix(null);
+                break;
+        }
+    }
+
+    /**
      * @Route("/", name="stock")
      */
     public function index(PieceRepository $pieceRepository): Response
@@ -45,6 +70,58 @@ class StockController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            foreach ($entityManager->getRepository(Piece::class)->findAll() as $pPiece) {
+                if($pPiece->getReference() === $piece->getReference()){
+                    $this->addFlash(
+                        'warning',
+                        'Cette référence est déjà utilisée'
+                    );
+
+                    return $this->render('stock/new.html.twig', [
+                        'piece' => $piece,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+
+            //Pièces Nécessaire
+            $resNecessaires = [];
+
+            foreach ($piece->getPiecesNecessaires() as $pn){
+                if(isset($resNecessaires[$pn->getPieceNecessaire()->getId()])) {
+                    $var = $resNecessaires[$pn->getPieceNecessaire()->getId()];
+                    $var->setQuantite($var->getQuantite() + $pn->getQuantite());
+                } else {
+                    $resNecessaires[$pn->getPieceNecessaire()->getId()] = $pn;
+                }
+            }
+
+            $piece->getPiecesNecessaires()->clear();
+
+            foreach($resNecessaires as $r){
+                $piece->addPiecesNecessaire($r);
+            }
+
+            //Pièces produites
+            $resProduites = [];
+
+            foreach ($piece->getPiecesProduites() as $pp){
+                if(isset($resProduites[$pp->getPieceProduite()->getId()])) {
+                    $var = $resProduites[$pp->getPieceProduite()->getId()];
+                    $var->setQuantite($var->getQuantite() + $pp->getQuantite());
+                } else {
+                    $resProduites[$pp->getPieceProduite()->getId()] = $pp;
+                }
+            }
+
+            $piece->getPiecesProduites()->clear();
+
+            foreach($resProduites as $r){
+                $piece->addPiecesProduite($r);
+            }
+
+
             $entityManager->persist($piece);
             $entityManager->flush();
 
@@ -62,8 +139,9 @@ class StockController extends AbstractController
      */
     public function show(Piece $piece): Response
     {
-        $pieceNecessaire = $piece->getPiecesNecessaire();
-        $pieceRealisable = $piece->getPiecesParentes();
+        $pieceNecessaire = $piece->getPiecesNecessaires();
+        $pieceRealisable = $piece->getPiecesProduites();
+
         return $this->render('stock/show.html.twig', [
             'pieceNecessaire' => $pieceNecessaire,
             'pieceRealisable' => $pieceRealisable,
@@ -79,10 +157,32 @@ class StockController extends AbstractController
     {
         $form = $this->createForm(StockType::class, $piece);
         $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            foreach ($entityManager->getRepository(Piece::class)->findAll() as $pPiece) {
+                if($pPiece->getReference() === $piece->getReference()){
+                    $this->addFlash(
+                        'warning',
+                        'Cette référence est déjà utilisée'
+                    );
 
+                    return $this->render('stock/new.html.twig', [
+                        'piece' => $piece,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+
+            $this->conformPropertiesToType($piece);
+            foreach ($piece->getPiecesNecessaires() as $pn){
+                if($pn->getId() === null) $entityManager->persist($pn);
+            }
+            foreach ($piece->getPiecesProduites() as $pp){
+                if($pp->getId() === null) $entityManager->persist($pp);
+            }
+
+            $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('stock');
         }
 

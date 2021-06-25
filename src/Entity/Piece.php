@@ -50,29 +50,31 @@ class Piece
     private $Fournisseur;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Piece::class, mappedBy="PiecesNecessaire")
-     */
-    private $PiecesParentes;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Piece::class, inversedBy="PiecesParentes")
-     */
-    private $PiecesNecessaire;
-
-    /**
      * @ORM\OneToOne(targetEntity=Gamme::class, mappedBy="Piece", cascade={"persist", "remove"})
      */
     private $Gamme;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $Reference;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PieceRelation::class, mappedBy="PieceNecessaire", cascade={"merge", "persist"}, orphanRemoval=true)
+     */
+    private $PiecesNecessaires;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PieceRelation::class, mappedBy="PieceProduite", cascade={"merge", "persist"}, orphanRemoval=true)
+     */
+    private $PiecesProduites;
+
     public function __construct()
     {
-        $this->PiecesParentes = new ArrayCollection();
-        $this->PiecesNecessaire = new ArrayCollection();
+        $this->Prix = null;
+        $this->PrixCatalogue = null;
+        $this->PiecesNecessaires = new ArrayCollection();
+        $this->PiecesProduites = new ArrayCollection();
     }
 
     public function __toString()
@@ -114,7 +116,7 @@ class Piece
         return $this->Prix;
     }
 
-    public function setPrix(float $Prix): self
+    public function setPrix(?float $Prix): self
     {
         $this->Prix = $Prix;
 
@@ -138,7 +140,7 @@ class Piece
         return $this->PrixCatalogue;
     }
 
-    public function setPrixCatalogue(float $PrixCatalogue): self
+    public function setPrixCatalogue(?float $PrixCatalogue): self
     {
         $this->PrixCatalogue = $PrixCatalogue;
 
@@ -153,57 +155,6 @@ class Piece
     public function setFournisseur(?Fournisseur $Fournisseur): self
     {
         $this->Fournisseur = $Fournisseur;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getPiecesParentes(): Collection
-    {
-        return $this->PiecesParentes;
-    }
-
-    public function addPiecesParente(self $piecesParente): self
-    {
-        if (!$this->PiecesParentes->contains($piecesParente)) {
-            $this->PiecesParentes[] = $piecesParente;
-        }
-
-        return $this;
-    }
-
-    public function removePiecesParente(self $piecesParente): self
-    {
-        $this->PiecesParentes->removeElement($piecesParente);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getPiecesNecessaire(): Collection
-    {
-        return $this->PiecesNecessaire;
-    }
-
-    public function addPiecesNecessaire(self $piecesNecessaire): self
-    {
-        if (!$this->PiecesNecessaire->contains($piecesNecessaire)) {
-            $this->PiecesNecessaire[] = $piecesNecessaire;
-            $piecesNecessaire->addPiecesParente($this);
-        }
-
-        return $this;
-    }
-
-    public function removePiecesNecessaire(self $piecesNecessaire): self
-    {
-        if ($this->PiecesNecessaire->removeElement($piecesNecessaire)) {
-            $piecesNecessaire->removePiecesParente($this);
-        }
 
         return $this;
     }
@@ -233,6 +184,68 @@ class Piece
     public function setReference(string $Reference): self
     {
         $this->Reference = $Reference;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PieceRelation[]
+     */
+    public function getPiecesProduites(): Collection
+    {
+        //dump($this->PiecesNecessaires);
+        return $this->PiecesNecessaires;
+    }
+
+    public function addPiecesProduite(PieceRelation $piecesNecessaire): self
+    {
+        if (!$this->PiecesNecessaires->contains($piecesNecessaire)) {
+            $this->PiecesNecessaires[] = $piecesNecessaire;
+            $piecesNecessaire->setPieceNecessaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removePiecesProduite(PieceRelation $piecesNecessaire): self
+    {
+        if ($this->PiecesNecessaires->removeElement($piecesNecessaire)) {
+            // set the owning side to null (unless already changed)
+            if ($piecesNecessaire->getPieceNecessaire() === $this) {
+                $piecesNecessaire->setPieceNecessaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PieceRelation[]
+     */
+    public function getPiecesNecessaires(): Collection
+    {
+        //dump($this->PiecesProduites);
+        return $this->PiecesProduites;
+    }
+
+    public function addPiecesNecessaire(PieceRelation $piecesProduite): self
+    {
+        if (!$this->PiecesProduites->contains($piecesProduite)) {
+            $this->PiecesProduites[] = $piecesProduite;
+            $piecesProduite->setPieceProduite($this);
+        }
+
+        return $this;
+    }
+
+    public function removePiecesNecessaire(PieceRelation $piecesProduite): self
+    {
+        if ($this->PiecesProduites->removeElement($piecesProduite)) {
+            // set the owning side to null (unless already changed)
+            if ($piecesProduite->getPieceProduite() === $this) {
+                $piecesProduite->setPieceProduite(null);
+            }
+        }
 
         return $this;
     }

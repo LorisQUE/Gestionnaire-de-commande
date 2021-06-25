@@ -12,74 +12,84 @@
 
     <table class="table">
         <tbody>
-        <tr>
-            <th>Reference</th>
-            <td>{{ piece.Reference }}</td>
-        </tr>
-        <tr>
-            <th>Libelle</th>
-            <td>{{ piece.Libelle }}</td>
-        </tr>
-        <tr>
-            <th>Type</th>
-            <td>{{ enumType[piece.Type] }}</td>
-        </tr>
-        <tr>
-            <th>Quantité</th>
-            <td>{{ piece.Quantite }}</td>
-        </tr>
-        {% if(piece.Type == 'PL') %}
-        <tr>
-            <th>Prix</th>
-            <td>{{ piece.Prix }}€</td>
-        </tr>
-        {% endif %}
-        {% if(piece.Type == 'PA' or piece.Type == 'MP') %}
-        <tr>
-            <th>Prix Catalogue</th>
-            <td>{{ piece.PrixCatalogue }}€</td>
-        </tr>
-        <tr>
-            <th>Fournisseur</th>
-            <td>{{ piece.Fournisseur }}€</td>
-        </tr>
-        {% endif %}
+            <tr>
+                <th>Reference</th>
+                <td>{{ piece.Reference }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ piece.Libelle }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ enumType[piece.Type] }}</td>
+            </tr>
+            <tr>
+                <th>Quantité</th>
+                <td>{{ piece.Quantite }}</td>
+            </tr>
+            {% if(piece.Type == 'PL') %}
+                <tr>
+                    <th>Prix</th>
+                    <td>{{ piece.Prix }} €</td>
+                </tr>
+            {% endif %}
+            {% if(piece.Type == 'PA' or piece.Type == 'MP') %}
+                <tr>
+                    <th>Prix Catalogue</th>
+                    <td>{{ piece.PrixCatalogue }} €</td>
+                </tr>
+                <tr>
+                    <th>Fournisseur</th>
+                    <td>{{ piece.Fournisseur }}</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 
-    <table class="table">
-        <thead>Pièce Nécessaire</thead>
-        <tbody>
-        {% for piece in pieceNecessaire %}
-            <tr>
-                <td scope="row">{{ piece.Reference }}</td>
-                <td>{{ piece.Libelle }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="2">Aucune pièce</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% if(piece.Type == 'PL' or piece.Type == 'PI') %}
+        <table class="table">
+            <thead>Pièce Nécessaire</thead>
+            <tbody>
+                {% for piece in pieceNecessaire %}
+                    <tr>
+                        <th>{{ piece.PieceNecessaire.Reference }}</th>
+                        <td>{{ piece.Quantite }} x {{ piece.PieceNecessaire.Libelle }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">Aucune pièce</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
-    <table class="table">
-        <thead>Pièce Réalisable</thead>
-        <tbody>
-        {% for piece in pieceRealisable %}
-            <tr>
-                <td scope="row">{{ piece.Reference }}</td>
-                <td>{{ piece.Libelle }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="2">Aucune pièce</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% if(piece.Type == 'PA' or piece.Type == 'MP' or piece.Type == 'PI') %}
+        <table class="table">
+            <thead>Pièce Réalisable</thead>
+            <tbody>
+                {% for piece in pieceRealisable %}
+                    <tr>
+                        <th>{{ piece.PieceProduite.Reference }}</th>
+                        <td>{{ piece.PieceProduite.Libelle }} - x{{ piece.Quantite }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">Aucune pièce</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+
     <div class="actions">
         <a class="btn btn-primary" href="{{ path('stock') }}">Retour à la liste</a>
+            {% dump(piece.Gamme) %}
+        {% if(piece.Gamme) %}
+            <a class="btn btn-primary" href="{{ path('gamme_show', {'id': piece.Gamme.id}) }}">Voir la gamme</a>
+        {% endif %}
 
         <a class="btn btn-primary" href="{{ path('stock_edit', {'id': piece.id}) }}">Modification</a>
 

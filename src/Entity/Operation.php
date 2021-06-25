@@ -47,13 +47,14 @@ class Operation
     private $PosteDeTravail;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Gamme::class, inversedBy="Operations")
+     * @ORM\ManyToMany(targetEntity=Gamme::class, mappedBy="Operations")
      */
-    private $Gamme;
+    private $Gammes;
 
     public function __construct()
     {
         $this->Realisations = new ArrayCollection();
+        $this->Gammes = new ArrayCollection();
     }
 
     public function __toString()
@@ -144,14 +145,29 @@ class Operation
         return $this;
     }
 
-    public function getGamme(): ?Gamme
+    /**
+     * @return Collection|Gamme[]
+     */
+    public function getGammes(): Collection
     {
-        return $this->Gamme;
+        return $this->Gammes;
     }
 
-    public function setGamme(?Gamme $Gamme): self
+    public function addGamme(Gamme $gamme): self
     {
-        $this->Gamme = $Gamme;
+        if (!$this->Gammes->contains($gamme)) {
+            $this->Gammes[] = $gamme;
+            $gamme->addOperation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGamme(Gamme $gamme): self
+    {
+        if ($this->Gammes->removeElement($gamme)) {
+            $gamme->removeOperation($this);
+        }
 
         return $this;
     }

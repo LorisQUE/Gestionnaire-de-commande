@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GammeType extends AbstractType
+class GammeOperationAjoutType extends AbstractType
 {
     private $entityManager;
     private $pieceRepository;
@@ -26,29 +26,8 @@ class GammeType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // UTILISATEUR
-        $ouvriers = $this->utilisateurRepository->findUsersByRole("ROLE_OUVRIER");
-
-        // PIECE
-        $pieces = $this->pieceRepository->findBy(["Type" => ["PL", "PI"]]);
-        $piecesDisponible = [];
-
-        foreach ($pieces as $piece) {
-            if($piece->getGamme() == null || $piece->getGamme() == $builder->getData()) {
-                array_push($piecesDisponible, $piece);
-            }
-        }
-
         $builder
-            ->add('Libelle')
-            ->add('Piece', ChoiceType::class, [
-                'choices' => $piecesDisponible,
-                'choice_label' => function ($choice, $key, $value) { return "#".$choice->getReference()." - ".$choice->getLibelle();}
-                ])
-            ->add('Superviseur', ChoiceType::class, [
-                'choices' => $ouvriers,
-                'choice_label' => function ($choice, $key, $value) { return $choice->getPseudonyme()." - ".$choice->getEmail(); },
-                ])
+            ->add('Operations')
         ;
     }
 

@@ -1,63 +1,207 @@
+<style>
+    .card { margin: 2em 0; }
+    .card .card { margin: 2em; }
+    .card .card .form-group { margin: 0; }
+    .card .card .card-body { display: flex; justify-content: space-between; align-items: flex-end; padding: 1em; }
+    .card .card .card-body.new > div { display: flex; justify-content: space-between; width: 92%;  }
+    .card .card .card-body.new > div > .form-group { width: 48%;  }
+    .card .card .card-body fieldset { width: 92%; }
+    .card .card .form-group .piece { display: flex; justify-content: space-between; }
+    .card .card .form-group .piece > .form-group { width: 48%; }
+</style>
+
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+        {{ form_row(form.Libelle) }}
+        {{ form_row(form.Reference) }}
+        {{ form_row(form.Type) }}
+        {{ form_row(form.Quantite) }}
+        {{ form_row(form.Prix) }}
+        {{ form_row(form.PrixCatalogue) }}
+        {{ form_row(form.Fournisseur) }}
 
-    <script>
-        var $type = $('#stock_Type');
-        var prix = $("#stock_Prix");
-        var prixCatalogue = $("#stock_PrixCatalogue");
-        var fournisseur = $("#stock_Fournisseur");
-        var piecesNecessaire = $("#stock_PiecesNecessaire");
+<div class="card card-parent-necessaire">
+    <div class="card-header">
+        Pièces Nécessaires
+    </div>
 
-        $( document ).ready(function() {
-            getTypePiece($type.val())
-        });
+    <div id="piece-necessaire-list" class="card-body cards-container" data-prototype="{{  form_widget(form.PiecesNecessaires.vars.prototype) | e('html_attr') }}">
+        {% for PiecesNecessaires in form.PiecesNecessaires %}
+            <div class="card card-piece-necessaire">
+                <div class="card-body">
+                    {{ form_row(PiecesNecessaires, { 'attr' : { 'class' : 'piece piece-necessaire' }} ) }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
-        $type.change(function(e) {
-            getTypePiece(this.value);
-        });
+<div class="card card-parent-produite">
+    <div class="card-header">
+        Pièces Produites
+    </div>
 
-        function getTypePiece(type){
-            switch (type) {
-                case "MP":
-                case "PA":
-                    prix.parents(".form-group").hide();
-                    prix.val(null);
-                    prix.prop('required', false);
-                    prixCatalogue.parents(".form-group").show();
-                    prixCatalogue.prop('required', true);
-                    fournisseur.parents(".form-group").show();
-                    fournisseur.prop('required', true);
-                    piecesNecessaire.parents(".form-group").hide();
-                    piecesNecessaire.val(null);
-                    piecesNecessaire.prop('required', false);
+    <div id="piece-produite-list" class="card-body cards-container" data-prototype="{{  form_widget(form.PiecesProduites.vars.prototype) | e('html_attr') }}">
+        {% for PiecesProduites in form.PiecesProduites %}
+            <div class="card card-piece-produite">
+                <div class="card-body">
+                    {{ form_row(PiecesProduites, { 'attr' : { 'class' : 'piece piece-produite' }} ) }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+
+<script>
+    var type = $('#stock_Type');
+    var prix = $("#stock_Prix");
+    var prixCatalogue = $("#stock_PrixCatalogue");
+    var fournisseur = $("#stock_Fournisseur");
+    var containerPieceNecessaire = $(".card-parent-necessaire");
+    var containerPieceProduite = $(".card-parent-produite");
+
+    $( document ).ready(function() {
+        getTypePiece(type.val());
+    });
+
+    type.change(function(e) {
+        getTypePiece(this.value);
+    });
+
+    function getTypePiece(type){
+        switch (type) {
+            case "MP":
+            case "PA":
+                prix.parents(".form-group").hide();
+                prix.val(null);
+                prix.prop('required', false);
+                prixCatalogue.parents(".form-group").show();
+                prixCatalogue.prop('required', true);
+                fournisseur.parents(".form-group").show();
+                fournisseur.prop('required', true);
+                containerPieceNecessaire.hide();
+                containerPieceProduite.show();
                 break;
 
-                case "PL":
-                    prix.parents(".form-group").show();
-                    prix.prop('required', true);
-                    prixCatalogue.parents(".form-group").hide();
-                    prixCatalogue.val(null);
-                    prixCatalogue.prop('required', false);
-                    fournisseur.parents(".form-group").hide();
-                    fournisseur.val(null);
-                    fournisseur.prop('required', false);
-                    piecesNecessaire.parents(".form-group").show();
+            case "PL":
+                prix.parents(".form-group").show();
+                prix.prop('required', true);
+                prixCatalogue.parents(".form-group").hide();
+                prixCatalogue.val(null);
+                prixCatalogue.prop('required', false);
+                fournisseur.parents(".form-group").hide();
+                fournisseur.val(null);
+                fournisseur.prop('required', false);
+                containerPieceNecessaire.show();
+                containerPieceProduite.hide();
                 break;
 
-                case "PI":
-                    prix.parents(".form-group").hide();
-                    prix.val(null);
-                    prix.prop('required', false);
-                    prixCatalogue.parents(".form-group").hide();
-                    prixCatalogue.val(null);
-                    prixCatalogue.prop('required', false);
-                    fournisseur.parents(".form-group").hide();
-                    fournisseur.val(null);
-                    fournisseur.prop('required', false);
-                    piecesNecessaire.parents(".form-group").show();
+            case "PI":
+                prix.parents(".form-group").hide();
+                prix.val(null);
+                prix.prop('required', false);
+                prixCatalogue.parents(".form-group").hide();
+                prixCatalogue.val(null);
+                prixCatalogue.prop('required', false);
+                fournisseur.parents(".form-group").hide();
+                fournisseur.val(null);
+                fournisseur.prop('required', false);
+                containerPieceNecessaire.show();
+                containerPieceProduite.show();
                 break;
-            }
         }
-    </script>
+    }
+
+    var collectionHolderNecessaire;
+    var addNewPieceNecessaire = $('<a class="btn btn-success"><i title="Ajouter" class="fas fa-plus"></i></a>')
+    var collectionHolderProduite;
+    var addNewPieceProduite = $('<a class="btn btn-success"><i title="Ajouter" class="fas fa-plus"></i></a>')
+
+
+    $(document).ready( function(){
+        //get the collectionHolders
+        collectionHolderNecessaire = $("#piece-necessaire-list");
+        collectionHolderProduite = $("#piece-produite-list");
+
+        //append btns new
+        $(".card-parent-necessaire > .card-body").append(addNewPieceNecessaire)
+        $(".card-parent-produite > .card-body").append(addNewPieceProduite)
+
+        //add remove button to existing items
+        collectionHolderNecessaire.find('.card').each(function(item) {
+            addRemoveButtonNecessaire($(this));
+        });
+
+        //add remove button to existing items
+        collectionHolderProduite.find('.card').each(function(item) {
+            addRemoveButtonProduite($(this));
+        });
+
+        // handle click event du btn d'ajout
+        addNewPieceNecessaire.click(function (e) {
+            // création d'un nouveau form et l'append
+            addNewFormNecessaire();
+        });
+
+        // handle click event du btn d'ajout
+        addNewPieceProduite.click(function (e) {
+            // création d'un nouveau form et l'append
+            addNewFormProduite();
+        });
+    });
+
+    //remove item
+    function addRemoveButtonNecessaire(item){
+        var removeButton = $('<a class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>');
+        var panelBtnContainer = $(item).find(".card-body").append(removeButton);
+
+        removeButton.click(function (e) {
+           $(e.target).parents('.card-piece-necessaire').slideUp(250, function() {
+               $(this).remove();
+           });
+        });
+    }
+
+    //remove item
+    function addRemoveButtonProduite(item){
+        var removeButton = $('<a class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>');
+        var panelBtnContainer = $(item).find(".card-body").append(removeButton);
+
+        removeButton.click(function (e) {
+            $(e.target).parents('.card-piece-produite').slideUp(250, function() {
+                $(this).remove();
+            });
+        });
+    }
+
+    function addNewFormNecessaire(){
+        var prototype = collectionHolderNecessaire.data('prototype');
+        var newForm = prototype;
+
+        newForm = newForm.replace(/__name__/g, $(".card-piece-necessaire").length + 1);
+
+        var card = $('<div class="card card-piece-necessaire"></div>');
+        var cardbody = $('<div class="card-body new"></div>').append(newForm);
+
+        card.append(cardbody);
+        addRemoveButtonNecessaire(card);
+        addNewPieceNecessaire.before(card);
+    }
+
+    function addNewFormProduite(){
+        var prototype = collectionHolderProduite.data('prototype');
+        var newForm = prototype;
+
+        newForm = newForm.replace(/__name__/g, $(".card-piece-produite").length + 1);
+
+        var card = $('<div class="card card-piece-produite"></div>');
+        var cardbody = $('<div class="card-body new"></div>').append(newForm);
+
+        card.append(cardbody);
+        addRemoveButtonProduite(card);
+        addNewPieceProduite.before(card);
+    }
+
+</script>
 {{ form_end(form) }}
