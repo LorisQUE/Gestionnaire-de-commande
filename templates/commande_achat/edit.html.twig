@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification d'une commande{% endblock %}
+
+{% block body %}
+    <h1>Modification d'une commande d'achat</h1>
+
+    {{ include('commande_achat/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <a class="btn btn-primary" href="{{ path('commande_achat_index') }}">Retour aux commandes</a>
+
+    {{ include('commande_achat/_delete_form.html.twig') }}
+{% endblock %}

@@ -7,7 +7,7 @@
     .page-container { display: flex; flex-direction: column; padding: 0 2em; }
     .group-container { display: flex; flex-direction: column; justify-content: center; }
     .group-body { display: flex; padding: 0 2em; flex-wrap: wrap; justify-content: center; }
-    .card { margin: 1em; width: 18rem; }
+    .card { margin: 1em; width: 18rem; min-height: 15em; }
     a.card { color: #212529; background-color: #dfdfdf38; border-radius: 3px; transition: .2s; }
     a:hover.card { text-decoration: none; background-color: #f0ffff57 /*#fafad247*/; box-shadow: 0 0 0 1px rgba(0, 0, 0, .05), 0 2px 3px 0 rgba(0, 0, 0, 0.1); }
 </style>
@@ -74,7 +74,7 @@
                 </div>
             </a>
 
-            <a href="#" class="card">
+            <a href="{{ path("commande_achat_index") }}" class="card">
                 <div class="card-body">
                     <h5 class="card-title">Commande d'achat</h5>
                     <p class="card-text">Permet de consulter les commandes déjà passées ou d'en réaliser d'autres.</p>
@@ -110,7 +110,6 @@
         </div>
 
         <div class="group-body">
-
             <a href="#" class="card">
                 <div class="card-body">
                     <h5 class="card-title">Card title</h5>

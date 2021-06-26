@@ -25,7 +25,7 @@ class CommandeAchat
     private $Libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity=LigneCommandeAchat::class, mappedBy="CommandeAchat", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=LigneCommandeAchat::class, mappedBy="CommandeAchat", orphanRemoval=true, cascade={"persist"})
      */
     private $Lignes;
 
@@ -48,6 +48,8 @@ class CommandeAchat
     public function __construct()
     {
         $this->Lignes = new ArrayCollection();
+        $this->DatePrevue = new \DateTime();
+        $this->DatePrevue->setTimezone( new \DateTimeZone("Europe/Paris"));
     }
 
     public function getId(): ?int

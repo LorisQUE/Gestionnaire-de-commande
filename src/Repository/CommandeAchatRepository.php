@@ -19,6 +19,25 @@ class CommandeAchatRepository extends ServiceEntityRepository
         parent::__construct($registry, CommandeAchat::class);
     }
 
+    public function  getPrixTotal(CommandeAchat $commandeAchat)
+    {
+        try {
+            $var = $this->createQueryBuilder('c')
+                ->select('SUM(l.Prix * l.Quantite)')
+                ->join('c.Lignes', 'l')
+                ->andWhere('c = :commande')
+                ->setParameter('commande', $commandeAchat)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+            $price = (float) array_values($var)[0];
+            return round($price, 2);
+        }
+        catch (\Exception $exception){
+            return 0;
+        }
+    }
+
     // /**
     //  * @return CommandeAchat[] Returns an array of CommandeAchat objects
     //  */

@@ -56,7 +56,7 @@ class CommandeAchatFixture extends Fixture
 
         $Commande1 = new CommandeAchat();
         $Commande1->setLibelle("Aciérie Mango pour le 15");
-        $Commande1->setFournisseur($Fournisseur2);
+        $Commande1->setFournisseur($Fournisseur1);
         $Commande1->setDatePrevue(new \DateTime('2021-06-15'));
         $Commande1->setDateEffective(new \DateTime());
 
@@ -76,13 +76,13 @@ class CommandeAchatFixture extends Fixture
         $Ligne1Commande2->setPiece($Caoutchouc);
         $Ligne1Commande2->setQuantite(5);
         $Ligne1Commande2->setPrix(15.03 );
-        $Ligne1Commande2->setCommandeAchat($Commande1);
+        $Ligne1Commande2->setCommandeAchat($Commande2);
 
         $Ligne2Commande2 = new LigneCommandeAchat();
         $Ligne2Commande2->setPiece($Plastique);
         $Ligne2Commande2->setQuantite(5);
         $Ligne2Commande2->setPrix(9.62);
-        $Ligne2Commande2->setCommandeAchat($Commande1);
+        $Ligne2Commande2->setCommandeAchat($Commande2);
 
         $manager->persist($Fournisseur1);
         $manager->persist($Fournisseur2);

@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande d'achat{% endblock %}
+
+{% block body %}
+    <h1>Commande d'achat</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Libellé</th>
+                <td>{{ commande_achat.Libelle }}</td>
+            </tr>
+            <tr>
+                <th>Date prévue</th>
+                <td>{{ commande_achat.DatePrevue ? commande_achat.DatePrevue|date('d/m/Y à H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date effective</th>
+                <td>{{ commande_achat.DateEffective ? commande_achat.DateEffective|date('d/m/Y à H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Pièce</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Prix</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ligne in commande_achat.Lignes %}
+            <tr>
+                <td>{{ ligne.Piece }}</td>
+                <td>{{ ligne.Quantite }}</td>
+                <td>{{ ligne.Prix * ligne.Quantite }}€</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>Aucune lignes</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('commande_achat_index') }}">Retour aux commandes</a>
+
+    {% if(not commande_achat.DateEffective) %}
+        <a class="btn btn-primary" href="{{ path('commande_achat_edit', {'id': commande_achat.id}) }}">Modifier la commande</a>
+    {% endif %}
+
+    {{ include('commande_achat/_delete_form.html.twig') }}
+{% endblock %}

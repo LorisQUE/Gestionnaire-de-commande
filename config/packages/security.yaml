@@ -36,6 +36,6 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: ^/atelier, roles: ROLE_OUVRIER }
-         - { path: ^/commerical, roles: ROLE_COMMERCIAL }
+         - { path: ^/commercial, roles: ROLE_COMMERCIAL }
          - { path: ^/comptabilite, roles: ROLE_COMPTABLE }
          - { path: ^/admin, roles: ROLE_ADMIN }
