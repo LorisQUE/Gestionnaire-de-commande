@@ -19,11 +19,12 @@ class LigneCommandeAchatType extends AbstractType
                 'class' => Piece::class,
                 'label' => 'Pièce',
                 'multiple' => false,
+                "attr" => ["class" => "select-piece"],
                 //'choices' => $piecesDisponible,
             ])
             ->add('Quantite', IntegerType::class, [
                 'label' => 'Quantité',
-                'attr' => ['min' => 1]
+                'attr' => ['min' => 1, "class" => "input-quantite"],
             ])
         ;
     }

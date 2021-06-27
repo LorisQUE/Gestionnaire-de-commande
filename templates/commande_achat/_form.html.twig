@@ -3,9 +3,10 @@
     .card .card { margin: 2em; }
     .card .card .form-group { margin: 0; }
     .card .card .card-body { display: flex; justify-content: space-between; align-items: flex-end; padding: 1em; }
-    .card .card .card-body.new > div { display: flex; justify-content: space-between; width: 92%;  }
+    .card .card .card-body.new > div { display: flex; justify-content: space-between; width: 85%;  }
     .card .card .card-body.new > div > .form-group { width: 48%;  }
-    .card .card .card-body fieldset { width: 92%; }
+    .card .card .card-body fieldset { width: 85%; }
+    .card .card .card-body .prix-total { display: flex; margin-bottom: .5em; }
     .card .card .form-group .ligne-row { display: flex; justify-content: space-between; }
     .card .card .form-group .ligne-row > .form-group { width: 48%; }
 </style>
@@ -27,6 +28,7 @@
             <div class="card card-ligne">
                 <div class="card-body">
                     {{ form_row(ligne, { 'attr' : { 'class' : 'ligne-row' }} ) }}
+                    <span class="prix-total">150€</span>
                 </div>
             </div>
         {% endfor %}
@@ -37,6 +39,8 @@
 
 <script>
     var fournisseur = $("#stock_Fournisseur");
+    var piece = $(".select-piece");
+    var quantite = $(".input-quantite");
     var container = $(".card-parent");
 
     var collectionHolder;
@@ -61,6 +65,13 @@
             addNewForm();
         });
 
+        piece.on("change", function(e){
+            calculePrixTotal(this);
+        });
+
+        quantite.on("change", function(e){
+            calculePrixTotal(this);
+        });
     });
 
     //remove item
@@ -82,11 +93,39 @@
         newForm = newForm.replace(/__name__/g, $(".card-ligne").length + 1);
 
         var card = $('<div class="card card-ligne"></div>');
-        var cardbody = $('<div class="card-body new"></div>').append(newForm);
+        var cardbody = $('<div class="card-body new"></div>').append(newForm).append('<span class="prix-total">150€</span>');
+        var idCard = cardbody.children()[0].id;
 
         card.append(cardbody);
         addRemoveButton(card);
         addNew.before(card);
+
+        $("#" + idCard + " .select-piece").on("change", function(e){
+            calculePrixTotal(this);
+        });
+
+        $("#" + idCard + " .input-quantite").on("change", function(e){
+            calculePrixTotal(this);
+        });
+    }
+
+    function calculePrixTotal(item){
+        var quantite, piece;
+        var prixHolder = $(item).parents(".card-body").children(".prix-total");
+        if(item.id.indexOf("Quantite") > 0) {
+            quantite = $(item).val();
+            piece = $(item).parents(".ligne-row").find(".select-piece").val();
+        }
+        else if(item.id.indexOf("Piece") > 0){
+            piece = $(item).val();
+            quantite = $(item).parents(".ligne-row").find(".input-quantite").val();
+        }
+
+        //Il faut récuperer la pièce avec l'id qu'on a dans la var piece
+        //En ayant la piece on peu faire le calcule de piece.prix * quantité, pour avoir le prix de la ligne
+
+        //Remplace le prix dans le DOM :
+        $(prixHolder).html("27.23€");
     }
 
 </script>
