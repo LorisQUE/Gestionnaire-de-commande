@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client index{% endblock %}
+
+{% block body %}
+    <style>
+    .page-container { display: flex; flex-direction: column; padding: 0 2em; }
+    .group-container { display: flex; flex-direction: column; justify-content: center; }
+    .group-body { display: flex; padding: 0 2em; flex-wrap: wrap; justify-content: center; }
+    .card { margin: 1em; width: 18rem; color: #212529; background-color: #dfdfdf38; border-radius: 3px; }
+    .card-body { display: flex; flex-direction: column; }
+    .card div.card-text { display: flex; margin-top: auto; }
+    .card div.card-text a:not(:last-child) { margin-right: .5em; }
+    .adress { font-size: .9em; font-style: italic; }
+</style>
+
+    <div class="page-container">
+        <h1>Clients</h1>
+        <div class="group-container">
+            <div class="group-body">
+
+                {% for client in clients %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ client.Nom }}</h5>
+                            <p class="card-text">{{ client.Email }} - {{ client.Telephone }}</p>
+                            <p class="card-text adress">{{ client.Adresse }}</p>
+                            <div class="card-text">
+                                <a class="btn btn-primary" href="{{ path('client_show', {'id': client.id}) }}"><i class="fas fa-search"></i></a>
+                                <a class="btn btn-primary" href="{{ path('client_edit', {'id': client.id}) }}"><i class="fas fa-edit"></i></a>
+                                <form method="post" action="{{ path('client_delete', {'id': client.id}) }}" onsubmit="return confirm('Voulez vous supprimez ce client ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ client.id) }}">
+                                    <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p> Aucun client n'est disponible. </p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+    <a class="btn btn-primary" href="{{ path('client_new') }}">Ajouter un client</a>
+{% endblock %}

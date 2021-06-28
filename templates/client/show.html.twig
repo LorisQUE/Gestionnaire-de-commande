@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client {{ client.Nom }}{% endblock %}
+
+{% block body %}
+    <style>
+        .d-flex > a { margin-right: .5em;}
+    </style>
+
+    <h1>Client {{ client.Nom }}</h1>
+    <div>
+
+        <div class="row">
+            <span class="col-md-2 font-weight-bold">Email</span>
+            <a class="col-md-6" href="mailto:{{ client.Email }}">{{ client.Email }}</a>
+        </div>
+
+        <div class="row">
+            <span class="col-md-2 font-weight-bold">Téléphone</span>
+            <a class="col-md-6" href="tel:{{ client.Telephone }}">{{ client.Telephone }}</a>
+        </div>
+
+        <div class="row">
+            <span class="col-md-2 font-weight-bold">Adresse</span>
+            <span class="col-md-6">{{ client.Adresse }}</span>
+        </div>
+
+    </div>
+
+    <br/>
+
+    <div class="d-flex">
+        <a class="btn btn-primary" href="{{ path('client_index') }}">Retour aux clients</a>
+
+        <a class="btn btn-primary" href="{{ path('client_edit', {'id': client.id}) }}">Modification</a>
+
+        {{ include('client/_delete_form.html.twig') }}
+    </div>
+{% endblock %}
