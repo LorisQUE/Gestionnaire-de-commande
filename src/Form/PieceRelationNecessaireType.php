@@ -51,6 +51,7 @@ class PieceRelationNecessaireType extends AbstractType
             ])
             ->add('Quantite', IntegerType::class, [
                 'label' => 'Quantité',
+                'attr' => ['min' => 1],
             ])
         ;
     }

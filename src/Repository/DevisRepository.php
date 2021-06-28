@@ -19,6 +19,25 @@ class DevisRepository extends ServiceEntityRepository
         parent::__construct($registry, Devis::class);
     }
 
+    public function  getPrixTotal(Devis $devis)
+    {
+        try {
+            $var = $this->createQueryBuilder('d')
+                ->select('SUM(l.Prix * l.Quantite)')
+                ->join('d.Lignes', 'l')
+                ->andWhere('d = :devis')
+                ->setParameter('devis', $devis)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+            $price = (float) array_values($var)[0];
+            return round($price, 2);
+        }
+        catch (\Exception $exception){
+            return 0;
+        }
+    }
+
     // /**
     //  * @return Devis[] Returns an array of Devis objects
     //  */

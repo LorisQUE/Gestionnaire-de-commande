@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau devis{% endblock %}
+
+{% block body %}
+    <h1>Créer un devis</h1>
+
+    {{ include('devis/_form.html.twig') }}
+
+    <a class="btn btn-primary" href="{{ path('devis_index') }}">Retour aux devis</a>
+{% endblock %}

@@ -19,6 +19,11 @@
                 <th>Date effective</th>
                 <td>{{ commande_achat.DateEffective ? commande_achat.DateEffective|date('d/m/Y à H:i:s') : '' }}</td>
             </tr>
+
+            <tr>
+                <th>Prix Total</th>
+                <td>{{ commande_achat | prixTotal }}€</td>
+            </tr>
         </tbody>
     </table>
 

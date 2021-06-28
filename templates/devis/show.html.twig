@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Devis{% endblock %}
+
+{% block body %}
+    <style>
+        .d-flex a { margin-right: .5em; }
+    </style>
+    <h1>Devis</h1>
+
+    <div>
+        <div class="row">
+            <span class="col-md-2 font-weight-bold">Libellé</span>
+            <span class="col-md-6">{{ devi.Libelle }}</span>
+        </div>
+
+        <div class="row">
+            <span class="col-md-2 font-weight-bold">Client</span>
+            <span class="col-md-6">{{ devi.Client }}</span>
+        </div>
+
+        <div class="row">
+            <span class="col-md-2 font-weight-bold">Délai</span>
+            <span class="col-md-6">{{ devi.Delai ? devi.Delai|date('d/m/Y à H:i') : '' }}</span>
+        </div>
+
+        <div class="row">
+            <span class="col-md-2 font-weight-bold">Prix Total</span>
+            <span class="col-md-6">{{ devi | prixTotalDevis }}€</span>
+        </div>
+    </div>
+
+    <br/>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Pièce</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Prix</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ligne in devi.Lignes %}
+            <tr>
+                <td>{{ ligne.Piece }}</td>
+                <td>{{ ligne.Quantite }}</td>
+                <td>{{ ligne.Prix * ligne.Quantite }}€</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>Aucune lignes</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <br/>
+
+    <div class="d-flex">
+        <a class="btn btn-primary" href="{{ path('devis_index') }}">Retour aux devis</a>
+        <a class="btn btn-primary" href="{{ path('devis_edit', {'id': devi.id}) }}">Modification</a>
+        {{ include('devis/_delete_form.html.twig') }}
+    </div>
+
+{% endblock %}

@@ -12,6 +12,7 @@
     .card div.card-text { display: flex; margin-top: auto; }
     .card div.card-text a:not(:last-child) { margin-right: .5em; }
     .adress { font-size: .9em; font-style: italic; }
+    .d-flex a { margin-right: .5em;}
 </style>
 
     <div class="page-container">
@@ -37,12 +38,14 @@
                         </div>
                     </div>
                 {% else %}
-                    <p> Aucun client n'est disponible. </p>
+                    <p> Aucun client n'est disponible </p>
                 {% endfor %}
 
             </div>
         </div>
     </div>
-
-    <a class="btn btn-primary" href="{{ path('client_new') }}">Ajouter un client</a>
+    <div class="d-flex">
+        <a class="btn btn-primary" href="{{ path('accueil') }}">Retour</a>
+        <a class="btn btn-primary" href="{{ path('client_new') }}">Ajouter un client</a>
+    </div>
 {% endblock %}

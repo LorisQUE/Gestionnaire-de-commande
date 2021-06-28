@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\LigneCommandeAchat;
+use App\Entity\LigneDevis;
 use App\Entity\Piece;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -12,6 +14,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LigneDevisType extends AbstractType
 {
+    private $entityManager;
+    private $pieceRepository;
+    private $pieces;
+    private $pieceAttr;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+        $this->pieceRepository = $this->entityManager->getRepository(Piece::class);
+        $this->pieces = $this->pieceRepository->findBy(["Type" => "PL"]);
+        $this->pieceAttr = [];
+
+        /** @var Piece $choice */
+        foreach($this->pieces as $choice) {
+            $this->pieceAttr[] = [
+                'data-prix' => $choice->getPrix(),
+            ];
+        }
+    }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -20,7 +41,8 @@ class LigneDevisType extends AbstractType
                 'label' => 'Pièce',
                 'multiple' => false,
                 "attr" => ["class" => "select-piece"],
-                //'choices' => $piecesDisponible,
+                'choices' => $this->pieces,
+                'choice_attr' => $this->pieceAttr,
             ])
             ->add('Quantite', IntegerType::class, [
                 'label' => 'Quantité',
@@ -32,7 +54,7 @@ class LigneDevisType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => LigneCommandeAchat::class,
+            'data_class' => LigneDevis::class,
         ]);
     }
 }

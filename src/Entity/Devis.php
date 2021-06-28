@@ -26,6 +26,7 @@ class Devis
 
     /**
      * @ORM\OneToMany(targetEntity=LigneDevis::class, mappedBy="Devis", orphanRemoval=true, cascade={"persist"})
+     *
      */
     private $Lignes;
 

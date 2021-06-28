@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification de {{ devi.Libelle }}{% endblock %}
+
+{% block body %}
+    <h1>Modification de {{ devi.Libelle }}</h1>
+
+        {{ include('devis/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+        <div class="d-flex">
+            <a class="btn btn-primary" href="{{ path('devis_index') }}">Retour aux devis</a>
+            {{ include('devis/_delete_form.html.twig') }}
+        </div>
+{% endblock %}
