@@ -35,12 +35,12 @@
                         <a class="btn btn-primary" href="{{ path('commande_achat_show', {'id': commande.id}) }}"><i class="fas fa-search"></i></a>
                         {% if(not commande.DateEffective) %}
                             <a class="btn btn-primary" href="{{ path('commande_achat_edit', {'id': commande.id}) }}"><i class="fas fa-edit"></i></a>
-                            <a class="btn btn-success" title="Validation" href="#"><i class="fas fa-check"></i></a>
+                            <a class="btn btn-success" title="Validation" data-toggle="modal" data-target="#modal-validation" data-commande="{{ commande.id }}"><i class="fas fa-check"></i></a>
+                            <form method="post" action="{{ path('commande_achat_delete', {'id': commande.id}) }}" onsubmit="return confirm('Voulez vous supprimer cette commande d\'achat ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commande.id) }}">
+                                <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                            </form>
                         {% endif %}
-                        <form method="post" action="{{ path('commande_achat_delete', {'id': commande.id}) }}" onsubmit="return confirm('Voulez vous supprimer cette commande d\'achat ?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commande.id) }}">
-                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-                        </form>
                     </div>
                 </td>
             </tr>
@@ -56,4 +56,48 @@
         <a class="btn btn-primary" href="{{ path('accueil') }}">Retour</a>
         <a class="btn btn-primary" href="{{ path('commande_achat_new') }}">Ajouter une commande</a>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-validation" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Valider la commande</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form>
+                    <div class="modal-body">
+                        <input id="modal-validation-date" class="form-control" name="dateValidation" type="datetime-local" required/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button id="modal-validation-save" type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#modal-validation').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var commandId = button.data('commande');
+            var url = "{{ path('commande_validation', {'id': 'commandId' }) }}".replace('commandId', commandId);
+
+            $("#modal-validation-save").off("click");
+            $("#modal-validation-save").on("click", function(e) {
+                var dateEffective = $('#modal-validation-date').val();
+                console.log("dateEffective", dateEffective);
+                if(!!dateEffective) {
+                    $.post(url, {'dateValidation': dateEffective}, function(res){
+
+                    });
+                }
+            });
+        });
+
+
+    </script>
 {% endblock %}

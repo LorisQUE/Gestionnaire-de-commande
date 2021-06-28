@@ -7,6 +7,7 @@ use App\Form\CommandeAchatNewType;
 use App\Form\CommandeAchatType;
 use App\Repository\CommandeAchatRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,6 +17,14 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CommandeAchatController extends AbstractController
 {
+    public function validerCommande(CommandeAchat $commandeAchat){
+        //Ajout de la quantité des pièces
+        foreach ($commandeAchat->getLignes() as $ligne){
+            $currentQte = $ligne->getPiece()->getQuantite();
+            $ligne->getPiece()->setQuantite($currentQte + $ligne->getQuantite());
+        }
+    }
+
     /**
      * @Route("/", name="commande_achat_index", methods={"GET"})
      */
@@ -58,6 +67,9 @@ class CommandeAchatController extends AbstractController
             foreach($resLignes as $r){
                 $commandeAchat->addLigne($r);
             }
+
+            if($commandeAchat->getDateEffective())
+                $this->validerCommande($commandeAchat);
 
             $entityManager->persist($commandeAchat);
             $entityManager->flush();
@@ -112,6 +124,9 @@ class CommandeAchatController extends AbstractController
                 $commandeAchat->addLigne($r);
             }
 
+            if($commandeAchat->getDateEffective())
+                $this->validerCommande($commandeAchat);
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('commande_achat_index');
@@ -121,6 +136,20 @@ class CommandeAchatController extends AbstractController
             'commande_achat' => $commandeAchat,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/validation/{id}", name="commande_validation", methods={"POST"})
+     */
+    public function validation(Request $request, CommandeAchat $commandeAchat): Response
+    {
+        $dateEffective = new \DateTime($request->get("dateValidation"));
+        $commandeAchat->setDateEffective($dateEffective);
+        $this->validerCommande($commandeAchat);
+        $this->getDoctrine()->getManager()->persist($commandeAchat);
+        $this->getDoctrine()->getManager()->flush();
+
+        return new JsonResponse();
     }
 
     /**

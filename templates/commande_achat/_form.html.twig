@@ -142,7 +142,12 @@
         var data = pieces.closest(`[data-fournisseur="${fournisseurId}"]`);
         $(".select-piece").empty().append(data);
 
-        fournisseur.on("change", getPieceParFournisseur);
+        fournisseur.on("change", function(e){
+            getPieceParFournisseur();
+            $(".select-piece").each(function( index ) {
+                calculePrixTotal(this);
+            });
+        });
     }
 
 </script>

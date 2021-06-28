@@ -54,7 +54,7 @@
 
     {% if(not commande_achat.DateEffective) %}
         <a class="btn btn-primary" href="{{ path('commande_achat_edit', {'id': commande_achat.id}) }}">Modifier la commande</a>
+        {{ include('commande_achat/_delete_form.html.twig') }}
     {% endif %}
 
-    {{ include('commande_achat/_delete_form.html.twig') }}
 {% endblock %}
