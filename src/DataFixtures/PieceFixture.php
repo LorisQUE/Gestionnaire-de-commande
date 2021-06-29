@@ -85,7 +85,7 @@ class PieceFixture extends Fixture
         $Raquette->setReference("PL0001");
         $Raquette->setLibelle("Raquette");
         $Raquette->setType("PL");
-        $Raquette->setPrix(16);
+        $Raquette->setPrix(16 * 1.2);
         $Raquette->setQuantite(0);
 
         $RelationBoisManche = new PieceRelation();

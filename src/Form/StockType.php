@@ -32,6 +32,7 @@ class StockType extends AbstractType
             ])
             ->add('Prix', NumberType::class, [
                 'label' => "Prix",
+                'help' => 'Saisissez le prix sans TVA, il sera ajouté à l\'enregistrement de la pièce'
             ])
             ->add('Type', ChoiceType::class, [
                 'choices' => $this->enumType

@@ -121,6 +121,7 @@ class StockController extends AbstractController
                 $piece->addPiecesProduite($r);
             }
 
+            $piece->setPrix($piece->getPrix() * 1.2);
 
             $entityManager->persist($piece);
             $entityManager->flush();
@@ -181,6 +182,8 @@ class StockController extends AbstractController
             foreach ($piece->getPiecesProduites() as $pp){
                 if($pp->getId() === null) $entityManager->persist($pp);
             }
+
+            $piece->setPrix($piece->getPrix() * 1.2);
 
             $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('stock');
