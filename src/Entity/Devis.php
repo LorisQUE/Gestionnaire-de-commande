@@ -37,7 +37,7 @@ class Devis
     private $Client;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $Delai;
 
@@ -110,7 +110,7 @@ class Devis
         return $this->Delai;
     }
 
-    public function setDelai(\DateTimeInterface $Delai): self
+    public function setDelai(\DateTimeInterface $Delai = null): self
     {
         $this->Delai = $Delai;
 

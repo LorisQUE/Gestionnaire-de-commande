@@ -23,15 +23,16 @@
             <tr>
                 <td>{{ devi.Libelle }}</td>
                 <td>{{ devi.Client }}</td>
-                <td>{{ devi.Delai ? devi.Delai|date('d/m/Y à H:i') : '' }}</td>
+                <td>{{ devi.Delai ? devi.Delai|date('d/m/Y à H:i') : 'Aucun délai' }}</td>
                 <td>{{ devi | prixTotalDevis }}€</td>
                 <td class="d-flex">
                     <a class="btn btn-primary" href="{{ path('devis_show', {'id': devi.id}) }}"><i class="fas fa-search"></i></a>
-                    <a class="btn btn-primary" href="{{ path('devis_edit', {'id': devi.id}) }}"><i class="fas fa-edit"></i></a><form method="post" action="{{ path('devis_delete', {'id': devi.id}) }}" onsubmit="return confirm('Voulez vous supprimer ce devis ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ devi.id) }}">
-                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-                    </form>
-
+                    {% if(devi.Delai is null) %}
+                        <a class="btn btn-primary" href="{{ path('devis_edit', {'id': devi.id}) }}"><i class="fas fa-edit"></i></a><form method="post" action="{{ path('devis_delete', {'id': devi.id}) }}" onsubmit="return confirm('Voulez vous supprimer ce devis ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ devi.id) }}">
+                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

@@ -21,6 +21,7 @@ class DevisType extends AbstractType
             ->add('Delai', DateTimeType::class, [
                 'label' => 'Délai',
                 'widget' => 'single_text',
+                'required' => false,
             ])
             ->add('Client')
             ->add('Lignes', CollectionType::class, [

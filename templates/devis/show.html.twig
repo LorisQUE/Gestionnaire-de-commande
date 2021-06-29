@@ -21,7 +21,7 @@
 
         <div class="row">
             <span class="col-md-2 font-weight-bold">Délai</span>
-            <span class="col-md-6">{{ devi.Delai ? devi.Delai|date('d/m/Y à H:i') : '' }}</span>
+            <span class="col-md-6">{{ devi.Delai ? devi.Delai|date('d/m/Y à H:i') : 'Aucun délai' }}</span>
         </div>
 
         <div class="row">
@@ -59,8 +59,10 @@
 
     <div class="d-flex">
         <a class="btn btn-primary" href="{{ path('devis_index') }}">Retour aux devis</a>
-        <a class="btn btn-primary" href="{{ path('devis_edit', {'id': devi.id}) }}">Modification</a>
-        {{ include('devis/_delete_form.html.twig') }}
+        {% if(devi.Delai is null) %}
+            <a class="btn btn-primary" href="{{ path('devis_edit', {'id': devi.id}) }}">Modification</a>
+            {{ include('devis/_delete_form.html.twig') }}
+        {% endif %}
     </div>
 
 {% endblock %}
