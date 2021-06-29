@@ -3,7 +3,9 @@
 namespace App\DataFixtures;
 
 use App\Entity\Client;
+use App\Entity\Commande;
 use App\Entity\Devis;
+use App\Entity\LigneCommande;
 use App\Entity\LigneDevis;
 use App\Entity\Piece;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -95,6 +97,67 @@ class ClientFixture extends Fixture
         $ligneDevis5->setPiece($livrable1);
         $ligneDevis5->setPrix(24.99);
         $manager->persist($ligneDevis5);
+
+        $commande1 = new Commande();
+        $commande1->setLibelle("Commande un");
+        $commande1->setClient($client);
+        $commande1->setDate(new \DateTime());
+        $manager->persist($commande1);
+
+        $commande1ligne1 = new LigneCommande();
+        $commande1ligne1->setPrix($ligneDevis1->getPrix());
+        $commande1ligne1->setQuantite($ligneDevis1->getQuantite());
+        $commande1ligne1->setPiece($ligneDevis1->getPiece());
+        $commande1ligne1->setCommande($commande1);
+        $manager->persist($commande1ligne1);
+
+        $commande1ligne2 = new LigneCommande();
+        $commande1ligne2->setPrix($ligneDevis2->getPrix());
+        $commande1ligne2->setQuantite($ligneDevis2->getQuantite());
+        $commande1ligne2->setPiece($ligneDevis2->getPiece());
+        $commande1ligne2->setCommande($commande1);
+        $manager->persist($commande1ligne2);
+
+        $commande2 = new Commande();
+        $commande2->setLibelle("Commande un");
+        $commande2->setClient($client);
+        $commande2->setDate(new \DateTime());
+        $manager->persist($commande2);
+
+        $commande2ligne1 = new LigneCommande();
+        $commande2ligne1->setPrix($ligneDevis1->getPrix());
+        $commande2ligne1->setQuantite($ligneDevis1->getQuantite());
+        $commande2ligne1->setPiece($ligneDevis1->getPiece());
+        $commande2ligne1->setCommande($commande2);
+        $manager->persist($commande2ligne1);
+
+        $commande2ligne2 = new LigneCommande();
+        $commande2ligne2->setPrix($ligneDevis3->getPrix());
+        $commande2ligne2->setQuantite($ligneDevis3->getQuantite());
+        $commande2ligne2->setPiece($ligneDevis3->getPiece());
+        $commande2ligne2->setCommande($commande2);
+        $manager->persist($commande2ligne2);
+
+        $commande2ligne3 = new LigneCommande();
+        $commande2ligne3->setPrix($ligneDevis4->getPrix());
+        $commande2ligne3->setQuantite($ligneDevis4->getQuantite());
+        $commande2ligne3->setPiece($ligneDevis4->getPiece());
+        $commande2ligne3->setCommande($commande2);
+        $manager->persist($commande2ligne3);
+
+        $commande2ligne3 = new LigneCommande();
+        $commande2ligne3->setPrix($ligneDevis4->getPrix());
+        $commande2ligne3->setQuantite($ligneDevis4->getQuantite());
+        $commande2ligne3->setPiece($ligneDevis4->getPiece());
+        $commande2ligne3->setCommande($commande2);
+        $manager->persist($commande2ligne3);
+
+        $commande2ligne4 = new LigneCommande();
+        $commande2ligne4->setPrix($ligneDevis5->getPrix());
+        $commande2ligne4->setQuantite($ligneDevis5->getQuantite());
+        $commande2ligne4->setPiece($ligneDevis5->getPiece());
+        $commande2ligne4->setCommande($commande2);
+        $manager->persist($commande2ligne4);
 
         $manager->flush();
     }
