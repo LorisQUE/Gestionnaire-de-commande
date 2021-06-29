@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Utilisateur{% endblock %}
+
+{% block body %}
+    <style>
+        .d-flex a { margin-right: .5em; }
+    </style>
+    <h1>Edit Utilisateur</h1>
+
+    {{ include('utilisateur/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <br/>
+    <div class="d-flex">
+        <a class="btn btn-primary" href="{{ path('utilisateur_index') }}">Retour aux utilisateurs</a>
+        {{ include('utilisateur/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

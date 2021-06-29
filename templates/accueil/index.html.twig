@@ -129,5 +129,27 @@
 
     </div>
     {% endif %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <!-- Service Comptable -->
+        <div class="group-container">
+
+            <div class="group-header">
+                <h2>Utilisateurs</h2>
+            </div>
+
+            <div class="group-body">
+                <a href="{{ path("utilisateur_index") }}" class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Administration</h5>
+                        <p class="card-text">Permet de gérer tous les utilisateurs</p>
+                    </div>
+                </a>
+
+
+            </div>
+
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -46,6 +46,20 @@ class UtilisateurFixture extends Fixture
         $multiOC->setRoles(["ROLE_OUVRIER", "ROLE_COMMERCIAL"]);
         $manager->persist($multiOC);
 
+        $admin = new Utilisateur();
+        $admin->setEmail("Admin@gmail.com");
+        $admin->setPseudonyme("Admin");
+        $admin->setPassword($this->passwordEncoder->encodePassword($multiOC, "root"));
+        $admin->setRoles(["ROLE_ADMIN"]);
+        $manager->persist($admin);
+
+        $adminOuvrier = new Utilisateur();
+        $adminOuvrier->setEmail("AdminOuvrier@gmail.com");
+        $adminOuvrier->setPseudonyme("AdminOuvrier");
+        $adminOuvrier->setPassword($this->passwordEncoder->encodePassword($multiOC, "root"));
+        $adminOuvrier->setRoles(["ROLE_ADMIN", "ROLE_OUVRIER"]);
+        $manager->persist($adminOuvrier);
+
         $manager->flush();
     }
 }
