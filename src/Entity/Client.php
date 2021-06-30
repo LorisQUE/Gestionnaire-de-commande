@@ -120,6 +120,18 @@ class Client
         return $this->Devis;
     }
 
+    public function getLignesDevisValide(\DateTime $commandeDate): array
+    {
+        $lignes = [];
+        foreach ($this->getDevis() as $devis){
+            if($devis->getDelai() <= $commandeDate) {
+                array_push($lignes, $devis->getLignes());
+            }
+        }
+
+        return $lignes;
+    }
+
     public function addDevis(Devis $Devis): self
     {
         if (!$this->devis->contains($$Devis)) {

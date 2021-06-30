@@ -40,9 +40,16 @@ class Commande
      */
     private $Client;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $Valide;
+
     public function __construct()
     {
         $this->Lignes = new ArrayCollection();
+        $this->Date = new \DateTime();
+        $this->Date->setTimezone( new \DateTimeZone("Europe/Paris"));
     }
 
     public function getId(): ?int
@@ -112,6 +119,18 @@ class Commande
     public function setClient(?Client $Client): self
     {
         $this->Client = $Client;
+
+        return $this;
+    }
+
+    public function getValide(): ?bool
+    {
+        return $this->Valide;
+    }
+
+    public function setValide(bool $Valide): self
+    {
+        $this->Valide = $Valide;
 
         return $this;
     }
