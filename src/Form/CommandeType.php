@@ -37,6 +37,7 @@ class CommandeType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'mapped' => false,
+                'attr' => ["class" => "select-ligne", ],
             ])
         ;
     }
@@ -45,7 +46,7 @@ class CommandeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Commande::class,
-            'lignesDevis' => [],
+            'lignesDevis' => []
         ]);
     }
 }

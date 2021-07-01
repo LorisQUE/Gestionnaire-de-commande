@@ -8,6 +8,7 @@ use App\Entity\LigneCommande;
 use App\Entity\LigneDevis;
 use App\Form\CommandeType;
 use App\Repository\CommandeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,7 +72,7 @@ class CommandeController extends AbstractController
                     $resLignesCommande[$ligne->getPiece()->getId().$ligne->getPrix()] = $ligne;
                 }
             }
-            $commande->setLignes($resLignesCommande);
+            $commande->setLignes(new ArrayCollection($resLignesCommande));
 
             $entityManager->persist($commande);
             $entityManager->flush();
@@ -107,6 +108,41 @@ class CommandeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //On récupere les lignes de devis
+            $lignesDevis = [];
+            $lignesDevisId = $request->request->get("commande")['LignesDevis'];
+            foreach($lignesDevisId as $ligneId) {
+                array_push($lignesDevis, $entityManager->getRepository(LigneDevis::class)->find($ligneId['LigneDevis']));
+            }
+
+            //On crée les lignes commandes à partir des lignes de devis
+            $lignesCommandes = [];
+            /** @var LigneDevis $ligneDevis */
+            foreach ($lignesDevis as $ligneDevis) {
+                $ligneCommande = new LigneCommande();
+                $ligneCommande->setQuantite($ligneDevis->getQuantite());
+                $ligneCommande->setPiece($ligneDevis->getPiece());
+                $ligneCommande->setPrix($ligneDevis->getPrix());
+                $ligneCommande->setCommande($commande);
+                array_push($lignesCommandes, $ligneCommande);
+            }
+            $allLignes = array_merge($lignesCommandes, $commande->getLignes()->toArray());
+
+            $resLignesCommande = [];
+            /** @var LigneCommande $ligne */
+            foreach ($allLignes as $ligne) {
+                if(isset($resLignesCommande[$ligne->getPiece()->getId().$ligne->getPrix()])) {
+                    $currentLigne = $resLignesCommande[$ligne->getPiece()->getId().$ligne->getPrix()];
+                    $currentLigne->setQuantite($currentLigne->getQuantite() + $ligne->getQuantite());
+                }
+                else {
+                    $resLignesCommande[$ligne->getPiece()->getId().$ligne->getPrix()] = $ligne;
+                }
+            }
+            $commande->getLignes()->clear();
+            $entityManager->flush();
+
+            $commande->setLignes(new ArrayCollection($resLignesCommande));
             $entityManager->flush();
 
             return $this->redirectToRoute('commande_index');
@@ -145,5 +181,21 @@ class CommandeController extends AbstractController
         }
 
         return $this->redirectToRoute('commande_index');
+    }
+
+    /**
+     * @Route("/{commande}/{id}", name="commande_ligne_delete", methods={"POST"})
+     */
+    public function deleteLine(Request $request, LigneCommande $ligneCommande, Commande $commande): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$ligneCommande->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($ligneCommande);
+            $entityManager->flush();
+        }
+
+        return $this->render('commande/show.html.twig', [
+            'commande' => $commande,
+        ]);
     }
 }

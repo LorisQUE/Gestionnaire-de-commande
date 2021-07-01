@@ -15,11 +15,30 @@
         {{ form_row(form.Client) }}
         {{ form_row(form.Date) }}
 
+{% if(commande.Lignes|length != 0) %}
 <div class="card card-parent">
     <div class="card-header">
-        Lignes du devis
+        Lignes de commande
     </div>
+    <div class="card-body">
+        {% for ligne in commande.Lignes %}
+            <div class="card card-ligne">
+                <div class="card-body" style="align-items: center; ">
+                    {{ ligne.Piece }} ( {{ ligne.Quantite }} ) à {{ ligne.Prix }}€ = {{ ligne.Prix * ligne.Quantite }}€
+                </div>
+            </div>
+        {% else %}
+            Aucune lignes actuellement disponible
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 
+
+<div class="card card-parent new">
+    <div class="card-header">
+        Nouvelle lignes de commande
+    </div>
     <div id="lignes-list" class="card-body" data-prototype="{{  form_widget(form.LignesDevis.vars.prototype) | e('html_attr') }}">
         {% for ligne in form.LignesDevis %}
             <div class="card card-ligne">
@@ -31,20 +50,27 @@
     </div>
 </div>
 
+<br/>
+
 <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 
 <script>
     var container = $(".card-parent");
-
+    var clientDate = $("#commande_Client, #commande_Date");
+    var client = $("#commande_Client");
+    var date = $("#commande_Date");
+    var lignesDevis = [];
+    var ligneDevis = $(".select-ligne");
     var collectionHolder;
     var addNew = $('<a class="btn btn-success"><i title="Ajouter" class="fas fa-plus"></i></a>')
 
 
     $(document).ready( function(){
-        pieces = $($(`.select-piece`)[0]).find('option');
+        lignesDevis = $($(`.select-ligne`)[0]).find('option');
+        console.log("lignesDevis", lignesDevis);
         collectionHolder = $("#lignes-list");
 
-        $(".card-parent > .card-body").append(addNew)
+        $(".card-parent.new > .card-body").append(addNew)
 
         collectionHolder.find('.card').each(function(item) {
             addRemoveButton($(this));
@@ -53,6 +79,8 @@
         addNew.click(function (e) {
             addNewForm();
         });
+
+        getDevisParClient();
     });
 
     //remove item
@@ -75,10 +103,36 @@
 
         var card = $('<div class="card card-ligne"></div>');
         var cardbody = $('<div class="card-body new ligne-row"></div>').append(newForm);
+        var idCard = cardbody.children()[0].id;
 
         card.append(cardbody);
         addRemoveButton(card);
         addNew.before(card);
+
+        lignesDevis = $("#"+idCard).find('option');
+        getDevisParClient();
+    }
+
+    function getDevisParClient(){
+        var clientId = client.val();
+        var currentDate = new Date(date.val()).getTime() / 1000;
+        console.log("date", currentDate);
+        var pClient = lignesDevis.closest(`[data-client="${clientId}"]`);
+
+        var res = [];
+        pClient.each(function(e){
+           console.log("this", parseInt($(this).data("date")));
+           if(currentDate <= parseInt($(this).data("date"))) {
+               res.push(this);
+           }
+           console.log("res", res);
+        });
+
+        $(".select-ligne").empty().append(res);
+
+        clientDate.on("change", function(e){
+            getDevisParClient();
+        });
     }
 </script>
 {{ form_row(form._token) }}

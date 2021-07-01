@@ -100,7 +100,7 @@ class Commande
         return $this;
     }
 
-    public function setLignes($lignes){
+    public function setLignes(Collection $lignes){
         $this->Lignes = $lignes;
     }
 

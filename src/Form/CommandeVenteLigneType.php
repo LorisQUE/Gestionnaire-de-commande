@@ -12,11 +12,23 @@ class CommandeVenteLigneType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->ligneDevisAttr = [];
+        /** @var LigneDevis $choice */
+        foreach($options['lignesDevis'] as $choice) {
+            $this->ligneDevisAttr[] = [
+                'data-devis' => $choice->getDevis()->getId(),
+                'data-client' => $choice->getDevis()->getClient()->getId(),
+                'data-date' => (string)$choice->getDevis()->getDelai()->getTimestamp(),
+            ];
+        }
+
         $builder
             ->add('LigneDevis', EntityType::class, [
                 'class' => LigneDevis::class,
                 'label' => 'Ligne de Devis',
+                'attr' => ["class" => "select-ligne", "required" => "required"],
                 'choices' => $options['lignesDevis'],
+                'choice_attr' => $this->ligneDevisAttr,
                 'mapped' => false,
             ])
         ;

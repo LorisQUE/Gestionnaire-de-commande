@@ -102,7 +102,6 @@ class ClientFixture extends Fixture
         $commande1->setLibelle("Commande un");
         $commande1->setClient($client);
         $commande1->setValide(true);
-        $commande1->setDate(new \DateTime());
         $manager->persist($commande1);
 
         $commande1ligne1 = new LigneCommande();
@@ -120,10 +119,9 @@ class ClientFixture extends Fixture
         $manager->persist($commande1ligne2);
 
         $commande2 = new Commande();
-        $commande2->setLibelle("Commande un");
+        $commande2->setLibelle("Commande deux");
         $commande2->setClient($client);
         $commande2->setValide(false);
-        $commande2->setDate(new \DateTime());
         $manager->persist($commande2);
 
         $commande2ligne1 = new LigneCommande();
