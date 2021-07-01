@@ -44,6 +44,9 @@
     <div class="d-flex">
         <a class="btn btn-primary" href="{{ path('utilisateur_index') }}">Retour aux utilisateurs</a>
         <a class="btn btn-primary" href="{{ path('utilisateur_edit', {'id': utilisateur.id}) }}">Modifier</a>
+        {% if (is_granted('ROLE_OUVRIER') and utilisateur.Gammes|length > 0) %}
+                <a class="btn btn-primary" href="{{ path('gamme_user_index', {'id': utilisateur.id}) }}">Voir les gammes</a>
+        {% endif %}
         {% if (currentUser.id != utilisateur.id) %}
             {{ include('utilisateur/_delete_form.html.twig') }}
         {% endif %}

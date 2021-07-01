@@ -7,6 +7,7 @@ use App\Entity\GammeRealisation;
 use App\Entity\OperationRealisation;
 use App\Entity\Piece;
 use App\Entity\PieceRelation;
+use App\Entity\Utilisateur;
 use App\Form\GammeOperationAjoutType;
 use App\Form\GammeRealisationNewType;
 use App\Form\GammeRealisationType;
@@ -44,6 +45,16 @@ class GammeController extends AbstractController
     {
         return $this->render('gamme/index.html.twig', [
             'gammes' => $gammeRepository->findAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/gamme/utilisateur/{id}", name="gamme_user_index", methods={"GET"})
+     */
+    public function indexByUsers(Utilisateur $utilisateur): Response
+    {
+        return $this->render('gamme/index.html.twig', [
+            'gammes' => $utilisateur->getGammes(),
         ]);
     }
 
