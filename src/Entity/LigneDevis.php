@@ -38,6 +38,11 @@ class LigneDevis
      */
     private $Piece;
 
+    public function __toString()
+    {
+        return $this->getPiece()->getLibelle()." (".$this->getQuantite()." * ".$this->getPrix()."€) - ".$this->getQuantite()*$this->getPrix()."€";
+    }
+
     public function getId(): ?int
     {
         return $this->id;

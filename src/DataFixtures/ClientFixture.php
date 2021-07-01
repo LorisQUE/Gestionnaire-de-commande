@@ -93,7 +93,7 @@ class ClientFixture extends Fixture
 
         $ligneDevis5 = new LigneDevis();
         $ligneDevis5->setDevis($devis2);
-        $ligneDevis5->setQuantite(15);
+        $ligneDevis5->setQuantite(20);
         $ligneDevis5->setPiece($livrable1);
         $ligneDevis5->setPrix(24.99);
         $manager->persist($ligneDevis5);

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification commande de vente{% endblock %}
+
+{% block body %}
+    <style>
+        .d-flex a { margin-right: .5em; }
+    </style>
+
+    <h1>Modification commande de vente</h1>
+
+        {{ include('commande/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    <br/>
+    <div class="d-flex">
+        <a class="btn btn-primary" href="{{ path('commande_index') }}">Retour aux commandes</a>
+        {{ include('commande/_delete_form.html.twig') }}
+    </div>
+
+{% endblock %}

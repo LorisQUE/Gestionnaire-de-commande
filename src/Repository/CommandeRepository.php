@@ -19,6 +19,25 @@ class CommandeRepository extends ServiceEntityRepository
         parent::__construct($registry, Commande::class);
     }
 
+    public function  getPrixTotal(Commande $commande)
+    {
+        try {
+            $var = $this->createQueryBuilder('c')
+                ->select('SUM(l.Prix * l.Quantite)')
+                ->join('c.Lignes', 'l')
+                ->andWhere('c = :commande')
+                ->setParameter('commande', $commande)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+            $price = (float) array_values($var)[0];
+            return round($price, 2);
+        }
+        catch (\Exception $exception){
+            return 0;
+        }
+    }
+
     // /**
     //  * @return Commande[] Returns an array of Commande objects
     //  */

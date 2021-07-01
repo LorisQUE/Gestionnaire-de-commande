@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande de vente{% endblock %}
+
+{% block body %}
+    <style>
+        .d-flex a { margin-right: .5em; }
+    </style>
+
+    <h1>Commande de vente</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Libelle</th>
+                <th>Date de Commande</th>
+                <th>Status</th>
+                <th>Prix total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commande in commandes %}
+            <tr>
+                <td>{{ commande.Libelle }}</td>
+                <td>{{ commande.Date ? commande.Date|date('d/m/Y H:i') : '' }}</td>
+                <td>
+                    {% if (commande.Valide) %}
+                        Validé
+                    {% else %}
+                        En Attente
+                    {% endif %}
+                </td>
+                <td>{{ commande | prixTotalCommandeVente }}€</td>
+                <td class="d-flex">
+                    <a class="btn btn-primary" href="{{ path('commande_show', {'id': commande.id}) }}"><i class="fas fa-search"></i></a>
+                    {% if(commande.Valide == false) %}
+                        <a class="btn btn-primary" href="{{ path('commande_edit', {'id': commande.id}) }}"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-success" title="Validation" href="{{ path('commande_validation', {'id': commande.id}) }}"><i class="fas fa-check"></i></a>
+                        <form method="post" action="{{ path('commande_delete', {'id': commande.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette commande ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commande.id) }}">
+                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    {% endif %}
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucune commande de vente disponible</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('commande_new') }}">Ajouter une commande</a>
+{% endblock %}

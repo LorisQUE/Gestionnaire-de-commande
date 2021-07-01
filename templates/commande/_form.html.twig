@@ -1,0 +1,85 @@
+<style>
+    .card { margin: 2em 0; }
+    .card .card { margin: 2em; }
+    .card .card .form-group { margin: 0; }
+    .card .card .card-body { display: flex; justify-content: space-between; align-items: flex-end; padding: 1em; }
+    .card .card .card-body.new > div { display: flex; justify-content: space-between; width: 85%;  }
+    .card .card .card-body.new > div > .form-group { width: 100%;  }
+    .card .card .card-body fieldset { width: 85%; }
+    .card .card .form-group .ligne-row { display: flex; justify-content: space-between; }
+    .card .card .form-group .ligne-row > .form-group { width: 48%; }
+</style>
+
+{{ form_start(form) }}
+        {{ form_row(form.Libelle) }}
+        {{ form_row(form.Client) }}
+        {{ form_row(form.Date) }}
+
+<div class="card card-parent">
+    <div class="card-header">
+        Lignes du devis
+    </div>
+
+    <div id="lignes-list" class="card-body" data-prototype="{{  form_widget(form.LignesDevis.vars.prototype) | e('html_attr') }}">
+        {% for ligne in form.LignesDevis %}
+            <div class="card card-ligne">
+                <div class="card-body">
+                    {{ form_row(ligne, { 'attr' : { 'class' : 'ligne-row' }} ) }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+
+<script>
+    var container = $(".card-parent");
+
+    var collectionHolder;
+    var addNew = $('<a class="btn btn-success"><i title="Ajouter" class="fas fa-plus"></i></a>')
+
+
+    $(document).ready( function(){
+        pieces = $($(`.select-piece`)[0]).find('option');
+        collectionHolder = $("#lignes-list");
+
+        $(".card-parent > .card-body").append(addNew)
+
+        collectionHolder.find('.card').each(function(item) {
+            addRemoveButton($(this));
+        });
+
+        addNew.click(function (e) {
+            addNewForm();
+        });
+    });
+
+    //remove item
+    function addRemoveButton(item){
+        var removeButton = $('<a class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>');
+        var panelBtnContainer = $(item).find(".card-body").append(removeButton);
+
+        removeButton.click(function (e) {
+            $(e.target).parents('.card-ligne').slideUp(250, function() {
+                $(this).remove();
+            });
+        });
+    }
+
+    function addNewForm(){
+        var prototype = collectionHolder.data('prototype');
+        var newForm = prototype;
+
+        newForm = newForm.replace(/__name__/g, $(".card-ligne").length + 1);
+
+        var card = $('<div class="card card-ligne"></div>');
+        var cardbody = $('<div class="card-body new ligne-row"></div>').append(newForm);
+
+        card.append(cardbody);
+        addRemoveButton(card);
+        addNew.before(card);
+    }
+</script>
+{{ form_row(form._token) }}
+{{ form_end(form, {'render_rest': false}) }}

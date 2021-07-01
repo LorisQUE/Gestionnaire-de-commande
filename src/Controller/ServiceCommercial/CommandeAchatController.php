@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/commercial/commande")
+ * @Route("/commercial/commande-achat")
  */
 class CommandeAchatController extends AbstractController
 {
@@ -139,7 +139,7 @@ class CommandeAchatController extends AbstractController
     }
 
     /**
-     * @Route("/validation/{id}", name="commande_validation", methods={"POST"})
+     * @Route("/validation/{id}", name="commande_achat_validation", methods={"POST"})
      */
     public function validation(Request $request, CommandeAchat $commandeAchat): Response
     {

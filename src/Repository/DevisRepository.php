@@ -38,6 +38,18 @@ class DevisRepository extends ServiceEntityRepository
         }
     }
 
+    public function getAllValideLignes(){
+        $lignes = [];
+
+        foreach ($this->findAll() as $devis){
+            if($devis->getDelai() !== null) {
+                array_push($lignes, ...$devis->getLignes()->toArray());
+            }
+        }
+
+        return $lignes;
+    }
+
     // /**
     //  * @return Devis[] Returns an array of Devis objects
     //  */

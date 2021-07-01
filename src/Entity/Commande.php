@@ -30,7 +30,7 @@ class Commande
     private $Date;
 
     /**
-     * @ORM\OneToMany(targetEntity=LigneCommande::class, mappedBy="Commande", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=LigneCommande::class, mappedBy="Commande", orphanRemoval=true, cascade={"persist"})
      */
     private $Lignes;
 
@@ -48,6 +48,7 @@ class Commande
     public function __construct()
     {
         $this->Lignes = new ArrayCollection();
+        $this->Valide = false;
         $this->Date = new \DateTime();
         $this->Date->setTimezone( new \DateTimeZone("Europe/Paris"));
     }
@@ -97,6 +98,10 @@ class Commande
         }
 
         return $this;
+    }
+
+    public function setLignes($lignes){
+        $this->Lignes = $lignes;
     }
 
     public function removeLigne(LigneCommande $ligne): self

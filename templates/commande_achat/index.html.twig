@@ -84,7 +84,7 @@
         $('#modal-validation').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var commandId = button.data('commande');
-            var url = "{{ path('commande_validation', {'id': 'commandId' }) }}".replace('commandId', commandId);
+            var url = "{{ path('commande_achat_validation', {'id': 'commandId' }) }}".replace('commandId', commandId);
 
             $("#modal-validation-save").off("click");
             $("#modal-validation-save").on("click", function(e) {

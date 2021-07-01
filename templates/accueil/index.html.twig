@@ -95,35 +95,13 @@
                 </div>
             </a>
 
-            <a href="#" class="card">
+            <a href="{{ path("commande_index") }}" class="card">
                 <div class="card-body">
                     <h5 class="card-title">Commande de vente</h5>
                     <p class="card-text">Permet de consulter les commandes déjà passées ou d'en réaliser d'autres.
                         Pour créer une commande il faut que le client est déjà un devis.</p>
                 </div>
             </a>
-
-        </div>
-
-    </div>
-    {% endif %}
-
-    {% if is_granted('ROLE_COMPTABLE') %}
-    <!-- Service Comptable -->
-    <div class="group-container">
-
-        <div class="group-header">
-            <h2>Service Comptable</h2>
-        </div>
-
-        <div class="group-body">
-            <a href="#" class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </a>
-
 
         </div>
 

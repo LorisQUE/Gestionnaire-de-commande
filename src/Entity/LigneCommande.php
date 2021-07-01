@@ -39,6 +39,11 @@ class LigneCommande
      */
     private $Piece;
 
+    public function __toString()
+    {
+        return $this->getQuantite()." * ".$this->getPiece()->getLibelle()." : ".$this->getQuantite()*$this->getPrix()."€";
+    }
+
     public function getId(): ?int
     {
         return $this->id;
