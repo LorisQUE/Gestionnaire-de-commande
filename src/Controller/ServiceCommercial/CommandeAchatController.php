@@ -6,17 +6,49 @@ use App\Entity\CommandeAchat;
 use App\Form\CommandeAchatNewType;
 use App\Form\CommandeAchatType;
 use App\Repository\CommandeAchatRepository;
+use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @Route("/commercial/commande-achat")
  */
 class CommandeAchatController extends AbstractController
 {
+    private $snappy;
+    public function __construct(Pdf $pdf){
+        $this->snappy = $pdf;
+    }
+
+    /**
+     *  Render in a PDF the sandbox_homepage URL
+     * @Route("/topdf/{id}", name="commande_achat_to_pdf")
+     * @return Response
+     */
+    public function pdfAction(CommandeAchat $commandeAchat)
+    {
+        $this->snappy->setOption('no-outline', true);
+        $this->snappy->setOption('page-size','LETTER');
+        $this->snappy->setOption('encoding', 'UTF-8');
+
+        $filename = $commandeAchat->getLibelle();
+
+        $html = $this->renderView('commande_achat/show_pdf.html.twig', ['commande_achat' => $commandeAchat]);
+
+        return new Response(
+            $this->snappy->getOutputFromHtml($html),
+            200,
+            array(
+                'Content-Type'          => 'application/pdf',
+                'Content-Disposition'   => 'inline; filename="'.$filename.'.pdf"'
+            )
+        );
+    }
+
     public function validerCommande(CommandeAchat $commandeAchat){
         //Ajout de la quantité des pièces
         foreach ($commandeAchat->getLignes() as $ligne){

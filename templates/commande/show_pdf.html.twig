@@ -1,7 +1,3 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Commande de Vente{% endblock %}
-
 {% block body %}
     <style>
         body{ color: #484b51; }
@@ -116,15 +112,6 @@
                     ID: #{{ commande.Id }}
                 </small>
             </h1>
-
-            <div class="page-tools">
-                <div class="action-buttons">
-                    <a class="btn bg-white btn-light mx-1px text-95" href="{{ path('commande_to_pdf', {'id': commande.Id}) }}" data-title="PDF">
-                        <i class="mr-1 fa fa-file-pdf-o text-danger-m1 text-120 w-2"></i>
-                        Exporter
-                    </a>
-                </div>
-            </div>
         </div>
 
         <div class="container px-0">
@@ -178,32 +165,21 @@
 
                     <div class="mt-4">
                         <div class="row text-600 text-white bgc-default-tp1 py-25">
-                            <div class="d-none d-sm-block col-1">#</div>
+                            <div class="d-sm-block col-1">#</div>
                             <div class="col-3">Pièce</div>
-                            <div class="d-none d-sm-block col-2">Quantité</div>
-                            <div class="d-none d-sm-block col-2">Prix Unité</div>
+                            <div class="d-sm-block col-2">Quantité</div>
+                            <div class="d-sm-block col-2">Prix Unité</div>
                             <div class="col-2">Prix Total</div>
-                            {% if(commande.Valide == false) %}
-                            <div class="col-2">Actions</div>
-                            {% endif %}
                         </div>
 
                         <div class="text-95 text-secondary-d3">
                             {% for ligne in commande.Lignes %}
                                 <div class="row mb-2 mb-sm-0 py-25">
-                                    <div class="d-none d-sm-block col-1">{{ ligne.Id }}</div>
+                                    <div class="d-sm-block col-1">{{ ligne.Id }}</div>
                                     <div class="col-3">{{ ligne.Piece }}</div>
-                                    <div class="d-none d-sm-block col-2">{{ ligne.Quantite }}</div>
-                                    <div class="d-none d-sm-block col-2">{{ ligne.Prix }}€</div>
+                                    <div class="d-sm-block col-2">{{ ligne.Quantite }}</div>
+                                    <div class="d-sm-block col-2">{{ ligne.Prix }}€</div>
                                     <div class="col-2 text-secondary-d2">{{ ligne.Prix * ligne.Quantite }}€</div>
-                                    {% if(commande.Valide == false) %}
-                                    <div class="col-2">
-                                        <form method="post" action="{{ path('commande_ligne_delete', {'id': ligne.id, 'commande': commande.id }) }}" onsubmit="return confirm('Voulez vous vraiment supprimer cette ligne de commande ?');">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ligne.id) }}">
-                                            <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-                                        </form>
-                                    </div>
-                                    {% endif %}
                                 </div>
                             {% else %}
                                 <div class="row mb-2 mb-sm-0 py-25">
@@ -227,16 +203,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <hr />
-
-                        <div class="d-flex">
-                            <a class="btn btn-primary" href="{{ path('commande_index') }}">Retour aux commandes</a>
-                            {% if(commande.Valide == false) %}
-                                <a class="btn btn-primary" href="{{ path('commande_edit', {'id': commande.id}) }}">Modification</a>
-                                {{ include('commande/_delete_form.html.twig') }}
-                            {% endif %}
                         </div>
                     </div>
                 </div>

@@ -9,6 +9,7 @@ use App\Entity\LigneDevis;
 use App\Form\CommandeType;
 use App\Repository\CommandeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,35 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CommandeController extends AbstractController
 {
+    private $snappy;
+    public function __construct(Pdf $pdf){
+        $this->snappy = $pdf;
+    }
+
+    /**
+     *  Render in a PDF the sandbox_homepage URL
+     * @Route("/topdf/{id}", name="commande_to_pdf")
+     * @return Response
+     */
+    public function pdfAction(Commande $commande)
+    {
+        $this->snappy->setOption('no-outline', true);
+        $this->snappy->setOption('page-size','LETTER');
+        $this->snappy->setOption('encoding', 'UTF-8');
+
+        $filename = $commande->getLibelle();
+
+        $html = $this->renderView('commande/show_pdf.html.twig', ['commande' => $commande]);
+
+        return new Response(
+            $this->snappy->getOutputFromHtml($html),
+            200,
+            array(
+                'Content-Type'          => 'application/pdf',
+                'Content-Disposition'   => 'inline; filename="'.$filename.'.pdf"'
+            )
+        );
+    }
     /**
      * @Route("/", name="commande_index", methods={"GET"})
      */
